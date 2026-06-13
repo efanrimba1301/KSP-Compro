@@ -3,13 +3,14 @@ import { UserMultipleIcon } from "@hugeicons/core-free-icons";
 import { Folder01Icon } from "@hugeicons/core-free-icons";
 import { LayerIcon } from "@hugeicons/core-free-icons";
 import { Invoice01Icon } from "@hugeicons/core-free-icons";
+import { User02Icon } from "@hugeicons/core-free-icons";
 
 export const AppMenu = {
     primaryNav: [
         {
             name: "dashboard",
             title: "Dashboard",
-            url: "/admin/dashboard",
+            url: "/Dashboard",
             Icon: DashboardSquare03Icon
         },
         {
@@ -35,6 +36,13 @@ export const AppMenu = {
             title: "Pricing",
             url: "/admin/pricing",
             Icon: Invoice01Icon
+        },
+    ],
+    secondaryNav: [
+        {
+            name: "user",
+            title: "User",
+            Icon: User02Icon
         }
     ]
 };

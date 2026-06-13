@@ -4,6 +4,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { useSidebar } from "./ui/sidebar";
 import logoUrl from "@/assets/KSP-Icon.svg";
 import { AppMenu } from "../Constants/AppMenu";
+import User from "./User";
 
 // Custom component Logo untuk menerima prop 'variant'
 const Logo = ({ variant = 'default' }: { variant?: 'default' | 'icon' }) => {
@@ -17,6 +18,7 @@ const Logo = ({ variant = 'default' }: { variant?: 'default' | 'icon' }) => {
         </div>
     )
 }
+
 
 const AppsSidebar = () => {
     const { isMobile } = useSidebar();
@@ -54,7 +56,14 @@ const AppsSidebar = () => {
                     </SidebarGroup>
                 </SidebarContent>
                 {/* Footer */}
-                <SidebarFooter></SidebarFooter>
+                <SidebarFooter className={cn(isMobile && 'border-t')}>
+                    <SidebarMenu>
+                        <SidebarMenuItem>
+                            <User />
+                        </SidebarMenuItem>
+                    </SidebarMenu>
+
+                </SidebarFooter>
 
             </Sidebar>
         </>
