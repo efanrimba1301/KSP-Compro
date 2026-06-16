@@ -10,7 +10,7 @@ export const AppMenu = {
         {
             name: "dashboard",
             title: "Dashboard",
-            url: "/Dashboard",
+            url: "/admin/dashboard",
             Icon: DashboardSquare03Icon
         },
         {

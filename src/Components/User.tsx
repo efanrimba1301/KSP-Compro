@@ -10,9 +10,22 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Notification01Icon, Logout03Icon, ArrowUpDownIcon } from "@hugeicons/core-free-icons";
 import { SidebarMenuButton, useSidebar } from "./ui/sidebar";
+import { useAuth } from "@/Context/AuthContext";
+import { useNavigate } from "react-router";
 
 const User = () => {
     const { isMobile } = useSidebar();
+
+    const { signOut } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        const { error } = await signOut();
+        if (error) {
+            alert("Logout failed");
+        }
+        navigate("/admin/login", { replace: true });
+    };
 
     return (
         <DropdownMenu>
@@ -27,7 +40,7 @@ const User = () => {
                     </Avatar>
                     <div className="grid flex-1 text-left text-sm leading-tight">
                         <span className="font-reguler">User</span>
-                        <span className="font-reguler">user@kebetulanserius.com</span>
+                        <span className="font-light text-sm">user@kebetulanserius.com</span>
                     </div>
                     <HugeiconsIcon icon={ArrowUpDownIcon} className="ml-auto size-4" />
                 </SidebarMenuButton>
@@ -56,7 +69,7 @@ const User = () => {
                     <span>Notifications</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>
                     <HugeiconsIcon icon={Logout03Icon} />
                     <span>Log out</span>
                 </DropdownMenuItem>
