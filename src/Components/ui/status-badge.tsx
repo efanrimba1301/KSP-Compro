@@ -12,7 +12,7 @@ const statusConfig: Record<LeadStatus, { label: string; className: string }> = {
     },
     active: {
         label: 'Active Client',
-        className: 'bg-[#E8FF5A]/15 text-[#E8FF5A] border-[#E8FF5A]/30 hover:bg-[#E8FF5A]/20',
+        className: 'bg-[#2D4C11]/15 text-[#33BE21] border-[#33BE21]/30 hover:bg-[#E8FF5A]/20',
     },
     finish: {
         label: 'Finish',

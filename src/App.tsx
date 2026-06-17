@@ -5,6 +5,7 @@ import Dashboard from './Pages/Admin/Dashboard'
 import { Routes, Route, Navigate } from 'react-router'
 import { ProtectedRoute } from './Components/ProtectedRoute'
 import { AuthProvider } from './Context/AuthContext'
+import Leads from './Pages/Admin/Leads'
 
 
 
@@ -30,6 +31,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+
+          />
+          <Route
+            path="/admin/leads"
+            element={
+              <ProtectedRoute>
+                <Leads />
               </ProtectedRoute>
             }
           />
