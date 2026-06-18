@@ -2,10 +2,11 @@ import './App.css'
 import AdminLogin from './Pages/Admin/Login'
 import HomePage from './Pages/HomePage'
 import Dashboard from './Pages/Admin/Dashboard'
-import { Routes, Route, Navigate } from 'react-router'
+import { Routes, Route } from 'react-router'
 import { ProtectedRoute } from './Components/ProtectedRoute'
 import { AuthProvider } from './Context/AuthContext'
 import Leads from './Pages/Admin/Leads'
+import AdminLayout from './Layouts/AdminLayout'
 
 
 
@@ -22,7 +23,7 @@ function App() {
             path="/admin"
             element={
               <ProtectedRoute>
-                <Navigate to="/admin/dashboard" replace />
+                <AdminLayout />
               </ProtectedRoute>
             }
           />

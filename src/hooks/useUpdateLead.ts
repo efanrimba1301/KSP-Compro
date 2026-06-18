@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
-import type { Lead, LeadStatus } from '@/types/leads'
+import type { LeadStatus } from '@/types/leads'
 
 type UpdatePayload = {
     status?: LeadStatus

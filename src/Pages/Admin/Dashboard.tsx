@@ -6,10 +6,9 @@ import HeaderDashboard from "../../Components/ui/HeaderDashboard";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter, CardAction } from "@/Components/ui/card";
 import { Badge } from "@/Components/ui/badge";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowMoveUpRightIcon, Type } from "@hugeicons/core-free-icons";
+import { ArrowMoveUpRightIcon } from "@hugeicons/core-free-icons";
 
 import { DataTable } from '@/Components/ui/data-table'
-import type { Lead } from '@/types/leads'
 import { useMemo } from 'react'
 import { createLeadsColumns } from './leads-columns'
 import { useLeads } from '@/hooks/useLeads'
@@ -154,9 +153,9 @@ const Dashboard = () => {
                             </Card>
                         </div>
 
-                        <div className="grid auto-rows-min gap-4 py-4 px-4">
-                            <div>
-                                <p className="text-neutral-400 text-sm mt-1">
+                        <div className="grid grid-cols-1 md:grid-row-2 auto-rows-min gap-2 py-2 px-4">
+                            <div className="flex justify-between items-center">
+                                <p className="text-neutral-400 text-sm">
                                     Overview leads dan client aktif
                                 </p>
                             </div>
@@ -169,7 +168,6 @@ const Dashboard = () => {
                                 />
                             )}
                         </div>
-
                     </SidebarInset>
                 </TooltipProvider>
             </SidebarProvider>

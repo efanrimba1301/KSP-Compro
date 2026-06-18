@@ -22,6 +22,7 @@ import {
     DropdownMenuSub
 } from '@/Components/ui/dropdown-menu'
 import type { Lead, LeadStatus } from '@/types/leads'
+import { Checkbox } from '@/Components/ui/checkbox'
 
 type LeadsColumnProps = {
     onStatusChange: (id: string, status: LeadStatus) => void
@@ -44,9 +45,43 @@ export function createLeadsColumns({
     onDelete,
 }: LeadsColumnProps): ColumnDef<Lead>[] {
     return [
+
+        //Checkbox
+        {
+            id: "select",
+            meta: { showFrom: 'mobile' },
+            header: ({ table }) => (
+                <div className='flex items-center justify-center'>
+                    <Checkbox
+                        checked={
+                            table.getIsAllPageRowsSelected()
+                                ? true
+                                : table.getIsSomePageRowsSelected()
+                                    ? "indeterminate"
+                                    : false
+                        }
+                        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+                        aria-label="Select all"
+                    />
+                </div>
+            ),
+            cell: ({ row }) => (
+                <div className='flex items-center justify-center'>
+                    <Checkbox
+                        checked={row.getIsSelected()}
+                        onCheckedChange={(value) => row.toggleSelected(!!value)}
+                        aria-label="Select row"
+                    />
+                </div>
+            ),
+            enableSorting: false,
+            enableHiding: false,
+        },
+
         // Kolom Nama
         {
             accessorKey: 'name',
+            meta: { showFrom: 'mobile' },
             header: ({ column }) => (
                 <Button
                     variant="ghost"
@@ -68,6 +103,7 @@ export function createLeadsColumns({
         // Kolom Company
         {
             accessorKey: 'company',
+            meta: { showFrom: 'tablet' },
             header: 'Company',
             cell: ({ row }) => (
                 <span className="text-neutral-300">{row.getValue('company') || '—'}</span>
@@ -78,6 +114,7 @@ export function createLeadsColumns({
         {
             accessorKey: 'whatsapp',
             header: 'WhatsApp',
+            meta: { showFrom: 'tablet' },
             cell: ({ row }) => (
                 <a
                     href={`https://wa.me/${row.getValue<string>('whatsapp').replace(/\D/g, '')}`}
@@ -94,6 +131,7 @@ export function createLeadsColumns({
         {
             accessorKey: 'budget_range',
             header: 'Budget',
+            meta: { showFrom: 'desktop' },
             cell: ({ row }) => (
                 <span className="text-neutral-300 text-sm">{row.getValue('budget_range')}</span>
             ),
@@ -103,6 +141,7 @@ export function createLeadsColumns({
         {
             accessorKey: 'services_required',
             header: 'Service',
+            meta: { showFrom: 'mobile' },
             cell: ({ row }) => {
                 const services: string[] = row.getValue('services_required')
                 return (
@@ -125,6 +164,7 @@ export function createLeadsColumns({
         {
             accessorKey: 'heard_from',
             header: 'Dari',
+            meta: { showFrom: 'desktop' },
             cell: ({ row }) => (
                 <span className="text-neutral-400 text-sm">{row.getValue('heard_from')}</span>
             ),
@@ -134,6 +174,7 @@ export function createLeadsColumns({
         {
             accessorKey: 'status',
             header: 'Status',
+            meta: { showFrom: 'mobile' },
             cell: ({ row }) => <StatusBadge status={row.getValue('status')} />,
             filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
@@ -141,6 +182,7 @@ export function createLeadsColumns({
         // Kolom Tanggal
         {
             accessorKey: 'created_at',
+            meta: { showFrom: 'mobile' },
             header: ({ column }) => (
                 <Button
                     variant="ghost"
@@ -168,6 +210,7 @@ export function createLeadsColumns({
         // Kolom Aksi
         {
             id: 'actions',
+            meta: { showFrom: 'mobile' },
             cell: ({ row }) => {
                 const lead = row.original
                 return (
