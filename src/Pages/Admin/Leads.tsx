@@ -16,6 +16,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { AddSquareIcon } from "@hugeicons/core-free-icons";
 import { ArrowMoveUpRightIcon } from "@hugeicons/core-free-icons";
 import { Button } from '@/Components/ui/button'
+import { AddLeadSheet } from '@/Components/AddLeadsSheet'
 
 export default function Leads() {
     const { data: leads, loading, error, refetch } = useLeads()
@@ -152,11 +153,7 @@ export default function Leads() {
                                     <p className="text-neutral-400 text-sm">
                                         Overview leads dan client aktif
                                     </p>
-                                    <Button
-                                        variant='default'
-                                        className="flex items-center gap-2 bg-white text-black px-3 py-1 rounded-md text-sm">
-                                        <HugeiconsIcon icon={AddSquareIcon} /> Tambah Leads
-                                    </Button>
+                                    <AddLeadSheet />
                                 </div>
                                 {!loading && !error && (
                                     <DataTable

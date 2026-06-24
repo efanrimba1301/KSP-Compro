@@ -6,7 +6,7 @@ import HeaderDashboard from "../../Components/ui/HeaderDashboard";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter, CardAction } from "@/Components/ui/card";
 import { Badge } from "@/Components/ui/badge";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowMoveUpRightIcon } from "@hugeicons/core-free-icons";
+import { ArrowMoveUpRightIcon, ArrowMoveDownRightIcon } from "@hugeicons/core-free-icons";
 
 import { DataTable } from '@/Components/ui/data-table'
 import { useMemo } from 'react'
@@ -14,9 +14,14 @@ import { createLeadsColumns } from './leads-columns'
 import { useLeads } from '@/hooks/useLeads'
 import { useUpdateLead } from '@/hooks/useUpdateLead'
 import type { LeadStatus } from '@/types/leads'
+import { ChartAreaInteractive } from "@/Components/chart-area-interactive";
+import { useVisitorStats } from '@/hooks/useVisitorStats'
+
 
 
 const Dashboard = () => {
+    const { stats, isLoading } = useVisitorStats()
+
     const { data, loading, error, refetch } = useLeads()
     const { updateLead, deleteLead } = useUpdateLead()
 
@@ -73,7 +78,7 @@ const Dashboard = () => {
                                 </button>
                             </div>
                         )}
-                        <div className="grid auto-rows-min gap-4 md:grid-cols-4 py-4 px-4">
+                        <div className="grid auto-rows-min gap-4 md:grid-cols-4 py-4 px-6 *:data-[slot=card]:bg-linear-gradient-to-t *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card *:data-[slot=card]:shadow-xs dark:*:data-[slot=card]:bg-card">
                             <Card className="@container/card">
                                 <CardContent>
                                     <CardHeader>
@@ -135,15 +140,42 @@ const Dashboard = () => {
                                     <CardHeader>
                                         <CardDescription>Total Visitors</CardDescription>
                                         <CardAction>
-                                            <Badge variant="outline">
-                                                20%
+                                            <Badge variant="outline"
+                                                className={
+                                                    stats.isIncreasing
+                                                        ? 'text-green-500 border-green-500/30'
+                                                        : 'text-red-500 border-red-500/30'
+                                                }
+                                            >
+                                                {stats.isIncreasing ? '+' : '-'}{stats.percentageChange}%
                                             </Badge>
                                         </CardAction>
                                     </CardHeader>
-                                    <CardTitle className="px-4 py-2 text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">1.000</CardTitle>
+                                    <CardTitle className="px-4 py-2 text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+                                        {isLoading
+                                            ? '...'
+                                            : stats.totalThisMonth.toLocaleString('id-ID')
+                                        }
+                                    </CardTitle>
                                     <CardFooter className="flex-col items-start gap-1.5 text-sm">
                                         <div className="line-clamp-1 flex gap-2 font-medium">
-                                            Trending up this month <HugeiconsIcon icon={ArrowMoveUpRightIcon} className="sm:size-4" />
+                                            {stats.isIncreasing ? (
+                                                <>
+                                                    Trending up this month
+                                                    <HugeiconsIcon
+                                                        icon={ArrowMoveUpRightIcon}
+                                                        className="sm:size-4 text-green-500"
+                                                    />
+                                                </>
+                                            ) : (
+                                                <>
+                                                    Trending down this month
+                                                    <HugeiconsIcon
+                                                        icon={ArrowMoveDownRightIcon}
+                                                        className="sm:size-4 text-red-500"
+                                                    />
+                                                </>
+                                            )}
                                         </div>
                                         <div className="text-muted-foreground">
                                             Visitors for the last 1 months
@@ -153,7 +185,11 @@ const Dashboard = () => {
                             </Card>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-row-2 auto-rows-min gap-2 py-2 px-4">
+                        <div className="px-4 lg:px-6">
+                            <ChartAreaInteractive />
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-row-2 auto-rows-min gap-2 py-6 px-6">
                             <div className="flex justify-between items-center">
                                 <p className="text-neutral-400 text-sm">
                                     Overview leads dan client aktif

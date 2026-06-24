@@ -10,6 +10,21 @@ type UpdatePayload = {
 export function useUpdateLead() {
     const [loading, setLoading] = useState(false)
 
+    const addLead = async (
+        payload: UpdatePayload
+    ): Promise<{ success: boolean; error?: string }> => {
+        setLoading(true)
+
+        const { error } = await supabase
+            .from('leads')
+            .insert(payload)
+
+        setLoading(false)
+
+        if (error) return { success: false, error: error.message }
+        return { success: true }
+    }
+
     const updateLead = async (
         id: string,
         payload: UpdatePayload
@@ -43,5 +58,5 @@ export function useUpdateLead() {
         return { success: true }
     }
 
-    return { updateLead, deleteLead, loading }
+    return { addLead, updateLead, deleteLead, loading }
 }
