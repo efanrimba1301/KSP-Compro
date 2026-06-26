@@ -31,6 +31,7 @@ interface DataTableProps<TData, TValue> {
     data: TData[]
     searchKey?: string        // key kolom yang bisa disearch, misal "name"
     searchPlaceholder?: string
+    onRowClick?: (row: TData) => void,
     mobileCard?: (data: TData) => React.ReactNode
 }
 
@@ -39,6 +40,7 @@ export function DataTable<TData, TValue>({
     data,
     searchKey,
     searchPlaceholder = 'Cari...',
+    onRowClick,
     mobileCard,
 }: DataTableProps<TData, TValue>) {
 
@@ -144,8 +146,9 @@ export function DataTable<TData, TValue>({
                                     <TableRow
                                         key={row.id}
                                         data-state={row.getIsSelected() && 'selected'}
-                                        className="border-neutral-800 hover:bg-neutral-800/50 
-                                    data-[state=selected]:bg-neutral-800"
+                                        onClick={() => onRowClick?.(row.original)}
+                                        className={`border-neutral-800 hover:bg-neutral-800/50 
+                                    data-[state=selected]:bg-neutral-800 ${onRowClick ? 'cursor-pointer' : ''}`}
                                     >
                                         {row.getVisibleCells().map((cell) => (
                                             <TableCell key={cell.id} className="text-neutral-200 whitespace-nowrap">

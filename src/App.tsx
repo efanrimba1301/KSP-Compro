@@ -7,7 +7,11 @@ import { ProtectedRoute } from './Components/ProtectedRoute'
 import { AuthProvider } from './Context/AuthContext'
 import Leads from './Pages/Admin/Leads'
 import AdminLayout from './Layouts/AdminLayout'
-
+import { Navigate } from 'react-router'
+import Portfolio from './Pages/Admin/Portofolio'
+import TambahProject from './Pages/Admin/TambahProject'
+import Services from './Pages/Admin/Services'
+import Pricing from './Pages/Admin/Pricing'
 
 
 function App() {
@@ -25,25 +29,17 @@ function App() {
               <ProtectedRoute>
                 <AdminLayout />
               </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/dashboard"
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-
-          />
-          <Route
-            path="/admin/leads"
-            element={
-              <ProtectedRoute>
-                <Leads />
-              </ProtectedRoute>
-            }
-          />
+            }>
+            <Route index element={<Navigate to="dashboard" replace />} />
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="leads" element={<Leads />} />
+            <Route path="portfolio">
+              <Route index element={<Portfolio />} />
+              <Route path="tambah" element={<TambahProject />} />
+            </Route>
+            <Route path="services" element={<Services />} />
+            <Route path="pricing" element={<Pricing />} />
+          </Route>
         </Routes>
       </AuthProvider>
     </>

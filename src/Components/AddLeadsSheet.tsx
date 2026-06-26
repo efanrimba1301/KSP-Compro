@@ -14,10 +14,7 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react";
 import { AddSquareIcon } from "@hugeicons/core-free-icons";
 
-import { useState } from "react"
-import { useUpdateLead } from "@/hooks/useUpdateLead"
 import { useLeads } from "@/hooks/useLeads"
-import type { LeadStatus } from "@/types/leads";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
