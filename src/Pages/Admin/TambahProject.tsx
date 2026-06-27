@@ -4,6 +4,10 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import { ArrowLeft02Icon, Undo02Icon, Bookmark02Icon, SentIcon } from "@hugeicons/core-free-icons"
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/Components/ui/tooltip"
 import { ButtonGroup } from "@/Components/ui/button-group"
+
+//Components
+import PortfolioForm from "@/Components/PortfolioForm"
+
 //router
 import { useNavigate } from "react-router"
 
@@ -16,7 +20,8 @@ const TambahProjectPage = () => {
     }
     return (
         <TooltipProvider>
-            <div className="flex flex-row gap-6 py-6 px-6 w-full justify-between">
+            <div className="flex flex-col w-full min-h-screen">
+                <div className="sticky top-16 z-10 bg-background border-b flex flex-row gap-6 py-4 px-6 w-full justify-between shadow-sm">
                 <div className="flex flex-row items-center gap-6">
                     <Button
                         variant="outline"
@@ -68,6 +73,10 @@ const TambahProjectPage = () => {
                         </ButtonGroup>
                     </ButtonGroup>
                 </div>
+            </div>
+            <div className="flex flex-col gap-6 px-6">
+                <PortfolioForm />
+            </div>
             </div>
         </TooltipProvider>
 
