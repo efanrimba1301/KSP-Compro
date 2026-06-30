@@ -71,7 +71,7 @@ const Dashboard = () => {
             <div className="grid auto-rows-min gap-4 py-4 px-6">
                 <h1>Dashboard</h1>
             </div>
-            <div className="grid auto-rows-min gap-4 md:grid-cols-4 py-4 px-6 *:data-[slot=card]:bg-linear-gradient-to-t *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card *:data-[slot=card]:shadow-xs dark:*:data-[slot=card]:bg-card">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 px-4 py-4 *:data-[slot=card]:bg-linear-gradient-to-t *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card *:data-[slot=card]:shadow-xs dark:*:data-[slot=card]:bg-card">
                 <Card className="@container/card">
                     <CardContent>
                         <CardHeader>

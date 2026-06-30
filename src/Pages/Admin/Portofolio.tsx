@@ -12,7 +12,7 @@ import type { Portfolio, ProjectStatus } from '@/types/portfolio'
 const PortfolioPage = () => {
     // State data — nanti diganti dengan hook Supabase
     const [data, setData] = useState<Portfolio[]>(portfolioDummyData)
-    const [selectedPortfolio, setSelectedPortfolio] = useState<Portfolio | null>(null)
+    const [, setSelectedPortfolio] = useState<Portfolio | null>(null)
     const navigate = useNavigate();
 
     // ─── Handlers ──────────────────────────────────────────────────────────
@@ -122,9 +122,7 @@ const PortfolioPage = () => {
                 searchKey="project_name"
                 searchPlaceholder="Cari nama project atau client..."
                 onRowClick={handleRowClick}
-
             />
-
         </div>
     )
 }

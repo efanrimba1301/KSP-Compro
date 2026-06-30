@@ -336,7 +336,10 @@ const PortfolioForm = () => {
                     </CardContent>
                 </Card>
             </div>
+
             <Separator orientation="vertical" className="hidden lg:block self-stretch" />
+
+            {/* right */}
             <div className="flex flex-col w-full lg:w-80 py-4 px-4 lg:py-8 sticky top-[150px] z-10 bg-background/60 backdrop-blur-sm border-b lg:border-none mb-2 lg:mb-0">
                 <FieldGroup>
                     <FieldLabel htmlFor="switch-featured">
