@@ -63,12 +63,6 @@ const PricingPage = () => {
                 <div className="flex flex-col gap-1">
                     <h1>Pricing</h1>
                 </div>
-                <Button
-                    disabled
-                >
-                    <HugeiconsIcon icon={PlusSignIcon} className="size-4" />
-                    Buat Payment
-                </Button>
             </div>
             <div className="grid grid-cols-2 gap-4">
                 <Card className="@container/card">
@@ -299,6 +293,10 @@ const PricingPage = () => {
                     <p className="text-neutral-400 text-sm">
                         Histori Pembayaran
                     </p>
+                    <Button>
+                        <HugeiconsIcon icon={PlusSignIcon} className="size-4" />
+                        Buat Payment
+                    </Button>
                 </div>
 
                 <DataTable

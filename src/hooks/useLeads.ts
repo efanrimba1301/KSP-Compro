@@ -35,7 +35,34 @@ export function useLeads(): UseLeadsReturn {
     }
 
     useEffect(() => {
+        let ignore = false
+
+        const fetchLeads = async () => {
+            setLoading(true)
+            setError(null)
+
+            const { data: leads, error: sbError } = await supabase
+                .from('leads')
+                .select('*')
+                .order('created_at', { ascending: false })
+
+            if (ignore) return
+
+            if (sbError) {
+                setError(sbError.message)
+                setData([])
+            } else {
+                setData(leads as Lead[])
+            }
+
+            setLoading(false)
+        }
+
         fetchLeads()
+
+        return () => {
+            ignore = true
+        }
     }, [])
 
     return {

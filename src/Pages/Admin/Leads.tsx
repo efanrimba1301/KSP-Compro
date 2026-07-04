@@ -1,46 +1,34 @@
 import { DataTable } from '@/Components/ui/data-table'
-import { createLeadsColumns } from './leads-columns'
-import type { LeadStatus } from '@/types/leads'
-import { useUpdateLead } from '@/hooks/useUpdateLead'
-import { useLeads } from '@/hooks/useLeads'
-import { useMemo } from 'react'
+import { AddLeadSheet } from '@/Components/AddLeadsSheet'
+import { useLeadsTable } from '@/hooks/useLeadsTable'
+
+// import { createLeadsColumns } from './leads-columns'
+// import type { LeadStatus } from '@/types/leads'
+// import { useUpdateLead } from '@/hooks/useUpdateLead'
+// import { useLeads } from '@/hooks/useLeads'
+// import { useMemo } from 'react'
+
+//ui
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter, CardAction } from "@/Components/ui/card";
 import { Badge } from "@/Components/ui/badge";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowMoveUpRightIcon } from "@hugeicons/core-free-icons";
-import { AddLeadSheet } from '@/Components/AddLeadsSheet'
+import { LeadDetailDialog } from '@/Components/LeadsDetailDialog';
 
 export default function Leads() {
-    const { data: leads, loading, error, refetch } = useLeads()
-    const { updateLead } = useUpdateLead()
-
-    const handleStatusChange = async (id: string, status: LeadStatus) => {
-        const { success, error } = await updateLead(id, { status })
-        if (success) {
-            refetch() // refresh tabel setelah update
-        } else {
-            console.error('Gagal update status:', error)
-        }
-    }
-    const handleDelete = async (id: string) => {
-        const confirmed = window.confirm('Yakin hapus lead ini?')
-        if (!confirmed) return
-
-        const { success, error } = await updateLead(id, { status: 'finish' })
-        if (success) {
-            refetch()
-        } else {
-            console.error('Gagal hapus:', error)
-        }
-    }
-
-    const columns = useMemo(
-        () => createLeadsColumns({
-            onStatusChange: handleStatusChange,
-            onDelete: handleDelete,
-        }),
-        [handleStatusChange, handleDelete]
-    )
+    const { data,
+        loading,
+        error,
+        refetch,
+        columns,
+        selectedLead,
+        dialogOpen,
+        handleRowClick,
+        handleDialogOpenChange,
+        handleStatusChange,
+        handleDelete,
+        handleUpdateField
+    } = useLeadsTable()
 
     return (
         <>
@@ -148,12 +136,23 @@ export default function Leads() {
                     {!loading && !error && (
                         <DataTable
                             columns={columns}
-                            data={leads}
+                            data={data}
                             searchKey="name"
                             searchPlaceholder="Cari nama atau company..."
+                            onRowClick={handleRowClick}
                         />
                     )}
                 </div>
+
+                <LeadDetailDialog
+                    lead={selectedLead}
+                    open={dialogOpen}
+                    onOpenChange={handleDialogOpenChange}
+                    onStatusChange={handleStatusChange}
+                    onDelete={handleDelete}
+                    onUpdateField={handleUpdateField}
+
+                />
             </div>
         </>
     )

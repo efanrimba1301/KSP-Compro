@@ -27,6 +27,7 @@ import { Checkbox } from '@/Components/ui/checkbox'
 type LeadsColumnProps = {
     onStatusChange: (id: string, status: LeadStatus) => void
     onDelete: (id: string) => void
+    onViewDetail: (lead: Lead) => void
 }
 
 const statusOptions: {
@@ -43,6 +44,7 @@ const statusOptions: {
 export function createLeadsColumns({
     onStatusChange,
     onDelete,
+    onViewDetail,
 }: LeadsColumnProps): ColumnDef<Lead>[] {
     return [
 
@@ -66,7 +68,8 @@ export function createLeadsColumns({
                 </div>
             ),
             cell: ({ row }) => (
-                <div className='flex items-center justify-center'>
+                <div className='flex items-center justify-center'
+                    onClick={(e) => e.stopPropagation()}>
                     <Checkbox
                         checked={row.getIsSelected()}
                         onCheckedChange={(value) => row.toggleSelected(!!value)}
@@ -214,69 +217,74 @@ export function createLeadsColumns({
             cell: ({ row }) => {
                 const lead = row.original
                 return (
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button
-                                variant="ghost"
-                                className="h-8 w-8 p-0 text-neutral-400 hover:text-white"
-                            >
-                                <HugeiconsIcon icon={MoreHorizontalIcon} className="ml-2 h-3.5 w-3.5" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent
-                            align="end"
-                            className="bg-neutral-900 border-neutral-800"
-                        >
-                            <DropdownMenuLabel className="text-neutral-400">
-                                Aksi
-                            </DropdownMenuLabel>
-                            <DropdownMenuSeparator className="bg-neutral-800" />
-                            <DropdownMenuItem
-                                className="text-neutral-200 hover:bg-neutral-800 cursor-pointer"
-                                onClick={() => navigator.clipboard.writeText(lead.email)}
-                            >
-                                <HugeiconsIcon icon={Copy01Icon} className="mr-2 h-3.5 w-3.5" />
-                                Copy Email
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                className="text-neutral-200 hover:bg-neutral-800 cursor-pointer"
-                            >
-                                <HugeiconsIcon icon={EyeIcon} className="mr-2 h-3.5 w-3.5" />
-                                Lihat Detail
-                            </DropdownMenuItem>
-                            <DropdownMenuSub>
-                                <DropdownMenuSubTrigger
-                                    className="text-neutral-200 hover:bg-neutral-800 cursor-pointer gap-2"
+                    <div
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button
+                                    variant="ghost"
+                                    className="h-8 w-8 p-0 text-neutral-400 hover:text-white"
                                 >
-                                    <HugeiconsIcon icon={ArrowDown01Icon} className="mr-2 h-3.5 w-3.5" />
-                                    Ubah Status
-                                </DropdownMenuSubTrigger>
-                                <DropdownMenuSubContent className="bg-neutral-900 border-neutral-800">
-                                    {statusOptions.map((opt) => (
-                                        <DropdownMenuItem
-                                            key={opt.value}
-                                            className={`cursor-pointer hover:bg-neutral-800 ${lead.status === opt.value
-                                                ? 'text-[#E8FF5A]'
-                                                : 'text-neutral-200'
-                                                }`}
-                                            onClick={() => onStatusChange(lead.id, opt.value)}
-                                        >
-                                            {opt.label}
-                                            {lead.status === opt.value && ' ✓'}
-                                        </DropdownMenuItem>
-                                    ))}
-                                </DropdownMenuSubContent>
-                            </DropdownMenuSub>
-                            <DropdownMenuSeparator className="bg-neutral-800" />
-                            <DropdownMenuItem
-                                className="text-red-400 hover:bg-neutral-800 cursor-pointer"
-                                onClick={() => onDelete(lead.id)}
+                                    <HugeiconsIcon icon={MoreHorizontalIcon} className="h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent
+                                align="end"
+                                className="bg-neutral-900 border-neutral-800"
                             >
-                                <HugeiconsIcon icon={Delete01Icon} className="mr-2 h-3.5 w-3.5" />
-                                Hapus
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                                <DropdownMenuLabel className="text-neutral-400">
+                                    Aksi
+                                </DropdownMenuLabel>
+                                <DropdownMenuSeparator className="bg-neutral-800" />
+                                <DropdownMenuItem
+                                    className="text-neutral-200 hover:bg-neutral-800 cursor-pointer"
+                                    onClick={() => navigator.clipboard.writeText(lead.email)}
+                                >
+                                    <HugeiconsIcon icon={Copy01Icon} className="mr-2 h-3.5 w-3.5" />
+                                    Copy Email
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    className="text-neutral-200 hover:bg-neutral-800 cursor-pointer"
+                                    onClick={() => onViewDetail(lead)}
+                                >
+                                    <HugeiconsIcon icon={EyeIcon} className="mr-2 h-3.5 w-3.5" />
+                                    Lihat Detail
+                                </DropdownMenuItem>
+                                <DropdownMenuSub>
+                                    <DropdownMenuSubTrigger
+                                        className="text-neutral-200 hover:bg-neutral-800 cursor-pointer gap-2"
+                                    >
+                                        <HugeiconsIcon icon={ArrowDown01Icon} className="mr-2 h-3.5 w-3.5" />
+                                        Ubah Status
+                                    </DropdownMenuSubTrigger>
+                                    <DropdownMenuSubContent className="bg-neutral-900 border-neutral-800">
+                                        {statusOptions.map((opt) => (
+                                            <DropdownMenuItem
+                                                key={opt.value}
+                                                className={`cursor-pointer hover:bg-neutral-800 ${lead.status === opt.value
+                                                    ? 'text-[#E8FF5A]'
+                                                    : 'text-neutral-200'
+                                                    }`}
+                                                onClick={() => onStatusChange(lead.id, opt.value)}
+                                            >
+                                                {opt.label}
+                                                {lead.status === opt.value && ' ✓'}
+                                            </DropdownMenuItem>
+                                        ))}
+                                    </DropdownMenuSubContent>
+                                </DropdownMenuSub>
+                                <DropdownMenuSeparator className="bg-neutral-800" />
+                                <DropdownMenuItem
+                                    className="text-red-400 hover:bg-neutral-800 cursor-pointer"
+                                    onClick={() => onDelete(lead.id)}
+                                >
+                                    <HugeiconsIcon icon={Delete01Icon} className="mr-2 h-3.5 w-3.5" />
+                                    Hapus
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
                 )
             },
         },

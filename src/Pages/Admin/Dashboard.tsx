@@ -4,49 +4,29 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowMoveUpRightIcon, ArrowMoveDownRightIcon } from "@hugeicons/core-free-icons";
 
 import { DataTable } from '@/Components/ui/data-table'
-import { useMemo } from 'react'
-import { createLeadsColumns } from './leads-columns'
-import { useLeads } from '@/hooks/useLeads'
-import { useUpdateLead } from '@/hooks/useUpdateLead'
-import type { LeadStatus } from '@/types/leads'
 import { ChartAreaInteractive } from "@/Components/chart-area-interactive";
 import { useVisitorStats } from '@/hooks/useVisitorStats'
+import { LeadDetailDialog } from '@/Components/LeadsDetailDialog'
+import { useLeadsTable } from "@/hooks/useLeadsTable";
 
 
 
 const Dashboard = () => {
     const { stats, isLoading } = useVisitorStats()
 
-    const { data, loading, error, refetch } = useLeads()
-    const { updateLead, deleteLead } = useUpdateLead()
-
-    const handleStatusChange = async (id: string, status: LeadStatus) => {
-        const { success, error } = await updateLead(id, { status })
-        if (success) {
-            refetch() // refresh tabel setelah update
-        } else {
-            console.error('Gagal update status:', error)
-        }
-    }
-    const handleDelete = async (id: string) => {
-        const confirmed = window.confirm('Yakin hapus lead ini?')
-        if (!confirmed) return
-
-        const { success, error } = await deleteLead(id)
-        if (success) {
-            refetch()
-        } else {
-            console.error('Gagal hapus:', error)
-        }
-    }
-
-    const columns = useMemo(
-        () => createLeadsColumns({
-            onStatusChange: handleStatusChange,
-            onDelete: handleDelete,
-        }),
-        [handleStatusChange, handleDelete]
-    )
+    const {
+        data,
+        loading,
+        error,
+        refetch,
+        columns,
+        selectedLead,
+        dialogOpen,
+        handleRowClick,
+        handleDialogOpenChange,
+        handleStatusChange,
+        handleDelete,
+    } = useLeadsTable()
 
     return (
         <>
@@ -194,8 +174,16 @@ const Dashboard = () => {
                         data={data}
                         searchKey="name"
                         searchPlaceholder="Cari nama atau company..."
+                        onRowClick={handleRowClick}
                     />
                 )}
+                <LeadDetailDialog
+                    lead={selectedLead}
+                    open={dialogOpen}
+                    onOpenChange={handleDialogOpenChange}
+                    onStatusChange={handleStatusChange}
+                    onDelete={handleDelete}
+                />
             </div>
         </>
     )

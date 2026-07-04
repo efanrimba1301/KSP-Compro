@@ -1,5 +1,3 @@
-// src/Pages/Admin/payment-columns.tsx
-
 import type { ColumnDef } from '@tanstack/react-table'
 import { Button } from '@/Components/ui/button'
 import { Badge } from '@/Components/ui/badge'
@@ -162,9 +160,9 @@ export function createPaymentColumns({
             accessorKey: 'payment_type',
             header: 'Payment Type',
             cell: ({ row }) => (
-                <span className="text-xs bg-neutral-800 text-neutral-300 px-2 py-0.5 rounded-full border border-neutral-700 whitespace-nowrap">
+                <Badge variant="outline" className="capitalize">
                     {paymentTypeLabel(row.getValue('payment_type'))}
-                </span>
+                </Badge>
             ),
         },
 

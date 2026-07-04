@@ -12,12 +12,19 @@ import {
     SheetTrigger,
 } from "@/Components/ui/sheet"
 import { HugeiconsIcon } from "@hugeicons/react";
-import { AddSquareIcon } from "@hugeicons/core-free-icons";
+import { AddSquareIcon, ArrowDown01, ArrowDown01Icon } from "@hugeicons/core-free-icons";
 
 import { useLeads } from "@/hooks/useLeads"
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { ServiceType } from "@/types/leads";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/Components/ui/dropdown-menu";
 import {
     Select,
     SelectContent,
@@ -29,6 +36,13 @@ import { Textarea } from "@/Components/ui/textarea";
 
 
 
+const serviceOptions: ServiceType[] = [
+    'Web & App Development',
+    'UI/UX Design',
+    'SaaS Engineering',
+    'IoT Engineering'
+]
+
 const AddLeadSchema = z.object({
     name: z.string()
         .min(1, "Name is required"),
@@ -38,6 +52,7 @@ const AddLeadSchema = z.object({
         .regex(/^[0-9]+$/, { message: "Phone must be a number" }),
     company: z.string()
         .min(1, "Company is required"),
+    services_required: z.array(z.string()).min(1, "Minimal pilih 1 service"),
 })
 
 
@@ -98,6 +113,49 @@ export function AddLeadSheet() {
                         <Label htmlFor="company">Company</Label>
                         <Input {...form.register("company")} type="text" placeholder="Nama Perusahaan Client" />
                         <span className="text-red-500">{form.formState.errors.company && form.formState.errors.company.message}</span>
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label>Service Requirement</Label>
+                        <Controller
+                            control={form.control}
+                            name="services_required"
+                            defaultValue={[]}
+                            render={({ field }) => (
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button
+                                            variant="outline"
+                                            className="w-full justify-between font-normal">
+                                            {field.value && field.value.length > 0
+                                                ? `${field.value.length} Service${field.value.length > 1 ? 's' : ''} Selected`
+                                                : "Select Service Requirement"}
+                                            <HugeiconsIcon icon={ArrowDown01Icon} className="sm:size-4" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent className="w-full min-w-[200px]">
+                                        {serviceOptions.map((service) => (
+                                            <DropdownMenuItem
+                                                key={service}
+                                                onSelect={(e) => {
+                                                    e.preventDefault() // Agar dropdown tidak menutup otomatis saat dipilih
+                                                    const current = field.value || []
+                                                    const updated = current.includes(service)
+                                                        ? current.filter((s) => s !== service)
+                                                        : [...current, service]
+                                                    field.onChange(updated)
+                                                }}
+                                                className="flex justify-between items-center cursor-pointer"
+                                            >
+                                                <span>{service}</span>
+                                                {field.value?.includes(service) && <span className="text-[#ffffff]">✓</span>}
+                                            </DropdownMenuItem>
+                                        ))}
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            )}
+                        />
+                        <span className="text-red-500 text-sm">{form.formState.errors.services_required?.message}</span>
                     </div>
 
                     <div className="flex flex-row- gap-2">

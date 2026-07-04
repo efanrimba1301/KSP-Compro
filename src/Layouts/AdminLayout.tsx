@@ -6,6 +6,8 @@ import HeaderDashboard from "@/Components/ui/HeaderDashboard";
 import { SidebarProvider, SidebarInset } from "@/Components/ui/sidebar";
 import { TooltipProvider } from "@/Components/ui/tooltip";
 import { ThemeProvider } from "@/Components/ui/ThemeProvider";
+import { Toaster } from "@/Components/ui/sonner"
+
 
 export default function AdminLayout() {
     return (
@@ -21,6 +23,7 @@ export default function AdminLayout() {
                     </SidebarInset>
                 </TooltipProvider>
             </SidebarProvider>
+            <Toaster position="top-center" />
         </ThemeProvider>
     );
 }
