@@ -26,6 +26,7 @@ const Dashboard = () => {
         handleDialogOpenChange,
         handleStatusChange,
         handleDelete,
+        handleUpdateField,
     } = useLeadsTable()
 
     return (
@@ -183,6 +184,8 @@ const Dashboard = () => {
                     onOpenChange={handleDialogOpenChange}
                     onStatusChange={handleStatusChange}
                     onDelete={handleDelete}
+                    onUpdateField={handleUpdateField}
+
                 />
             </div>
         </>

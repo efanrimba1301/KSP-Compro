@@ -1,4 +1,5 @@
 import type { ColumnDef } from '@tanstack/react-table'
+//ui
 import { Button } from '@/Components/ui/button'
 import { StatusBadge } from '@/Components/ui/status-badge'
 import { HugeiconsIcon } from '@hugeicons/react'
@@ -9,7 +10,6 @@ import {
     EyeIcon,
     Delete01Icon,
 } from '@hugeicons/core-free-icons'
-
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -23,11 +23,25 @@ import {
 } from '@/Components/ui/dropdown-menu'
 import type { Lead, LeadStatus } from '@/types/leads'
 import { Checkbox } from '@/Components/ui/checkbox'
+import { toast } from 'sonner'
 
 type LeadsColumnProps = {
     onStatusChange: (id: string, status: LeadStatus) => void
     onDelete: (id: string) => void
     onViewDetail: (lead: Lead) => void
+}
+
+//Copy Handler
+const handleCopy = (text: string, type: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+        toast.success(`${type} copied to clipboard`, {
+            duration: 1000,
+        })
+    }).catch(() => {
+        toast.error(`Failed to copy ${type}`, {
+            duration: 1000,
+        })
+    })
 }
 
 const statusOptions: {
@@ -239,7 +253,7 @@ export function createLeadsColumns({
                                 <DropdownMenuSeparator className="bg-neutral-800" />
                                 <DropdownMenuItem
                                     className="text-neutral-200 hover:bg-neutral-800 cursor-pointer"
-                                    onClick={() => navigator.clipboard.writeText(lead.email)}
+                                    onClick={() => handleCopy(lead.email, 'Email')}
                                 >
                                     <HugeiconsIcon icon={Copy01Icon} className="mr-2 h-3.5 w-3.5" />
                                     Copy Email

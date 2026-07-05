@@ -10,6 +10,20 @@ export type ServiceType =
     | 'SaaS Engineering'
     | 'IoT Engineering'
 
+export type BudgetRange =
+    | 'Under 5JT'
+    | '5JT - 15JT'
+    | '15JT - 35JT'
+    | '35JT - 65JT'
+    | '65JT - 100JT'
+    | '100JT++'
+
+export type HeardFrom =
+    | 'Instagram'
+    | 'Google'
+    | 'ChatGPT'
+    | 'Other'
+
 export type Lead = {
     id: string
     name: string

@@ -12,13 +12,13 @@ import {
     SheetTrigger,
 } from "@/Components/ui/sheet"
 import { HugeiconsIcon } from "@hugeicons/react";
-import { AddSquareIcon, ArrowDown01, ArrowDown01Icon } from "@hugeicons/core-free-icons";
+import { AddSquareIcon, ArrowDown01Icon } from "@hugeicons/core-free-icons";
 
 import { useLeads } from "@/hooks/useLeads"
 import { useForm, Controller } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { ServiceType } from "@/types/leads";
+import type { ServiceType, BudgetRange, HeardFrom } from "@/types/leads";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -41,6 +41,22 @@ const serviceOptions: ServiceType[] = [
     'UI/UX Design',
     'SaaS Engineering',
     'IoT Engineering'
+]
+
+const heardFromOptions: HeardFrom[] = [
+    'Instagram',
+    'Google',
+    'ChatGPT',
+    'Other'
+]
+
+const budgetRangeOptions: BudgetRange[] = [
+    'Under 5JT',
+    '5JT - 15JT',
+    '15JT - 35JT',
+    '35JT - 65JT',
+    '65JT - 100JT',
+    '100JT++'
 ]
 
 const AddLeadSchema = z.object({
@@ -88,8 +104,9 @@ export function AddLeadSheet() {
                     </SheetDescription>
                 </SheetHeader>
                 <form
+                    id="form-add-lead"
                     onSubmit={form.handleSubmit((handleSubmit))}
-                    className="grid flex-1 auto-rows-min gap-2 px-4">
+                    className="flex-1 overflow-y-auto scrollbar-thumb-black/40 px-4 grid gap-2">
                     <div className="grid gap-2">
                         <Label htmlFor="name">Name</Label>
                         <Input {...form.register("name")} type="text" placeholder="Nama Client" />
@@ -138,7 +155,7 @@ export function AddLeadSheet() {
                                             <DropdownMenuItem
                                                 key={service}
                                                 onSelect={(e) => {
-                                                    e.preventDefault() // Agar dropdown tidak menutup otomatis saat dipilih
+                                                    e.preventDefault()
                                                     const current = field.value || []
                                                     const updated = current.includes(service)
                                                         ? current.filter((s) => s !== service)
@@ -166,10 +183,14 @@ export function AddLeadSheet() {
                                     <SelectValue placeholder="Budget Range Client" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="<5jt"> kurang dari 5jt</SelectItem>
-                                    <SelectItem value="5jt-10jt"> 5jt - 10jt</SelectItem>
-                                    <SelectItem value="10jt-15jt"> 10jt - 15jt</SelectItem>
-                                    <SelectItem value=">15jt"> lebih dari 15jt</SelectItem>
+                                    {budgetRangeOptions.map((budgetRange) => (
+                                        <SelectItem
+                                            key={budgetRange}
+                                            value={budgetRange}
+                                        >
+                                            {budgetRange}
+                                        </SelectItem>
+                                    ))}
                                 </SelectContent>
                             </Select>
                             <span className="text-red-500"></span>
@@ -181,10 +202,14 @@ export function AddLeadSheet() {
                                     <SelectValue placeholder="Heard From Client" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="Social Media">Social Media</SelectItem>
-                                    <SelectItem value="Website">Website</SelectItem>
-                                    <SelectItem value="Rekomendasi">Rekomendasi</SelectItem>
-                                    <SelectItem value="Lainnya">Lainnya</SelectItem>
+                                    {heardFromOptions.map((source) => (
+                                        <SelectItem
+                                            key={source}
+                                            value={source}
+                                        >
+                                            {source}
+                                        </SelectItem>
+                                    ))}
                                 </SelectContent>
                             </Select>
                             <span className="text-red-500"></span>
@@ -197,10 +222,17 @@ export function AddLeadSheet() {
                         <Textarea className="border-b-mauve-400 min-h-[80px] resize-y border-2" placeholder="Project Detail Client" />
                         <span className="text-red-500"></span>
                     </div>
-
-                    <Button>Save changes</Button>
+                    <div className="grid gap-2">
+                        <Textarea className="border-b-mauve-400 min-h-[30px] max-h-[65px] resize-y border-2" placeholder="Internal Notes" />
+                        <span className="text-red-500"></span>
+                    </div>
                 </form>
-                <SheetFooter>
+                <SheetFooter className="mt-auto">
+                    <Button
+                        type="submit"
+                        form="form-add-lead">
+                        Save changes
+                    </Button>
                     <SheetClose asChild>
                         <Button variant="outline">Close</Button>
                     </SheetClose>

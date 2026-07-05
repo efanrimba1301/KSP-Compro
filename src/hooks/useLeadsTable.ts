@@ -93,7 +93,7 @@ export function useLeadsTable({ onRowClick }: UseLeadsTableOptions = {}) {
     }, [updateLead, refetch]
     )
 
-    const handleUpdateField = useCallback(async (id: string, field: keyof Lead, value: string) => {
+    const handleUpdateField = useCallback(async (id: string, field: keyof Lead, value: any) => {
         const { success, error } = await updateLead(id, { [field]: value })
         if (success) {
             refetch()
