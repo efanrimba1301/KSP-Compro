@@ -401,7 +401,7 @@ export function LeadDetailDialog({
                             <DetailRow icon={MoneyBag01Icon} label="Budget Range" >
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
-                                        <Button variant="outline" className="w-full py-5 justify-between font-normal">
+                                        <Button variant="outline" className="w-full py-4.5 justify-between font-normal">
                                             {form.budget_range || "Select Budget Range"}
                                             <HugeiconsIcon icon={ArrowDown01Icon} className="w-4 h-4" />
                                         </Button>

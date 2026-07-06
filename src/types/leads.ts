@@ -9,6 +9,8 @@ export type ServiceType =
     | 'UI/UX Design'
     | 'SaaS Engineering'
     | 'IoT Engineering'
+    | 'AI Tools'
+    | 'Others'
 
 export type BudgetRange =
     | 'Under 5JT'

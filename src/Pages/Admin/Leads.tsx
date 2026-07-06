@@ -1,12 +1,4 @@
-import { DataTable } from '@/Components/ui/data-table'
-import { AddLeadSheet } from '@/Components/AddLeadsSheet'
 import { useLeadsTable } from '@/hooks/useLeadsTable'
-
-// import { createLeadsColumns } from './leads-columns'
-// import type { LeadStatus } from '@/types/leads'
-// import { useUpdateLead } from '@/hooks/useUpdateLead'
-// import { useLeads } from '@/hooks/useLeads'
-// import { useMemo } from 'react'
 
 //ui
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter, CardAction } from "@/Components/ui/card";
@@ -14,6 +6,9 @@ import { Badge } from "@/Components/ui/badge";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowMoveUpRightIcon } from "@hugeicons/core-free-icons";
 import { LeadDetailDialog } from '@/Components/LeadsDetailDialog';
+import { AddLeadSheet } from '@/Components/AddLeadsSheet'
+import { DataTable } from '@/Components/ui/data-table'
+
 
 export default function Leads() {
     const { data,

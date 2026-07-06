@@ -141,7 +141,13 @@ export function createPortfolioColumns({ onEdit, onStatusChange, onDelete }: Por
         cell: ({ row }) => {
             const created_at = row.getValue('created_at') as string
             return (
-                <span className="text-neutral-300 text-sm">{new Date(created_at).toLocaleDateString()}</span>
+                <span className="text-neutral-300 text-sm">
+                    {new Date(created_at).toLocaleDateString('id-ID', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                    })}
+                </span>
             )
         }
     },
