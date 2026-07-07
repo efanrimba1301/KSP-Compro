@@ -1,4 +1,8 @@
 import { useState } from "react"
+import { z } from "zod"
+import { useForm, Controller } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { portfolioFormSchema, type PortfolioFormValues } from "@/schemas/portfolio_schema"
 import {
     Card,
     CardHeader,
@@ -30,7 +34,8 @@ import {
     ArrowDown01Icon,
     Bookmark02Icon,
     SentIcon,
-    ImageAdd01Icon
+    ImageAdd01Icon,
+    Images
 } from "@hugeicons/core-free-icons"
 import { Input } from "./ui/input"
 import {
@@ -70,18 +75,27 @@ import {
     ComboboxValue,
     useComboboxAnchor,
 } from "@/Components/ui/combobox"
-import type { ProjectType } from "@/types/portfolio"
+import type { ProjectType, ProjectCategory } from "@/types/portfolio"
 import { Badge } from "./ui/badge"
 import React from "react"
+import { useImageUpload } from "@/hooks/useImageUpload"
+import { toast } from "sonner"
 
 
 const ServiceOptions: ProjectType[] = [
     'Web & App Development',
     'Mobile App',
+    'SaaS Engineering',
     'UI/UX Design',
     'IoT',
     'AI Tool',
     'Others'
+]
+
+const CategoryOption: ProjectCategory[] = [
+    'Basic',
+    'Enterprise',
+    'Custom'
 ]
 
 const Tags = [
@@ -92,24 +106,64 @@ const Tags = [
     "Landing Page"
 ] as const
 
-const image = [
-    {
-        name: "image1",
-        meta: "JPG · 1.1 MB",
-        url: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=900&auto=format&fit=crop&q=80",
-        alt: "Hero Section Image"
-    }
-]
-
-const imagesPenunjang = [
-    { name: "image2", meta: "JPEG · 8.9 MB", src: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1172&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", alt: "Vast desert landscape" },
-    { name: "image3", meta: "PNG · 4.2 MB", src: "https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", alt: "Flowing river through forest" },
-    { name: "image4", meta: "JPEG · 2.5 MB", src: "https://plus.unsplash.com/premium_photo-1683147638125-fd31a506a429?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", alt: "Snowy mountain peak against blue sky" },
-]
-
 const PortfolioForm = () => {
-    const [selectedServices, setSelectedServices] = useState<ProjectType[]>([])
     const anchor = useComboboxAnchor()
+    const {
+        register,
+        control,
+        handleSubmit,
+        watch,
+        setValue,
+        formState: { errors },
+    } = useForm<z.input<typeof portfolioFormSchema>, any, z.output<typeof portfolioFormSchema>>({
+        resolver: zodResolver(portfolioFormSchema),
+        defaultValues: {
+            project_name: "",
+            client: "",
+            year: new Date().getFullYear(),
+            description: "",
+            category: "Basic",
+            services_required: [],
+            tags: [],
+            project_url: "",
+            is_featured: false,
+        },
+    })
+
+    const descriptionValue = watch("description")
+    const servicesValue = watch("services_required")
+
+    const cover = useImageUpload({ maxFiles: 1, maxSizeMB: 2 })
+    const gallery = useImageUpload({ maxFiles: 4, maxSizeMB: 3 })
+
+    const onSubmit = (status: "draft" | "published") =>
+        handleSubmit((data: PortfolioFormValues) => {
+            if (cover.images.length === 0) {
+                toast.error("Cover image wajib diunggah.")
+                return
+            }
+
+            const payload = {
+                ...data,
+                status,
+                cover_image: cover.images[0].file,
+                gallery_images: gallery.images.map((img) => img.file),
+            }
+
+            console.log("Payload siap kirim:", payload)
+            toast.promise(
+                new Promise((resolve) => setTimeout(() =>
+                    resolve(data), 1000)
+                ),
+                {
+                    loading: "Mengunggah portofolio...",
+                    success: "Portofolio berhasil ditambahkan!",
+                    error: "Gagal menambahkan portofolio.",
+                }
+            )
+            // TODO: ganti console.log ini dengan Supabase insert kalau backend udah ready
+        })
+
 
     // ── Reusable blocks ──────────────────────────────────────────────────────
 
@@ -118,19 +172,21 @@ const PortfolioForm = () => {
         <Card className="w-full">
             <CardContent className="py-3 px-3">
                 <div className="flex flex-row items-center gap-3">
-                    {image.map((img) => (
+                    {cover.images.map((img) => (
                         <img
                             key={img.name}
-                            src={img.url}
-                            alt={img.alt}
+                            src={img.previewUrl}
+                            alt={img.name}
                             className="h-12 w-20 rounded object-cover shrink-0"
                         />
                     ))}
                     <div className="flex flex-col gap-0.5 min-w-0">
-                        <p className="text-sm font-medium truncate">Notarix DMS</p>
-                        <p className="text-xs text-muted-foreground truncate">Preview kartu publik</p>
+                        <p className="text-sm font-medium truncate">{watch("project_name") || "Judul Proyek (akan muncul di halaman publik)"}</p>
+                        <p className="text-xs text-muted-foreground truncate">{descriptionValue || "Deskripsi Proyek (akan muncul di halaman publik)"}</p>
                     </div>
-                    <Badge variant="secondary" className="ml-auto shrink-0">Featured</Badge>
+                    <Badge variant="secondary" className="ml-auto shrink-0">
+                        {watch("is_featured") ? "Featured" : "Not Featured"}
+                    </Badge>
                 </div>
             </CardContent>
         </Card>
@@ -139,22 +195,22 @@ const PortfolioForm = () => {
     /** Preview card — full version (desktop sidebar) */
     const PreviewCardFull = (
         <Card className="relative w-full pt-0 overflow-hidden">
-            {image.map((img) => (
+            {cover.images.map((img) => (
                 <div key={img.name} className="h-[180px]">
                     <img
-                        src={img.url}
-                        alt={img.alt}
+                        src={img.previewUrl}
+                        alt={img.name}
                         className="w-full h-full object-cover"
                     />
                 </div>
             ))}
             <CardHeader className="pt-3 pb-2 px-4">
                 <CardAction>
-                    <Badge variant="secondary">Featured</Badge>
+                    <Badge variant="secondary">{watch("is_featured") ? "Featured" : "Not Featured"}</Badge>
                 </CardAction>
-                <CardTitle className="text-base">Notarix DMS</CardTitle>
+                <CardTitle className="text-base">{watch("project_name") || "Judul Proyek (akan muncul di halaman publik)"}</CardTitle>
                 <CardDescription className="text-xs line-clamp-2">
-                    Sistem Manajemen Dokumen digital khusus untuk mengelola akta dan dokumen kenotariatan dengan aman dan efisien.
+                    {descriptionValue || "Sistem Manajemen Dokumen digital khusus untuk mengelola akta dan dokumen kenotariatan dengan aman dan efisien."}
                 </CardDescription>
             </CardHeader>
         </Card>
@@ -170,99 +226,127 @@ const PortfolioForm = () => {
             <CardContent className="flex flex-col gap-4 pb-4">
                 <div className="flex flex-col gap-1.5">
                     <Label htmlFor="category" className="text-sm font-medium">Kategori</Label>
-                    <Select>
-                        <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select a category" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="umkm">UMKM</SelectItem>
-                            <SelectItem value="enterprise">Enterprise</SelectItem>
-                            <SelectItem value="custom">Custom</SelectItem>
-                        </SelectContent>
-                    </Select>
+                    <Controller
+                        control={control}
+                        name="category"
+                        render={({ field }) => (
+                            <Select onValueChange={field.onChange} value={field.value}>
+                                <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Select a category" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {CategoryOption.map((category) => {
+                                        return (
+                                            <SelectItem key={category} value={category}>
+                                                {category}
+                                            </SelectItem>
+                                        )
+                                    })}
+                                </SelectContent>
+                            </Select>
+                        )}
+                    />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
                     <Label htmlFor="Service" className="text-sm font-medium">Services</Label>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button
-                                variant="outline"
-                                className="w-full py-2 h-auto justify-between font-normal flex flex-wrap gap-2"
-                            >
-                                <div className="flex gap-2 flex-wrap flex-1 text-left">
-                                    {selectedServices.map((service) => (
-                                        <Badge key={service} variant="outline">{service}</Badge>
-                                    ))}
-                                    {selectedServices.length === 0 && (
-                                        <span className="text-muted-foreground">Select Services</span>
-                                    )}
-                                </div>
-                                <HugeiconsIcon icon={ArrowDown01Icon} className="w-4 h-4 shrink-0 mt-1" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                            {ServiceOptions.map((opt) => {
-                                const isSelected = selectedServices.includes(opt)
-                                return (
-                                    <DropdownMenuItem
-                                        key={opt}
-                                        className={`cursor-pointer hover:bg-neutral-800 ${isSelected ? 'text-[#E8FF5A]' : 'text-neutral-200'}`}
-                                        onClick={(e) => {
-                                            e.preventDefault()
-                                            if (isSelected) {
-                                                setSelectedServices(prev => prev.filter(s => s !== opt))
-                                            } else {
-                                                setSelectedServices(prev => [...prev, opt])
-                                            }
-                                        }}
+                    <Controller
+                        name="services_required"
+                        control={control}
+                        render={({ field }) => (
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button
+                                        variant="outline"
+                                        className="w-full py-2 h-auto justify-between font-normal flex flex-wrap gap-2"
                                     >
-                                        {opt}
-                                        {isSelected && ' \u2713'}
-                                    </DropdownMenuItem>
-                                )
-                            })}
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                                        <div className="flex gap-2 flex-wrap flex-1 text-left">
+                                            {field.value.map((service) => (
+                                                <Badge key={service} variant="outline">{service}</Badge>
+                                            ))}
+                                            {field.value.length === 0 && (
+                                                <span className="text-muted-foreground">Select Services</span>
+                                            )}
+                                        </div>
+                                        <HugeiconsIcon icon={ArrowDown01Icon} className="w-4 h-4 shrink-0 mt-1" />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    {ServiceOptions.map((opt) => {
+                                        const isSelected = field.value.includes(opt)
+                                        return (
+                                            <DropdownMenuItem
+                                                key={opt}
+                                                className={`cursor-pointer hover:bg-neutral-800 ${isSelected ? 'text-[#E8FF5A]' : 'text-neutral-200'}`}
+                                                onClick={(e) => {
+                                                    e.preventDefault()
+                                                    field.onChange(
+                                                        isSelected
+                                                            ? field.value.filter((s) => s !== opt)
+                                                            : [...field.value, opt]
+                                                    )
+                                                }}
+                                            >
+                                                {opt}
+                                                {isSelected && ' \u2713'}
+                                            </DropdownMenuItem>
+                                        )
+                                    })}
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        )}
+                    />
+                    {errors.services_required && (
+                        <p className="text-sm text-destructive mt-1">{errors.services_required.message}</p>
+                    )}
                 </div>
 
                 <div className="flex flex-col gap-1.5">
                     <Label className="text-sm font-medium">Tags</Label>
-                    <Combobox
-                        multiple
-                        autoHighlight
-                        items={Tags}
-                        defaultInputValue={[Tags[0]]}
-                    >
-                        <ComboboxChips ref={anchor} className="w-full">
-                            <ComboboxValue>
-                                {(values) => (
-                                    <React.Fragment>
-                                        {values.map((value: string) => (
-                                            <ComboboxChip key={value}>{value}</ComboboxChip>
-                                        ))}
-                                        <ComboboxChipsInput placeholder="Select Tags" />
-                                        <HugeiconsIcon icon={ArrowDown01Icon} className="w-4 h-4 shrink-0" />
-                                    </React.Fragment>
-                                )}
-                            </ComboboxValue>
-                        </ComboboxChips>
-                        <ComboboxContent anchor={anchor}>
-                            <ComboboxEmpty>No items found.</ComboboxEmpty>
-                            <ComboboxList>
-                                {(item) => (
-                                    <ComboboxItem key={item} value={item}>
-                                        {item}
-                                    </ComboboxItem>
-                                )}
-                            </ComboboxList>
-                        </ComboboxContent>
-                    </Combobox>
+                    <Controller
+                        control={control}
+                        name="tags"
+                        render={({ field }) => (
+                            <Combobox
+                                multiple
+                                autoHighlight
+                                items={Tags}
+                                value={field.value}
+                                onValueChange={field.onChange}
+                            >
+                                <ComboboxChips ref={anchor} className="w-full">
+                                    <ComboboxValue>
+                                        {(values) => (
+                                            <React.Fragment>
+                                                {values.map((value: string) => (
+                                                    <ComboboxChip key={value}>{value}</ComboboxChip>
+                                                ))}
+                                                <ComboboxChipsInput placeholder="Select Tags" />
+                                                <HugeiconsIcon icon={ArrowDown01Icon} className="w-4 h-4 shrink-0" />
+                                            </React.Fragment>
+                                        )}
+                                    </ComboboxValue>
+                                </ComboboxChips>
+                                <ComboboxContent anchor={anchor}>
+                                    <ComboboxEmpty>No items found.</ComboboxEmpty>
+                                    <ComboboxList>
+                                        {(item) => (
+                                            <ComboboxItem key={item} value={item}>
+                                                {item}
+                                            </ComboboxItem>
+                                        )}
+                                    </ComboboxList>
+                                </ComboboxContent>
+                            </Combobox>
+                        )}
+                    />
+                    {errors.tags && <p className="text-sm text-destructive mt-1">{errors.tags.message}</p>}
                 </div>
 
                 <div className="flex flex-col gap-1.5">
                     <Label htmlFor="link" className="text-sm font-medium">Link</Label>
-                    <Input id="link" className="w-full" placeholder="https://example.com" />
+                    <Input id="link" className="w-full" placeholder="https://example.com" {...register("project_url")} />
+                    {errors.project_url && <p className="text-sm text-destructive mt-1">{errors.project_url.message}</p>}
                 </div>
             </CardContent>
         </Card>
@@ -285,7 +369,17 @@ const PortfolioForm = () => {
                                     Tampilkan di highlight halaman depan
                                 </FieldDescription>
                             </FieldContent>
-                            <Switch id="switch-featured" />
+                            <Controller
+                                control={control}
+                                name="is_featured"
+                                render={({ field }) => (
+                                    <Switch
+                                        id="switch-featured"
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                )}
+                            />
                         </Field>
                     </FieldLabel>
                 </FieldGroup>
@@ -293,7 +387,7 @@ const PortfolioForm = () => {
                 <div className="flex flex-row gap-2 w-full pt-1">
                     <Tooltip>
                         <TooltipTrigger asChild>
-                            <Button variant="outline" size="lg" className="flex-1">
+                            <Button variant="outline" size="lg" className="flex-1" onClick={onSubmit("draft")}>
                                 <HugeiconsIcon icon={Bookmark02Icon} />
                                 Save Draft
                             </Button>
@@ -304,7 +398,7 @@ const PortfolioForm = () => {
                     </Tooltip>
                     <Tooltip>
                         <TooltipTrigger asChild>
-                            <Button variant="default" size="lg" className="flex-1">
+                            <Button variant="default" size="lg" className="flex-1" onClick={onSubmit("published")}>
                                 <HugeiconsIcon icon={SentIcon} />
                                 Publish
                             </Button>
@@ -340,23 +434,23 @@ const PortfolioForm = () => {
                     <CardContent className="-mb-(--card-spacing) px-0">
                         <div className="flex flex-col gap-3 border-t bg-muted/50 px-4 py-4">
                             <AttachmentGroup className="w-full flex-col">
-                                {image.map((img) => (
-                                    <Attachment key={img.name} orientation="horizontal" className="w-full">
+                                {cover.images.map((img) => (
+                                    <Attachment key={img.id} orientation="horizontal" className="w-full">
                                         <AttachmentMedia variant="image">
-                                            <img src={img.url} alt={img.alt} />
+                                            <img src={img.previewUrl} alt={img.name} />
                                         </AttachmentMedia>
                                         <AttachmentContent>
                                             <AttachmentTitle>{img.name}</AttachmentTitle>
                                             <AttachmentDescription>{img.meta}</AttachmentDescription>
                                         </AttachmentContent>
                                         <AttachmentActions>
-                                            <AttachmentAction aria-label={`Remove ${img.name}`}>
+                                            <AttachmentAction aria-label={`Remove ${img.name}`} onClick={() => cover.removeImage(img.id)}>
                                                 <HugeiconsIcon icon={Cancel01Icon} />
                                             </AttachmentAction>
                                         </AttachmentActions>
                                         <AttachmentTrigger asChild>
                                             <a
-                                                href={img.url}
+                                                href={img.id}
                                                 target="_blank"
                                                 rel="noreferrer"
                                                 aria-label={`Open ${img.name}`}
@@ -368,7 +462,10 @@ const PortfolioForm = () => {
 
                             <label
                                 htmlFor="dropzone-cover"
-                                className="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-muted-foreground/30 rounded-lg cursor-pointer bg-muted/30 hover:bg-muted/50 transition-colors"
+                                className={`flex flex-col items-center justify-center w-full h-36 border-2 border-dashed rounded-lg transition-colors ${cover.isFull
+                                    ? "opacity-40 cursor-not-allowed border-muted-foreground/20"
+                                    : "cursor-pointer border-muted-foreground/30 bg-muted/30 hover:bg-muted/50"
+                                    }`}
                             >
                                 <div className="flex flex-col items-center justify-center gap-3">
                                     <div className="p-3 bg-background rounded-full shadow-sm border">
@@ -383,8 +480,17 @@ const PortfolioForm = () => {
                                         </p>
                                     </div>
                                 </div>
-                                <input id="dropzone-cover" type="file" className="sr-only" accept="image/*" />
+                                <input
+                                    id="dropzone-cover"
+                                    type="file"
+                                    className="sr-only"
+                                    accept="image/*"
+                                    disabled={cover.isFull}
+                                    onChange={(e) => cover.addFiles(e.target.files)} />
                             </label>
+                            {cover.error && (
+                                <p className="text-xs text-destructive">{cover.error}</p>
+                            )}
                         </div>
                     </CardContent>
                 </Card>
@@ -404,8 +510,11 @@ const PortfolioForm = () => {
                                 id="title"
                                 className="w-full"
                                 placeholder="Contoh: Notarix DMS"
+                                {...register("project_name")}
                             />
-                            <p className="text-xs text-muted-foreground">Maks. 140 karakter</p>
+                            {errors.project_name && (
+                                <p className="text-xs text-destructive">{errors.project_name.message}</p>
+                            )}
                         </div>
 
                         {/* Client + Date — always 2 columns */}
@@ -417,15 +526,23 @@ const PortfolioForm = () => {
                                     id="client"
                                     className="w-full"
                                     placeholder="Notarix"
+                                    {...register("client")}
                                 />
+                                {errors.client?.message && (
+                                    <p className="text-xs text-destructive">{errors.client.message}</p>
+                                )}
                             </div>
                             <div className="flex flex-col gap-1.5">
-                                <label htmlFor="date" className="text-sm font-medium">Tahun</label>
+                                <label htmlFor="year" className="text-sm font-medium">Tahun</label>
                                 <Input
-                                    type="date"
-                                    id="date"
+                                    type="number"
+                                    id="year"
                                     className="w-full"
+                                    {...register("year")}
                                 />
+                                {errors.year?.message && (
+                                    <p className="text-xs text-destructive">{errors.year.message}</p>
+                                )}
                             </div>
                         </div>
 
@@ -464,10 +581,14 @@ const PortfolioForm = () => {
                                     <InputGroupTextarea
                                         id="desc"
                                         placeholder="Ringkas 1-2 kalimat"
+                                        {...register("description")}
                                     />
                                     <InputGroupAddon align="block-end">
-                                        <InputGroupText>0/500</InputGroupText>
+                                        <InputGroupText>{descriptionValue?.length ?? 0}/500</InputGroupText>
                                     </InputGroupAddon>
+                                    {errors.description && (
+                                        <p className="text-xs text-destructive">{errors.description.message}</p>
+                                    )}
                                 </InputGroup>
                             </Field>
                         </FieldGroup>
@@ -485,29 +606,29 @@ const PortfolioForm = () => {
                         <CardTitle className="text-base">Galeri</CardTitle>
                         <CardDescription className="text-xs">Gambar penunjang (opsional)</CardDescription>
                         <CardAction>
-                            <p className="text-sm text-muted-foreground">3/4</p>
+                            <p className="text-sm text-muted-foreground">{gallery.images.length}/4</p>
                         </CardAction>
                     </CardHeader>
                     <CardContent className="flex flex-col gap-4 pb-4">
                         {/* 2 cols on mobile, flex wrap on desktop */}
                         <AttachmentGroup className="grid grid-cols-3 lg:flex lg:flex-wrap items-center justify-center gap-2 lg:gap-4">
-                            {imagesPenunjang.map((img) => (
+                            {gallery.images.map((img) => (
                                 <Attachment key={img.name} orientation="vertical">
                                     <AttachmentMedia variant="image">
-                                        <img src={img.src} alt={img.alt} />
+                                        <img src={img.previewUrl} alt={img.name} />
                                     </AttachmentMedia>
                                     <AttachmentContent>
                                         <AttachmentTitle>{img.name}</AttachmentTitle>
                                         <AttachmentDescription>{img.meta}</AttachmentDescription>
                                     </AttachmentContent>
                                     <AttachmentActions>
-                                        <AttachmentAction aria-label={`Remove ${img.name}`}>
+                                        <AttachmentAction aria-label={`Remove ${img.name}`} onClick={() => gallery.removeImage(img.id)}>
                                             <HugeiconsIcon icon={Cancel01Icon} />
                                         </AttachmentAction>
                                     </AttachmentActions>
                                     <AttachmentTrigger asChild>
                                         <a
-                                            href={img.src}
+                                            href={img.previewUrl}
                                             target="_blank"
                                             rel="noreferrer"
                                             aria-label={`Open ${img.name}`}
@@ -536,7 +657,7 @@ const PortfolioForm = () => {
                                     </p>
                                 </div>
                             </div>
-                            <input id="dropzone-gallery" type="file" className="sr-only" multiple accept="image/*" />
+                            <input id="dropzone-gallery" type="file" className="sr-only" multiple accept="image/*" onChange={(e) => gallery.addFiles(e.target.files)} />
                         </label>
                     </CardContent>
                 </Card>

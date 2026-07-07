@@ -9,7 +9,7 @@ export type ProjectType =
     | 'AI Tool'
     | 'Others';
 
-export type ProjectCategory = 'UMKM' | 'Enterprise' | 'Custom';
+export type ProjectCategory = 'Basic' | 'Enterprise' | 'Custom';
 
 
 export interface Portfolio {
@@ -17,7 +17,9 @@ export interface Portfolio {
     project_name: string
     client: string
     category: ProjectCategory
-    services_required: ProjectType
+    services_required: ProjectType[]
+    tags: string[]
+    project_url?: string
     status: ProjectStatus
     year: number
     description: string
