@@ -8,18 +8,19 @@ import { PlusSignIcon } from '@hugeicons/core-free-icons'
 import { createPortfolioColumns } from './portofolio-columns'
 import { portfolioDummyData } from '@/data/portofolio-dummy'
 import type { Portfolio, ProjectStatus } from '@/types/portfolio'
+import { PortfolioDetailDialog } from '@/Components/PortfolioDetailDialog'
 
 const PortfolioPage = () => {
     // State data — nanti diganti dengan hook Supabase
     const [data, setData] = useState<Portfolio[]>(portfolioDummyData)
-    const [, setSelectedPortfolio] = useState<Portfolio | null>(null)
+    const [selectedPortfolio, setSelectedPortfolio] = useState<Portfolio | null>(null)
+    const [dialogOpen, setDialogOpen] = useState(false)
     const navigate = useNavigate();
 
     // ─── Handlers ──────────────────────────────────────────────────────────
     const handleEdit = useCallback((portfolio: Portfolio) => {
-        // TODO: buka dialog/modal edit
-        console.log('Edit portfolio:', portfolio)
-        alert(`Edit: ${portfolio.project_name} — segera diimplementasikan`)
+        setSelectedPortfolio(portfolio)
+        setDialogOpen(true)
     }, [])
 
     const handleDelete = useCallback((id: string) => {
@@ -38,8 +39,20 @@ const PortfolioPage = () => {
     }, [])
 
     const handleRowClick = useCallback((portfolio: Portfolio) => {
-        alert(`Edit: ${portfolio.project_name} — segera diimplementasikan`)
+        setSelectedPortfolio(portfolio)
+        setDialogOpen(true)
     }, [])
+
+    const handleUpdateField = useCallback(
+        async (id: string, field: keyof Portfolio, value: Portfolio[keyof Portfolio]) => {
+            setData((prev) =>
+                prev.map((item) => (item.id === id ? { ...item, [field]: value } : item))
+            )
+            // TODO: ganti dengan Supabase update kalau backend udah ready
+            console.log(`Update ${field} untuk ${id}:`, value)
+        },
+        []
+    )
 
     // ─── Column definition ─────────────────────────────────────────────────
     const columns = useMemo(
@@ -122,6 +135,15 @@ const PortfolioPage = () => {
                 searchKey="project_name"
                 searchPlaceholder="Cari nama project atau client..."
                 onRowClick={handleRowClick}
+            />
+
+            <PortfolioDetailDialog
+                open={dialogOpen}
+                onOpenChange={setDialogOpen}
+                portfolio={selectedPortfolio}
+                onStatusChange={handleStatusChange}
+                onUpdateField={handleUpdateField}
+                onDelete={handleDelete}
             />
         </div>
     )

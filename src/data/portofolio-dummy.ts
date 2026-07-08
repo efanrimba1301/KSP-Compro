@@ -7,13 +7,16 @@ export const portfolioDummyData: Portfolio[] = [
         project_name: 'Notarix DMS',
         client: 'Notarix',
         category: 'Basic',
-        services_required: ['SaaS Engineering'],
+        services_required: ['SaaS Engineering', 'Web & App Development'],
         tags: [],
         status: 'published',
         year: 2024,
-        description: 'Sistem manajemen dokumen digital untuk kantor notaris. Fitur utama: upload dokumen, tracking status, client portal.',
+        description: 'Sistem manajemen dokumen digital untuk kantor notaris. Fitur utama: upload dokumen, tracking status, client portal.Deskripsi panjang untuk project ini.',
+        note: 'Sistem manajemen dokumen digital untuk kantor notaris. Fitur utama: upload dokumen, tracking status, client portal.',
         is_featured: true,
         created_at: '2024-01-15T00:00:00.000Z',
+        updated_at: ''
+
     },
     {
         id: '2',
@@ -25,21 +28,26 @@ export const portfolioDummyData: Portfolio[] = [
         status: 'draft',
         year: 2025,
         description: 'Peta kota interaktif untuk pejalan kaki, pesepeda, dan pengunjung event. Fokus area IKN.',
+        note: 'Peta kota interaktif untuk pejalan kaki, pesepeda, dan pengunjung event. Fokus area IKN.',
         is_featured: false,
         created_at: '2025-03-10T00:00:00.000Z',
+        updated_at: ''
+
     },
     {
         id: '3',
         project_name: 'PT. PIKP Company Profile',
         client: 'PT. Penajam Inti Karya Persada',
-        category: 'Custom',
+        category: 'Enterprise',
         services_required: ['Web & App Development'],
         tags: [],
         status: 'published',
         year: 2025,
         description: 'Website company profile statis dengan SEO-optimized, OG tags, dan contact form terintegrasi.',
+        note: 'Website company profile statis dengan SEO-optimized, OG tags, dan contact form terintegrasi.',
         is_featured: true,
         created_at: '2025-02-20T00:00:00.000Z',
+        updated_at: ''
     },
     {
         id: '4',
@@ -51,8 +59,10 @@ export const portfolioDummyData: Portfolio[] = [
         status: 'archived',
         year: 2023,
         description: 'Dashboard monitoring sensor suhu dan kelembaban gudang secara realtime via protokol MQTT.',
+        note: 'Dashboard monitoring sensor suhu dan kelembaban gudang secara realtime via protokol MQTT.',
         is_featured: false,
         created_at: '2023-08-01T00:00:00.000Z',
+        updated_at: ''
     },
     {
         id: '5',
@@ -64,8 +74,10 @@ export const portfolioDummyData: Portfolio[] = [
         status: 'published',
         year: 2024,
         description: 'Aplikasi mobile e-commerce untuk produk oleh-oleh khas Kalimantan. Tersedia di Android.',
+        note: 'Aplikasi mobile e-commerce untuk produk oleh-oleh khas Kalimantan. Tersedia di Android.',
         is_featured: false,
         created_at: '2024-06-10T00:00:00.000Z',
+        updated_at: ''
     },
     {
         id: '6',
@@ -77,8 +89,11 @@ export const portfolioDummyData: Portfolio[] = [
         status: 'published',
         year: 2024,
         description: 'Redesign dashboard HR management — absensi, payroll, dan performance review dalam satu tampilan.',
+        note: 'Redesign dashboard HR management — absensi, payroll, dan performance review dalam satu tampilan.',
         is_featured: false,
         created_at: '2024-09-15T00:00:00.000Z',
+        updated_at: ''
+
     },
 
     {
@@ -91,8 +106,10 @@ export const portfolioDummyData: Portfolio[] = [
         status: 'published',
         year: 2025,
         description: 'Redesign website manajemen inventaris untuk CV. Mitra Konstruksi.',
+        note: 'Redesign website manajemen inventaris untuk CV. Mitra Konstruksi.',
         is_featured: false,
         created_at: '2025-01-15T00:00:00.000Z',
+        updated_at: ''
     },
 
     {
@@ -105,8 +122,11 @@ export const portfolioDummyData: Portfolio[] = [
         status: 'published',
         year: 2024,
         description: 'Redesign dashboard HR management — absensi, payroll, dan performance review dalam satu tampilan.',
+        note: 'Redesign dashboard HR management — absensi, payroll, dan performance review dalam satu tampilan.',
         is_featured: false,
         created_at: '2024-09-15T00:00:00.000Z',
+        updated_at: ''
+
     },
 
     {
@@ -119,8 +139,11 @@ export const portfolioDummyData: Portfolio[] = [
         status: 'published',
         year: 2025,
         description: 'Aplikasi web untuk pelacakan kedatangan jemaat dalam acara keagamaan.',
+        note: 'Aplikasi web untuk pelacakan kedatangan jemaat dalam acara keagamaan.',
         is_featured: false,
         created_at: '2025-09-15T00:00:00.000Z',
+        updated_at: ''
+
     },
 
     {
@@ -133,8 +156,11 @@ export const portfolioDummyData: Portfolio[] = [
         status: 'published',
         year: 2025,
         description: 'Sistem manajemen database UMKM di wilayah IKN. Fitur utama: registrasi UMKM, tracking status, client portal.',
+        note: 'Sistem manajemen database UMKM di wilayah IKN. Fitur utama: registrasi UMKM, tracking status, client portal.',
         is_featured: false,
         created_at: '2024-09-15T00:00:00.000Z',
+        updated_at: ''
+
     },
 
     {
@@ -147,7 +173,9 @@ export const portfolioDummyData: Portfolio[] = [
         status: 'published',
         year: 2024,
         description: 'Redesign dashboard HR management — absensi, payroll, dan performance review dalam satu tampilan.',
+        note: 'Redesign dashboard HR management — absensi, payroll, dan performance review dalam satu tampilan.',
         is_featured: false,
         created_at: '2024-09-15T00:00:00.000Z',
+        updated_at: ''
     },
 ]

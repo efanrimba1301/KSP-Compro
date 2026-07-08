@@ -1,4 +1,3 @@
-import { useState } from "react"
 import { z } from "zod"
 import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -172,14 +171,20 @@ const PortfolioForm = () => {
         <Card className="w-full">
             <CardContent className="py-3 px-3">
                 <div className="flex flex-row items-center gap-3">
-                    {cover.images.map((img) => (
-                        <img
-                            key={img.name}
-                            src={img.previewUrl}
-                            alt={img.name}
-                            className="h-12 w-20 rounded object-cover shrink-0"
-                        />
-                    ))}
+                    {cover.images.length === 0 ? (
+                        <div className="h-12 w-20 rounded border flex items-center justify-center dark:bg-gray-900 text-gray-400">
+                            <HugeiconsIcon icon={ImageAdd01Icon} className="h-5 w-5" />
+                        </div>
+                    ) : (
+                        cover.images.map((img) => (
+                            <img
+                                key={img.name}
+                                src={img.previewUrl}
+                                alt={img.name}
+                                className="h-12 w-20 rounded object-cover shrink-0"
+                            />
+                        ))
+                    )}
                     <div className="flex flex-col gap-0.5 min-w-0">
                         <p className="text-sm font-medium truncate">{watch("project_name") || "Judul Proyek (akan muncul di halaman publik)"}</p>
                         <p className="text-xs text-muted-foreground truncate">{descriptionValue || "Deskripsi Proyek (akan muncul di halaman publik)"}</p>
@@ -195,15 +200,24 @@ const PortfolioForm = () => {
     /** Preview card — full version (desktop sidebar) */
     const PreviewCardFull = (
         <Card className="relative w-full pt-0 overflow-hidden">
-            {cover.images.map((img) => (
-                <div key={img.name} className="h-[180px]">
-                    <img
-                        src={img.previewUrl}
-                        alt={img.name}
-                        className="w-full h-full object-cover"
-                    />
+            {cover.images.length === 0 ? (
+                <div className="h-48 w-full flex items-center justify-center dark:bg-gray-900 text-gray-400 border-b">
+                    <div className="flex flex-col items-center gap-2">
+                        <HugeiconsIcon icon={ImageAdd01Icon} className="h-10 w-10" />
+                        <span className="text-sm">Preview Cover</span>
+                    </div>
                 </div>
-            ))}
+            ) : (
+                cover.images.map((img) => (
+                    <div key={img.name} className="h-[180px]">
+                        <img
+                            src={img.previewUrl}
+                            alt={img.name}
+                            className="w-full h-full object-cover"
+                        />
+                    </div>
+                ))
+            )}
             <CardHeader className="pt-3 pb-2 px-4">
                 <CardAction>
                     <Badge variant="secondary">{watch("is_featured") ? "Featured" : "Not Featured"}</Badge>

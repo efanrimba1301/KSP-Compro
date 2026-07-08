@@ -34,7 +34,6 @@ import {
     Mail01Icon,
     PencilEdit01Icon,
     Delete01Icon,
-    Previous,
 } from '@hugeicons/core-free-icons'
 
 import type { IconSvgElement } from '@hugeicons/react'

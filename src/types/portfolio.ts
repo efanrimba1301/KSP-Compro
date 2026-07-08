@@ -23,6 +23,8 @@ export interface Portfolio {
     status: ProjectStatus
     year: number
     description: string
+    note: string
     is_featured: boolean
     created_at: string
+    updated_at: string
 }

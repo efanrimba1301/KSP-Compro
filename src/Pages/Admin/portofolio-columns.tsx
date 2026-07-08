@@ -20,7 +20,7 @@ import {
     StarIcon,
 } from '@hugeicons/core-free-icons'
 
-import type { Portfolio, ProjectStatus } from '@/types/portfolio'
+import type { Portfolio, ProjectCategory, ProjectStatus } from '@/types/portfolio'
 
 const statusConfig: Record<ProjectStatus, { label: string; className: string }> = {
     published: {
@@ -37,13 +37,20 @@ const statusConfig: Record<ProjectStatus, { label: string; className: string }> 
     },
 }
 
-interface PortfolioColumnProps {
+const categoryConfig: Record<ProjectCategory, string> = {
+    Basic: 'bg-blue-500/10 text-blue-400 border-blue-500/30',
+    Enterprise: 'bg-purple-500/10 text-purple-400 border-purple-500/30',
+    Custom: 'bg-neutral-500/10 text-neutral-400 border-neutral-500/30',
+}
+
+type PortfolioColumnProps = {
     onEdit: (portfolio: Portfolio) => void
     onStatusChange: (id: string, status: ProjectStatus) => void
     onDelete: (id: string) => void
+    //onViewDetail: (portfolio: Portfolio) => void
 }
 
-export function createPortfolioColumns({ onEdit, onStatusChange, onDelete }: PortfolioColumnProps): ColumnDef<Portfolio>[] {
+export function createPortfolioColumns({ onEdit, onStatusChange, onDelete, }: PortfolioColumnProps): ColumnDef<Portfolio>[] {
     return [{
 
         id: 'select',
@@ -103,11 +110,11 @@ export function createPortfolioColumns({ onEdit, onStatusChange, onDelete }: Por
         accessorKey: 'category',
         header: 'Category',
         cell: ({ row }) => {
-            const category = row.getValue('category') as string
+            const category = row.getValue('category') as ProjectCategory
             return (
                 <Badge
                     variant="outline"
-                    className={category ?? 'text-neutral-400'}
+                    className={categoryConfig[category]}
                 >
                     {category}
                 </Badge>
@@ -119,9 +126,18 @@ export function createPortfolioColumns({ onEdit, onStatusChange, onDelete }: Por
         accessorKey: 'services_required',
         header: 'Services',
         cell: ({ row }) => {
-            const services_required = row.getValue('services_required') as string
+            const services_required = row.getValue('services_required') as string[]
             return (
-                <span className="text-xs bg-neutral-800 text-neutral-300 px-2 py-0.5 rounded-full border border-neutral-700">{services_required}</span>
+                <div className="flex flex-wrap gap-1 max-w-[180px] ">
+                    {services_required.map((service) => (
+                        <span
+                            key={service}
+                            className="text-xs bg-neutral-800 text-neutral-300 px-2 py-0.5 rounded-full border border-neutral-700"
+                        >
+                            {service}
+                        </span>
+                    ))}
+                </div>
             )
         }
     },
