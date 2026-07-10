@@ -1,4 +1,5 @@
 import { useLeadsTable } from '@/hooks/useLeadsTable'
+import { useLeadsStats } from '@/hooks/useLeadsStats'
 
 //ui
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter, CardAction } from "@/Components/ui/card";
@@ -9,6 +10,9 @@ import { LeadDetailDialog } from '@/Components/LeadsDetailDialog';
 import { AddLeadSheet } from '@/Components/AddLeadsSheet'
 import { DataTable } from '@/Components/ui/data-table'
 
+
+const formatRupiah = (amount: number) =>
+    new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(amount)
 
 export default function Leads() {
     const { data,
@@ -25,6 +29,8 @@ export default function Leads() {
         handleUpdateField
     } = useLeadsTable()
 
+    const stats = useLeadsStats(data)
+
     return (
         <>
             <div className="grid auto-rows-min gap-4 py-4 px-6">
@@ -36,7 +42,7 @@ export default function Leads() {
                         <CardHeader>
                             <CardDescription>Total Clients</CardDescription>
                         </CardHeader>
-                        <CardTitle className="px-4 py-2 text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">3</CardTitle>
+                        <CardTitle className="px-4 py-2 text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">{stats.totalClients}</CardTitle>
                         <CardFooter className="flex-col items-start gap-1.5 text-sm">
                             <div className="line-clamp-1 flex gap-2 font-medium">
                                 Trending up this month <HugeiconsIcon icon={ArrowMoveUpRightIcon} className="sm:size-4" />
@@ -53,7 +59,7 @@ export default function Leads() {
                         <CardHeader>
                             <CardDescription>Total leads</CardDescription>
                         </CardHeader>
-                        <CardTitle className="px-4 py-2 text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">1</CardTitle>
+                        <CardTitle className="px-4 py-2 text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">{stats.totalLeads}</CardTitle>
                         <CardFooter className="flex-col items-start gap-1.5 text-sm">
                             <div className="line-clamp-1 flex gap-2 font-medium">
                                 Trending up this month <HugeiconsIcon icon={ArrowMoveUpRightIcon} className="sm:size-4" />
@@ -69,7 +75,7 @@ export default function Leads() {
                         <CardHeader>
                             <CardDescription>Total Finish Clients</CardDescription>
                         </CardHeader>
-                        <CardTitle className="px-4 py-2 text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">1</CardTitle>
+                        <CardTitle className="px-4 py-2 text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">{stats.totalFinishClients}</CardTitle>
                         <CardFooter className="flex-col items-start gap-1.5 text-sm">
                             <div className="line-clamp-1 flex gap-2 font-medium">
                                 Trending up this month <HugeiconsIcon icon={ArrowMoveUpRightIcon} className="sm:size-4" />
@@ -90,7 +96,7 @@ export default function Leads() {
                                 </Badge>
                             </CardAction>
                         </CardHeader>
-                        <CardTitle className="px-4 py-2 text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">RP 1.200.000</CardTitle>
+                        <CardTitle className="px-4 py-2 text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">{formatRupiah(2000000)}</CardTitle>
                         <CardFooter className="flex-col items-start gap-1.5 text-sm">
                             <div className="line-clamp-1 flex gap-2 font-medium">
                                 Trending up this month <HugeiconsIcon icon={ArrowMoveUpRightIcon} className="sm:size-4" />
@@ -126,7 +132,7 @@ export default function Leads() {
                         <p className="text-neutral-400 text-sm">
                             Overview leads dan client aktif
                         </p>
-                        <AddLeadSheet />
+                        <AddLeadSheet onSuccess={refetch} />
                     </div>
                     {!loading && !error && (
                         <DataTable

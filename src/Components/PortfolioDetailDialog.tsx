@@ -3,6 +3,8 @@ import { useState, useEffect, useRef } from 'react'
 
 //types
 import type { Portfolio, ProjectStatus, ProjectType, ProjectCategory } from "@/types/portfolio";
+import { usePortfolioImageUpload } from "@/hooks/usePortfolioImageUpload"
+
 
 //ui
 import {
@@ -34,7 +36,7 @@ import {
     DropdownMenuTrigger
 } from "./ui/dropdown-menu";
 import { HugeiconsIcon } from "@hugeicons/react"
-import { ArrowDown01Icon, Building02Icon, Delete01Icon, PencilEdit01Icon, Calendar01Icon, StatusIcon, SourceCodeSquareIcon, User03Icon, Link02Icon, StarIcon, TextAlignLeftIcon, Copy01Icon, ImageIcon } from "@hugeicons/core-free-icons"
+import { ArrowDown01Icon, Building02Icon, Delete01Icon, PencilEdit01Icon, Calendar01Icon, StatusIcon, SourceCodeSquareIcon, User03Icon, Link02Icon, StarIcon, TextAlignLeftIcon, Copy01Icon, ImageIcon, ArrowExpand02Icon } from "@hugeicons/core-free-icons"
 import type { IconSvgElement } from '@hugeicons/react'
 import { Separator } from "./ui/separator"
 import { toast } from 'sonner';
@@ -118,6 +120,10 @@ export const PortfolioDetailDialog = ({
     })
     const [originalValues, setOriginalValues] = useState(form)
     const [editingField, setEditingField] = useState<EditableField | null>(null)
+    const [coverPreview, setCoverPreview] = useState<string>("")
+    const [uploadingCover, setUploadingCover] = useState(false)
+    const { uploadCoverAndGallery, uploadSingleCover } = usePortfolioImageUpload()
+
 
     useEffect(() => {
         if (!portfolio) return
@@ -134,6 +140,7 @@ export const PortfolioDetailDialog = ({
         setForm(snapshot)
         setOriginalValues(snapshot)
         setEditingField(null)
+        setCoverPreview(portfolio.cover_image_url ?? "")
     }, [portfolio])
 
     if (!portfolio) return null
@@ -224,9 +231,20 @@ export const PortfolioDetailDialog = ({
                 }}
 
             >
-                <DialogHeader />
+                {/* top left icon button - implementasi v2*/}
+                <DialogHeader>
+                    <DialogTitle className="sr-only">
+                        Detail portfolio {portfolio.project_name}
+                    </DialogTitle>
+                    <DialogDescription className="sr-only">
+                        Lihat dan edit detail proyek, termasuk status, kategori, layanan, dan cover image.
+                    </DialogDescription>
+                    <Button variant="outline" size="icon-sm">
+                        <HugeiconsIcon icon={ArrowExpand02Icon} className=" size-4" />
+                    </Button>
+                </DialogHeader>
 
-                <div className="-mx-4 scrollbar-thumb-accent-foreground/20 max-h-[80vh] overflow-y-auto px-4 gap-y-12">
+                <div className="-mx-4 scrollbar-thumb-accent-foreground/20 max-h-[75vh] overflow-y-auto px-4 gap-y-12">
 
                     <div className="px-8 pt-8 pb-4">
                         {/* ── Title — besar, editable ── */}
@@ -376,20 +394,20 @@ export const PortfolioDetailDialog = ({
                             icon={Calendar01Icon}
                             label="Created Date"
                         >
-                            <span className='w-full border border-input rounded-md px-3 py-2 text-neutral-400 text-sm'>
+                            <div className='w-full border border-input rounded-md px-3 py-2 text-neutral-400 text-sm'>
                                 {new Date(portfolio.created_at).toLocaleDateString('id-ID', {
                                     year: 'numeric',
                                     month: 'long',
                                     day: 'numeric'
                                 })}
-                            </span>
+                            </div>
                         </PropertyRow>
 
                         <PropertyRow
                             icon={Calendar01Icon}
                             label="Last Update"
                         >
-                            <span className='w-full border border-input rounded-md px-3 py-2 text-neutral-400 text-sm'>
+                            <div className='w-full border border-input rounded-md px-3 py-2 text-neutral-400 text-sm'>
                                 {portfolio.updated_at
                                     ? new Date(portfolio.updated_at).toLocaleDateString('id-ID', {
                                         year: 'numeric',
@@ -397,8 +415,7 @@ export const PortfolioDetailDialog = ({
                                         day: 'numeric'
                                     })
                                     : '-'}
-
-                            </span>
+                            </div>
                         </PropertyRow>
                     </div>
                     <Separator
@@ -410,27 +427,54 @@ export const PortfolioDetailDialog = ({
                             <HugeiconsIcon icon={ImageIcon} className="w-4 h-4" />
                             Thumbnail
                         </div>
-                        <div className='w-full h-full object-cover rounded-md'>
+                        <div className="relative w-full h-40 rounded-md overflow-hidden group">
                             <input
-                                type='file'
-                                id='thumbnail'
-                                name='thumbnail'
-                                className='hidden'
-                                onChange={(e) => {
-                                    if (e.target.files && e.target.files[0]) {
-                                        const file = e.target.files[0]
-                                        const reader = new FileReader()
-                                        reader.onloadend = () => {
-                                            //handleFieldChange("thumbnail", reader.result as string)
-                                        }
-                                        reader.readAsDataURL(file)
+                                type="file"
+                                id="thumbnail"
+                                name="thumbnail"
+                                accept="image/*"
+                                className="hidden"
+                                disabled={uploadingCover}
+                                onChange={async (e) => {
+                                    const file = e.target.files?.[0]
+                                    if (!file) return
+
+                                    const localPreview = URL.createObjectURL(file)
+                                    setCoverPreview(localPreview)
+                                    setUploadingCover(true)
+
+                                    try {
+                                        const newUrl = await uploadSingleCover(file)
+                                        setCoverPreview(newUrl)
+                                        URL.revokeObjectURL(localPreview)
+                                        await commitField("cover_image_url", newUrl)
+                                    } catch (err) {
+                                        toast.error("Gagal mengunggah cover baru.")
+                                        setCoverPreview(portfolio.cover_image_url ?? "")
+                                    } finally {
+                                        setUploadingCover(false)
+                                        e.target.value = ""
                                     }
                                 }}
                             />
-                            <label htmlFor='thumbnail' className='cursor-pointer'>
-                                <img
-                                    className='w-full h-full object-cover rounded-md'
-                                />
+                            <label htmlFor="thumbnail" className="cursor-pointer block w-full h-full">
+                                {coverPreview ? (
+                                    <img
+                                        src={coverPreview}
+                                        alt={form.project_name}
+                                        className="w-full h-full object-cover rounded-md"
+                                    />
+                                ) : (
+                                    <div className="w-full h-full flex items-center justify-center bg-neutral-900 text-neutral-500 text-sm">
+                                        Klik untuk unggah cover
+                                    </div>
+                                )}
+                                {/* Overlay hover — signal ke user kalau gambar bisa diganti */}
+                                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                    <span className="text-white text-sm font-medium">
+                                        {uploadingCover ? "Mengunggah..." : "Ganti gambar"}
+                                    </span>
+                                </div>
                             </label>
                         </div>
                     </div>
@@ -441,7 +485,7 @@ export const PortfolioDetailDialog = ({
                         <div className="flex items-center gap-2 text-sm text-neutral-400 mb-2">
                         </div>
                         <textarea
-                            className="w-full min-h-64 text-sm bg-transparent focus:outline-none focus:ring-1 focus:ring-[#E8FF5A]/50 rounded-md px-2 py-2 -mx-1 resize-y"
+                            className="w-full min-h-100 text-sm bg-transparent focus:outline-none rounded-md px-2 py-2 -mx-1 resize-y"
                             value={form.description}
                             onChange={(e) => handleFieldChange("description", e.target.value)}
                             onBlur={() => commitFieldIfChanged("description", form.description)}

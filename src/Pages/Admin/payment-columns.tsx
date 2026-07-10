@@ -112,8 +112,8 @@ export function createPaymentColumns({
             ),
             cell: ({ row }) => (
                 <div>
-                    <p className="font-medium text-white">{row.getValue('name')}</p>
-                    <p className="text-xs text-neutral-500 mt-0.5">{row.original.email}</p>
+                    <p className="font-medium text-white">{row.original.name ?? '—'}</p>
+                    <p className="text-xs text-neutral-500 mt-0.5">{row.original.email ?? '—'}</p>
                 </div>
             ),
         },
@@ -124,8 +124,8 @@ export function createPaymentColumns({
             header: 'Company',
             cell: ({ row }) => (
                 <div>
-                    <p className="text-neutral-300 text-sm">{row.getValue('company')}</p>
-                    <p className="text-xs text-neutral-500 mt-0.5">{row.original.whatsapp}</p>
+                    <p className="text-neutral-300 text-sm">{row.original.company ?? '—'}</p>
+                    <p className="text-xs text-neutral-500 mt-0.5">{row.original.whatsapp ?? '—'}</p>
                 </div>
             ),
         },

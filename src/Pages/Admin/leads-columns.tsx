@@ -19,14 +19,15 @@ import {
     DropdownMenuTrigger,
     DropdownMenuSubTrigger,
     DropdownMenuSubContent,
-    DropdownMenuSub
+    DropdownMenuSub,
+    DropdownMenuPortal
 } from '@/Components/ui/dropdown-menu'
-import type { Lead, LeadStatus } from '@/types/leads'
+import type { Lead, LeadStatus, CloseReason } from '@/types/leads'
 import { Checkbox } from '@/Components/ui/checkbox'
 import { toast } from 'sonner'
 
 type LeadsColumnProps = {
-    onStatusChange: (id: string, status: LeadStatus) => void
+    onStatusChange: (id: string, status: LeadStatus, close_reason?: CloseReason) => void
     onDelete: (id: string) => void
     onViewDetail: (lead: Lead) => void
 }
@@ -50,7 +51,6 @@ const statusOptions: {
 }[] =
     [
         { value: 'leads', label: 'Leads' },
-        { value: 'close', label: 'Close' },
         { value: 'active', label: 'Active Client' },
         { value: 'finish', label: 'Finish' },
     ]
@@ -192,7 +192,7 @@ export function createLeadsColumns({
             accessorKey: 'status',
             header: 'Status',
             meta: { showFrom: 'mobile' },
-            cell: ({ row }) => <StatusBadge status={row.getValue('status')} />,
+            cell: ({ row }) => <StatusBadge status={row.getValue('status')} closeReason={row.original.close_reason} />,
             filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
 
@@ -276,9 +276,7 @@ export function createLeadsColumns({
                                         {statusOptions.map((opt) => (
                                             <DropdownMenuItem
                                                 key={opt.value}
-                                                className={`cursor-pointer hover:bg-neutral-800 ${lead.status === opt.value
-                                                    ? 'text-[#E8FF5A]'
-                                                    : 'text-neutral-200'
+                                                className={`cursor-pointer hover:bg-neutral-800 ${lead.status === opt.value ? 'text-[#E8FF5A]' : 'text-neutral-200'
                                                     }`}
                                                 onClick={() => onStatusChange(lead.id, opt.value)}
                                             >
@@ -286,6 +284,34 @@ export function createLeadsColumns({
                                                 {lead.status === opt.value && ' ✓'}
                                             </DropdownMenuItem>
                                         ))}
+
+                                        {/* Nested submenu — Close punya sub-pilihan Won/Lost */}
+                                        <DropdownMenuSub>
+                                            <DropdownMenuSubTrigger className="text-neutral-200 hover:bg-neutral-800 cursor-pointer">
+                                                Closed
+                                                {lead.status === 'closed' && (
+                                                    <span className={lead.close_reason === 'lost' ? 'text-red-400' : 'text-[#53ee5b]'}>
+                                                        {' '}({lead.close_reason === 'lost' ? 'Lost' : 'Won'})
+                                                    </span>
+                                                )}
+                                            </DropdownMenuSubTrigger>
+                                            <DropdownMenuSubContent className="bg-neutral-900 border-neutral-800">
+                                                <DropdownMenuItem
+                                                    className="cursor-pointer hover:bg-neutral-800 text-[#53ee5b]"
+                                                    onClick={() => onStatusChange(lead.id, 'closed', 'won')}
+                                                >
+                                                    Won
+                                                    {lead.status === 'closed' && lead.close_reason === 'won' && ' ✓'}
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem
+                                                    className="cursor-pointer hover:bg-neutral-800 text-red-400"
+                                                    onClick={() => onStatusChange(lead.id, 'closed', 'lost')}
+                                                >
+                                                    Lost
+                                                    {lead.status === 'closed' && lead.close_reason === 'lost' && ' ✓'}
+                                                </DropdownMenuItem>
+                                            </DropdownMenuSubContent>
+                                        </DropdownMenuSub>
                                     </DropdownMenuSubContent>
                                 </DropdownMenuSub>
                                 <DropdownMenuSeparator className="bg-neutral-800" />
@@ -298,7 +324,7 @@ export function createLeadsColumns({
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
-                    </div>
+                    </div >
                 )
             },
         },

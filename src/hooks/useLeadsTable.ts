@@ -2,14 +2,14 @@ import { useMemo, useCallback, useState } from 'react'
 import { useLeads } from './useLeads'
 import { useUpdateLead } from './useUpdateLead'
 import { createLeadsColumns } from '@/Pages/Admin/leads-columns'
-import type { Lead, LeadStatus } from '@/types/leads'
+import type { CloseReason, Lead, LeadStatus } from '@/types/leads'
 
 import { toast } from 'sonner'
 
 
 const statusLabels: Record<LeadStatus, string> = {
     leads: 'Leads',
-    close: 'Close',
+    closed: 'Closed',
     active: 'Active Client',
     finish: 'Finish',
 }
@@ -42,11 +42,17 @@ export function useLeadsTable({ onRowClick }: UseLeadsTableOptions = {}) {
     }, [])
 
     // useCallback — stable reference, useMemo columns tidak re-create tiap render
-    const handleStatusChange = useCallback(async (id: string, status: LeadStatus) => {
+    const handleStatusChange = useCallback(async (id: string, status: LeadStatus, close_reason?: CloseReason) => {
         // Simpan status sebelumnya untuk undo
-        const previousStatus = data?.find((l) => l.id === id)?.status
+        const previous = data?.find((l) => l.id === id)
+        const previousStatus = previous?.status
+        const previousCloseReason = previous?.close_reason
 
-        const { success, error } = await updateLead(id, { status })
+        const payload = status === 'closed'
+            ? { status, close_reason: close_reason ?? 'won' }
+            : { status, close_reason: null }
+
+        const { success, error } = await updateLead(id, payload)
         if (!success) {
             console.error('Gagal ganti status lead', error)
             toast.error('Gagal mengubah status')
@@ -54,17 +60,26 @@ export function useLeadsTable({ onRowClick }: UseLeadsTableOptions = {}) {
         }
 
         refetch()
-        setSelectedLead((prev) => prev?.id === id ? { ...prev, status } : prev)
+        setSelectedLead((prev) => prev?.id === id ? { ...prev, ...payload } : prev)
 
-        const toastId = toast.success(`Status berhasil diubah ke "${statusLabels[status]}"`, {
+        const label = status === 'closed'
+            ? `Closed (${close_reason === 'lost' ? 'Lost' : 'Won'})`
+            : statusLabels[status]
+
+        const toastId = toast.success(`Status berhasil diubah ke "${label}"`, {
             action: previousStatus
                 ? {
                     label: 'Undo',
                     onClick: async () => {
-                        const { success: undoSuccess } = await updateLead(id, { status: previousStatus })
+                        const { success: undoSuccess } = await updateLead(id, {
+                            status: previousStatus,
+                            close_reason: previousCloseReason ?? null,
+                        })
                         if (undoSuccess) {
                             refetch()
-                            setSelectedLead((prev) => prev?.id === id ? { ...prev, status: previousStatus } : prev)
+                            setSelectedLead((prev) => prev?.id === id
+                                ? { ...prev, status: previousStatus, close_reason: previousCloseReason }
+                                : prev)
                             toast.success(`Status dikembalikan ke "${statusLabels[previousStatus]}"`, { id: toastId })
                         } else {
                             toast.error('Gagal mengembalikan status', { id: toastId })

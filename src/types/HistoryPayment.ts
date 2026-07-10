@@ -3,7 +3,7 @@ export type PaymentStatus =
     | 'success'
     | 'failed'
 
-export type PringTier =
+export type PricingTier =
     | 'Basic'
     | 'Growth'
     | 'Enterprise'
@@ -41,7 +41,7 @@ export type HistoryPayment = {
     amount: number
     invoice_number: string
     invoice_type: InvoiceType
-    pricing_tier: PringTier
+    pricing_tier: PricingTier
     payment_type: paymentType
     status: PaymentStatus
     proof_of_payment: string

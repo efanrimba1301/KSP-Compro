@@ -25,7 +25,7 @@ const PricingPage = () => {
 
     const handleEdit = useCallback((payment: HistoryPayment) => {
         console.log('Edit payment:', payment)
-        alert(`Edit: ${payment.name} — segera diimplementasikan`)
+        alert(`Edit: ${payment.id} — segera diimplementasikan`)
     }, [])
 
     const handleDelete = useCallback((id: string) => {
@@ -41,7 +41,7 @@ const PricingPage = () => {
     }, [])
 
     const handleRowClick = useCallback((payment: HistoryPayment) => {
-        alert(`Detail: ${payment.name} — segera diimplementasikan`)
+        alert(`Detail: ${payment.id} — segera diimplementasikan`)
     }, [])
 
     const columns = useMemo(

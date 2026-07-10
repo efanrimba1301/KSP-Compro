@@ -1,8 +1,12 @@
 export type LeadStatus =
     | 'leads'        // Pitching / belum deal
-    | 'close'        // Deal tapi belum kickoff
+    | 'closed'        // Deal tapi belum kickoff
     | 'active'       // Project on progress
     | 'finish'       // Project selesai
+
+export type CloseReason =
+    | 'won'
+    | 'lost'
 
 export type ServiceType =
     | 'Web & App Development'
@@ -37,6 +41,7 @@ export type Lead = {
     heard_from: string
     project_detail: string
     status: LeadStatus
+    close_reason?: CloseReason | null
     notes?: string
     created_at: string
     updated_at: string

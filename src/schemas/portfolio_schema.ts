@@ -40,8 +40,7 @@ export const portfolioFormSchema = z.object({
         .url("URL tidak valid")
         .optional()
         .or(z.literal("")),
-    is_featured: z.boolean()
-        .optional(),
+    is_featured: z.boolean(),
 })
 
 export type PortfolioFormValues = z.infer<typeof portfolioFormSchema>

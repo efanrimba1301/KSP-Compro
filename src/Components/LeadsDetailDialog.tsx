@@ -17,9 +17,13 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuSub,
+    DropdownMenuSubContent,
+    DropdownMenuSubTrigger,
     DropdownMenuTrigger,
 } from '@/Components/ui/dropdown-menu'
-import type { Lead, LeadStatus, BudgetRange, ServiceType } from '@/types/leads'
+import type { Lead, LeadStatus, BudgetRange, ServiceType, CloseReason } from '@/types/leads'
 
 import { HugeiconsIcon } from '@hugeicons/react'
 import {
@@ -45,7 +49,7 @@ interface LeadDetailDialogProps {
     lead: Lead | null
     open: boolean
     onOpenChange: (open: boolean) => void
-    onStatusChange: (id: string, status: LeadStatus) => void
+    onStatusChange: (id: string, status: LeadStatus, closeReason?: CloseReason) => void
     onDelete: (id: string) => void
     // ← optional — sambungkan ke useUpdateLead nanti kalau mau persist ke DB
     onUpdateField?: (id: string, field: keyof Lead, value: string) => Promise<void>
@@ -63,12 +67,14 @@ const fieldLabels: Record<EditableField, string> = {
     notes: 'Notes',
 }
 
-const statusOptions: { value: LeadStatus; label: string }[] = [
-    { value: 'leads', label: 'Leads' },
-    { value: 'close', label: 'Close' },
-    { value: 'active', label: 'Active Client' },
-    { value: 'finish', label: 'Finish' },
-]
+const statusOptions: {
+    value: LeadStatus;
+    label: string;
+}[] = [
+        { value: 'leads', label: 'Leads' },
+        { value: 'active', label: 'Active Client' },
+        { value: 'finish', label: 'Finish' },
+    ]
 
 const heardFromOptions = ['Instagram', 'Google', 'LinkedIn', 'Referral', 'Website']
 
@@ -121,6 +127,7 @@ export function LeadDetailDialog({
             whatsapp: lead.whatsapp ?? '',
             budget_range: lead.budget_range ?? '',
             heard_from: lead.heard_from ?? '',
+            close_reason: lead.close_reason ?? '',
             services_required: lead.services_required ?? [],
             project_detail: lead.project_detail ?? '',
             notes: lead.notes ?? '',
@@ -279,7 +286,7 @@ export function LeadDetailDialog({
                                             variant="outline"
                                             className="flex items-center gap-2 py-2 cursor-pointer"
                                         >
-                                            <StatusBadge status={lead.status} />
+                                            <StatusBadge status={lead.status} closeReason={lead.close_reason} />
                                             <HugeiconsIcon icon={ArrowDown01Icon} className="w-4 h-4" />
                                         </Button>
                                     </DropdownMenuTrigger>
@@ -295,6 +302,34 @@ export function LeadDetailDialog({
                                                 {lead.status === opt.value && ' ✓'}
                                             </DropdownMenuItem>
                                         ))}
+                                        <DropdownMenuSeparator className="bg-neutral-800" />
+                                        <DropdownMenuSub>
+                                            <DropdownMenuSubTrigger className="text-neutral-200 hover:bg-neutral-800 cursor-pointer">
+                                                Closed
+                                                {lead.status === 'closed' && (
+                                                    <span className={lead.close_reason === 'lost' ? 'text-red-400' : 'text-[#53ee5b]'}>
+                                                        {' '}({lead.close_reason === 'lost' ? 'Lost' : 'Won'})
+                                                    </span>
+                                                )}
+                                            </DropdownMenuSubTrigger>
+                                            <DropdownMenuSubContent className="bg-neutral-900 border-neutral-800">
+                                                <DropdownMenuItem
+                                                    className="cursor-pointer hover:bg-neutral-800 text-[#53ee5b]"
+                                                    onClick={() => onStatusChange(lead.id, 'closed', 'won')}
+                                                >
+                                                    Won
+                                                    {lead.status === 'closed' && lead.close_reason === 'won' && ' ✓'}
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem
+                                                    className="cursor-pointer hover:bg-neutral-800 text-red-400"
+                                                    onClick={() => onStatusChange(lead.id, 'closed', 'lost')}
+                                                >
+                                                    Lost
+                                                    {lead.status === 'closed' && lead.close_reason === 'lost' && ' ✓'}
+                                                </DropdownMenuItem>
+                                            </DropdownMenuSubContent>
+                                        </DropdownMenuSub>
+
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </DetailRow>

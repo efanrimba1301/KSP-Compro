@@ -1,70 +1,22 @@
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/Components/ui/card";
-import { useState, useMemo, useCallback } from 'react'
+import { useMemo } from 'react'
 import { useNavigate } from "react-router";
 import { DataTable } from '@/Components/ui/data-table'
 import { Button } from '@/Components/ui/button'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { PlusSignIcon } from '@hugeicons/core-free-icons'
-import { createPortfolioColumns } from './portofolio-columns'
-import { portfolioDummyData } from '@/data/portofolio-dummy'
-import type { Portfolio, ProjectStatus } from '@/types/portfolio'
 import { PortfolioDetailDialog } from '@/Components/PortfolioDetailDialog'
+import { usePortfolioTable } from "@/hooks/usePortfolioTable";
 
 const PortfolioPage = () => {
-    // State data — nanti diganti dengan hook Supabase
-    const [data, setData] = useState<Portfolio[]>(portfolioDummyData)
-    const [selectedPortfolio, setSelectedPortfolio] = useState<Portfolio | null>(null)
-    const [dialogOpen, setDialogOpen] = useState(false)
-    const navigate = useNavigate();
+    const navigate = useNavigate()
+    const {
+        data, loading, error, columns,
+        selectedPortfolio, dialogOpen,
+        handleRowClick, handleDialogOpenChange,
+        handleStatusChange, handleDelete, handleUpdateField,
+    } = usePortfolioTable()
 
-    // ─── Handlers ──────────────────────────────────────────────────────────
-    const handleEdit = useCallback((portfolio: Portfolio) => {
-        setSelectedPortfolio(portfolio)
-        setDialogOpen(true)
-    }, [])
-
-    const handleDelete = useCallback((id: string) => {
-        const confirmed = window.confirm('Yakin hapus portfolio ini?')
-        if (!confirmed) return
-        setData((prev) => prev.filter((item) => item.id !== id))
-    }, [])
-
-    const handleStatusChange = useCallback((id: string, status: ProjectStatus) => {
-        setData((prev) =>
-            prev.map((item) => (item.id === id ? { ...item, status } : item))
-        )
-        setSelectedPortfolio((prev) =>
-            prev?.id === id ? { ...prev, status } : prev
-        )
-    }, [])
-
-    const handleRowClick = useCallback((portfolio: Portfolio) => {
-        setSelectedPortfolio(portfolio)
-        setDialogOpen(true)
-    }, [])
-
-    const handleUpdateField = useCallback(
-        async (id: string, field: keyof Portfolio, value: Portfolio[keyof Portfolio]) => {
-            setData((prev) =>
-                prev.map((item) => (item.id === id ? { ...item, [field]: value } : item))
-            )
-            // TODO: ganti dengan Supabase update kalau backend udah ready
-            console.log(`Update ${field} untuk ${id}:`, value)
-        },
-        []
-    )
-
-    // ─── Column definition ─────────────────────────────────────────────────
-    const columns = useMemo(
-        () => createPortfolioColumns({
-            onEdit: handleEdit,
-            onDelete: handleDelete,
-            onStatusChange: handleStatusChange,
-        }),
-        [handleEdit, handleDelete, handleStatusChange]
-    )
-
-    // ─── Summary stats (dari data) ─────────────────────────────────────────
     const stats = useMemo(() => ({
         total: data.length,
         published: data.filter((d) => d.status === 'published').length,
@@ -139,7 +91,7 @@ const PortfolioPage = () => {
 
             <PortfolioDetailDialog
                 open={dialogOpen}
-                onOpenChange={setDialogOpen}
+                onOpenChange={handleDialogOpenChange}
                 portfolio={selectedPortfolio}
                 onStatusChange={handleStatusChange}
                 onUpdateField={handleUpdateField}

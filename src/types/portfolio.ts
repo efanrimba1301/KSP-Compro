@@ -25,6 +25,23 @@ export interface Portfolio {
     description: string
     note: string
     is_featured: boolean
+    cover_image_url?: string        // ← tambahin ini
+    gallery_image_urls: string[]    // ← dan ini
     created_at: string
     updated_at: string
+}
+
+export interface PortfolioInsertPayload {
+    project_name: string
+    client: string
+    category: ProjectCategory
+    services_required: ProjectType[]
+    tags: string[]
+    project_url?: string
+    status: ProjectStatus
+    year: number
+    description: string
+    is_featured: boolean
+    cover_image_url: string
+    gallery_image_urls: string[]
 }

@@ -13,12 +13,6 @@ import {
 } from "@/Components/ui/sheet"
 import { HugeiconsIcon } from "@hugeicons/react";
 import { AddSquareIcon, ArrowDown01Icon } from "@hugeicons/core-free-icons";
-
-import { useLeads } from "@/hooks/useLeads"
-import { useForm, Controller } from "react-hook-form";
-import z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import type { ServiceType, BudgetRange, HeardFrom } from "@/types/leads";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -32,7 +26,17 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/Components/ui/select";
+import { toast } from "sonner"
 import { Textarea } from "@/Components/ui/textarea";
+
+//state & hooks
+import { useState } from "react";
+import z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useUpdateLead } from "@/hooks/useUpdateLead"
+import { useLeadsTable } from "@/hooks/useLeadsTable"
+import type { ServiceType, BudgetRange, HeardFrom } from "@/types/leads";
+import { useForm, Controller } from "react-hook-form";
 
 
 
@@ -64,32 +68,68 @@ const AddLeadSchema = z.object({
         .min(1, "Name is required"),
     email: z.string()
         .regex(/[^@ \t]+@[^@ \t]+\.[^@ \t]+/, { message: "Email tidak valid" }),
-    phone: z.string()
+    whatsapp: z.string()
         .regex(/^[0-9]+$/, { message: "Phone must be a number" }),
     company: z.string()
         .min(1, "Company is required"),
-    services_required: z.array(z.string()).min(1, "Minimal pilih 1 service"),
+    services_required: z.array(z.enum([
+        'Web & App Development', 'UI/UX Design', 'SaaS Engineering',
+        'IoT Engineering', 'AI Tools', 'Others',
+    ])).min(1, "Minimal pilih 1 layanan"),
+    budget_range: z.string().min(1, "Budget wajib dipilih"),
+    heard_from: z.string().min(1, "Sumber lead wajib dipilih"),
+    project_detail: z.string().min(1, "Detail project wajib diisi"),
+    notes: z.string().optional(),
+
 })
 
 
 export type AddLeadValues = z.infer<typeof AddLeadSchema>
 
+interface AddLeadSheetProps {
+    onSuccess?: () => void
+}
 
-export function AddLeadSheet() {
+export function AddLeadSheet({ onSuccess }: AddLeadSheetProps) {
 
-    const { refetch: refreshLeads } = useLeads();
+    const [open, setOpen] = useState(false)
+    const { addLead, loading } = useUpdateLead()
+    const { refetch } = useLeadsTable()
 
     const form = useForm<AddLeadValues>({
         resolver: zodResolver(AddLeadSchema),
-    });
+        defaultValues: {
+            name: "",
+            email: "",
+            whatsapp: "",
+            company: "",
+            services_required: [],
+            budget_range: "",
+            heard_from: "",
+            project_detail: "",
+            notes: "",
+        },
+    })
 
-    const handleSubmit = (data: AddLeadValues) => {
-        alert(' Leads berhasil ditambahkan')
-        console.log(data)
+    const onSubmit = async (data: AddLeadValues) => {
+        const { success, error } = await addLead({
+            ...data,
+            status: "leads",
+        })
+
+        if (!success) {
+            toast.error("Gagal menambahkan lead", { description: error })
+            return
+        }
+
+        toast.success("Lead berhasil ditambahkan")
+        onSuccess?.()
+        form.reset()
+        setOpen(false)
     }
 
     return (
-        <Sheet>
+        <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
                 <Button variant='default'
                     className="flex items-center gap-2 bg-white text-black px-3 py-1 rounded-md text-sm">
@@ -105,7 +145,7 @@ export function AddLeadSheet() {
                 </SheetHeader>
                 <form
                     id="form-add-lead"
-                    onSubmit={form.handleSubmit((handleSubmit))}
+                    onSubmit={form.handleSubmit(onSubmit)}
                     className="flex-1 overflow-y-auto scrollbar-thumb-black/40 px-4 grid gap-2">
                     <div className="grid gap-2">
                         <Label htmlFor="name">Name</Label>
@@ -121,9 +161,9 @@ export function AddLeadSheet() {
                     </div>
 
                     <div className="grid gap-2">
-                        <Label htmlFor="phone">Phone</Label>
-                        <Input {...form.register("phone")} type="text" placeholder="Nomor Telepon Client" />
-                        <span className="text-red-500">{form.formState.errors.phone && form.formState.errors.phone.message}</span>
+                        <Label htmlFor="whatsapp">Whatsapp</Label>
+                        <Input {...form.register("whatsapp")} type="text" placeholder="Nomor Telepon Client" />
+                        <span className="text-red-500">{form.formState.errors.whatsapp && form.formState.errors.whatsapp.message}</span>
                     </div>
 
                     <div className="grid gap-2">
@@ -178,60 +218,77 @@ export function AddLeadSheet() {
                     <div className="flex flex-row- gap-2">
                         <div className="grid gap-2">
                             <Label htmlFor="budget_range">Budget Range</Label>
-                            <Select>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Budget Range Client" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {budgetRangeOptions.map((budgetRange) => (
-                                        <SelectItem
-                                            key={budgetRange}
-                                            value={budgetRange}
-                                        >
-                                            {budgetRange}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                            <span className="text-red-500"></span>
+                            <Controller
+                                control={form.control}
+                                name="budget_range"
+                                render={({ field }) => (
+                                    <Select value={field.value} onValueChange={field.onChange}>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Budget Range Client" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {budgetRangeOptions.map((budgetRange) => (
+                                                <SelectItem
+                                                    key={budgetRange}
+                                                    value={budgetRange}
+                                                >
+                                                    {budgetRange}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                )}
+                            />
+                            <span className="text-red-500">{form.formState.errors.budget_range?.message}</span>
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="heard_from">Heard From</Label>
-                            <Select>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Heard From Client" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {heardFromOptions.map((source) => (
-                                        <SelectItem
-                                            key={source}
-                                            value={source}
-                                        >
-                                            {source}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                            <span className="text-red-500"></span>
+                            <Controller
+                                control={form.control}
+                                name="heard_from"
+                                render={({ field }) => (
+                                    <Select value={field.value} onValueChange={field.onChange}>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Heard From Client" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {heardFromOptions.map((source) => (
+                                                <SelectItem
+                                                    key={source}
+                                                    value={source}
+                                                >
+                                                    {source}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                )}
+                            />
+                            <span className="text-red-500">{form.formState.errors.heard_from?.message}</span>
 
                         </div>
                     </div>
 
                     <div className="grid gap-2">
                         <Label htmlFor="project_detail">Project Detail</Label>
-                        <Textarea className="border-b-mauve-400 min-h-[80px] resize-y border-2" placeholder="Project Detail Client" />
-                        <span className="text-red-500"></span>
+                        <Textarea
+                            {...form.register("project_detail")}
+                            className="border-b-mauve-400 min-h-[80px] resize-y border-2" placeholder="Project Detail Client" />
+                        <span className="text-red-500">{form.formState.errors.project_detail?.message}</span>
                     </div>
                     <div className="grid gap-2">
-                        <Textarea className="border-b-mauve-400 min-h-[30px] max-h-[65px] resize-y border-2" placeholder="Internal Notes" />
-                        <span className="text-red-500"></span>
+                        <Textarea
+                            {...form.register("notes")}
+                            className="border-b-mauve-400 min-h-[30px] max-h-[65px] resize-y border-2"
+                            placeholder="Internal Notes" />
+                        <span className="text-red-500">{form.formState.errors.notes?.message}</span>
                     </div>
                 </form>
                 <SheetFooter className="mt-auto">
                     <Button
                         type="submit"
-                        form="form-add-lead">
-                        Save changes
+                        form="form-add-lead" disabled={loading}>
+                        {loading ? "Menyimpan..." : "Save changes"}
                     </Button>
                     <SheetClose asChild>
                         <Button variant="outline">Close</Button>

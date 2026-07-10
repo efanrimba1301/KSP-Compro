@@ -1,6 +1,7 @@
 import { z } from "zod"
 import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+//ui
 import { portfolioFormSchema, type PortfolioFormValues } from "@/schemas/portfolio_schema"
 import {
     Card,
@@ -80,6 +81,12 @@ import React from "react"
 import { useImageUpload } from "@/hooks/useImageUpload"
 import { toast } from "sonner"
 
+// Hooks
+import { useUpdatePortfolio } from "@/hooks/useUpdatePortfolio"
+import { usePortfolioImageUpload } from "@/hooks/usePortfolioImageUpload"
+//route
+import { useNavigate } from "react-router"
+
 
 const ServiceOptions: ProjectType[] = [
     'Web & App Development',
@@ -135,32 +142,42 @@ const PortfolioForm = () => {
     const cover = useImageUpload({ maxFiles: 1, maxSizeMB: 2 })
     const gallery = useImageUpload({ maxFiles: 4, maxSizeMB: 3 })
 
+    const { addPortfolio } = useUpdatePortfolio()
+    const { uploadCoverAndGallery, uploading } = usePortfolioImageUpload()
+    const navigate = useNavigate()
+
     const onSubmit = (status: "draft" | "published") =>
-        handleSubmit((data: PortfolioFormValues) => {
+        handleSubmit(async (data: PortfolioFormValues) => {
             if (cover.images.length === 0) {
                 toast.error("Cover image wajib diunggah.")
                 return
             }
 
-            const payload = {
-                ...data,
-                status,
-                cover_image: cover.images[0].file,
-                gallery_images: gallery.images.map((img) => img.file),
-            }
+            const toastId = toast.loading("Mengunggah gambar...")
 
-            console.log("Payload siap kirim:", payload)
-            toast.promise(
-                new Promise((resolve) => setTimeout(() =>
-                    resolve(data), 1000)
-                ),
-                {
-                    loading: "Mengunggah portofolio...",
-                    success: "Portofolio berhasil ditambahkan!",
-                    error: "Gagal menambahkan portofolio.",
-                }
-            )
-            // TODO: ganti console.log ini dengan Supabase insert kalau backend udah ready
+            try {
+                const { coverUrl, galleryUrls } = await uploadCoverAndGallery(
+                    cover.images[0].file,
+                    gallery.images.map((img) => img.file)
+                )
+
+                toast.loading("Menyimpan portfolio...", { id: toastId })
+
+                const { success, error } = await addPortfolio({
+                    ...data,
+                    status,
+                    cover_image_url: coverUrl!,
+                    gallery_image_urls: galleryUrls,
+                })
+
+                if (!success) throw new Error(error)
+
+                toast.success("Portfolio berhasil ditambahkan!", { id: toastId })
+                navigate("/admin/portfolio")
+            } catch (err) {
+                toast.error("Gagal menambahkan portfolio.", { id: toastId })
+                console.error(err)
+            }
         })
 
 
@@ -412,7 +429,13 @@ const PortfolioForm = () => {
                     </Tooltip>
                     <Tooltip>
                         <TooltipTrigger asChild>
-                            <Button variant="default" size="lg" className="flex-1" onClick={onSubmit("published")}>
+                            <Button
+                                variant="default"
+                                size="lg"
+                                className="flex-1"
+                                onClick={onSubmit("published")}
+                                disabled={uploading}
+                            >
                                 <HugeiconsIcon icon={SentIcon} />
                                 Publish
                             </Button>
