@@ -20,7 +20,6 @@ import {
     DropdownMenuSubTrigger,
     DropdownMenuSubContent,
     DropdownMenuSub,
-    DropdownMenuPortal
 } from '@/Components/ui/dropdown-menu'
 import type { Lead, LeadStatus, CloseReason } from '@/types/leads'
 import { Checkbox } from '@/Components/ui/checkbox'
@@ -276,7 +275,7 @@ export function createLeadsColumns({
                                         {statusOptions.map((opt) => (
                                             <DropdownMenuItem
                                                 key={opt.value}
-                                                className={`cursor-pointer hover:bg-neutral-800 ${lead.status === opt.value ? 'text-[#E8FF5A]' : 'text-neutral-200'
+                                                className={`cursor-pointer hover:bg-neutral-800 ${lead.status === opt.value ? 'text-yellow-500' : 'text-neutral-200'
                                                     }`}
                                                 onClick={() => onStatusChange(lead.id, opt.value)}
                                             >
@@ -290,14 +289,14 @@ export function createLeadsColumns({
                                             <DropdownMenuSubTrigger className="text-neutral-200 hover:bg-neutral-800 cursor-pointer">
                                                 Closed
                                                 {lead.status === 'closed' && (
-                                                    <span className={lead.close_reason === 'lost' ? 'text-red-400' : 'text-[#53ee5b]'}>
+                                                    <span className={lead.close_reason === 'lost' ? 'text-red-400' : 'text-yellow-500'}>
                                                         {' '}({lead.close_reason === 'lost' ? 'Lost' : 'Won'})
                                                     </span>
                                                 )}
                                             </DropdownMenuSubTrigger>
                                             <DropdownMenuSubContent className="bg-neutral-900 border-neutral-800">
                                                 <DropdownMenuItem
-                                                    className="cursor-pointer hover:bg-neutral-800 text-[#53ee5b]"
+                                                    className="cursor-pointer hover:bg-neutral-800 text-yellow-500"
                                                     onClick={() => onStatusChange(lead.id, 'closed', 'won')}
                                                 >
                                                     Won

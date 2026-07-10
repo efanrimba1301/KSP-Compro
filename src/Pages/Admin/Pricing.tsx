@@ -19,6 +19,8 @@ import { HistoryPaymentDummyData } from "@/data/payment-dummy"
 import { useState, useMemo, useCallback } from 'react'
 import { DataTable } from '@/Components/ui/data-table'
 
+const formatRupiah = (amount: number) =>
+    new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(amount)
 
 const PricingPage = () => {
     const [payment, setPayment] = useState<HistoryPayment[]>(HistoryPaymentDummyData)
@@ -75,7 +77,7 @@ const PricingPage = () => {
                                 </Badge>
                             </CardAction>
                         </CardHeader>
-                        <CardTitle className="px-4 py-2 text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">RP 1.200.000</CardTitle>
+                        <CardTitle className="px-4 py-2 text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">{formatRupiah(2000000)}</CardTitle>
                         <CardFooter className="flex-col items-start gap-1.5 text-sm">
                             <div className="line-clamp-1 flex gap-2 font-medium">
                                 Trending up this month <HugeiconsIcon icon={ArrowMoveUpRightIcon} className="sm:size-4" />

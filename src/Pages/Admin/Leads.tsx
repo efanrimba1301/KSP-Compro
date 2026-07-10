@@ -44,11 +44,8 @@ export default function Leads() {
                         </CardHeader>
                         <CardTitle className="px-4 py-2 text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">{stats.totalClients}</CardTitle>
                         <CardFooter className="flex-col items-start gap-1.5 text-sm">
-                            <div className="line-clamp-1 flex gap-2 font-medium">
-                                Trending up this month <HugeiconsIcon icon={ArrowMoveUpRightIcon} className="sm:size-4" />
-                            </div>
                             <div className="text-muted-foreground">
-                                Clients for the last 1 months
+                                Client dengan status Active atau Finish
                             </div>
                         </CardFooter>
                     </CardContent>
@@ -61,9 +58,6 @@ export default function Leads() {
                         </CardHeader>
                         <CardTitle className="px-4 py-2 text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">{stats.totalLeads}</CardTitle>
                         <CardFooter className="flex-col items-start gap-1.5 text-sm">
-                            <div className="line-clamp-1 flex gap-2 font-medium">
-                                Trending up this month <HugeiconsIcon icon={ArrowMoveUpRightIcon} className="sm:size-4" />
-                            </div>
                             <div className="text-muted-foreground">
                                 Clients for the last 1 months
                             </div>
@@ -96,13 +90,13 @@ export default function Leads() {
                                 </Badge>
                             </CardAction>
                         </CardHeader>
-                        <CardTitle className="px-4 py-2 text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">{formatRupiah(2000000)}</CardTitle>
+                        <CardTitle className="px-4 py-2 text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">{formatRupiah(0)}</CardTitle>
                         <CardFooter className="flex-col items-start gap-1.5 text-sm">
                             <div className="line-clamp-1 flex gap-2 font-medium">
                                 Trending up this month <HugeiconsIcon icon={ArrowMoveUpRightIcon} className="sm:size-4" />
                             </div>
                             <div className="text-muted-foreground">
-                                Revanue for the last 1 months
+                                Dari payment berstatus Success
                             </div>
                         </CardFooter>
                     </CardContent>

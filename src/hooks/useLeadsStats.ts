@@ -7,7 +7,6 @@ export function useLeadsStats(leads: Lead[]) {
         const totalClients = leads.filter((l) => l.status === 'active' || l.status === 'finish').length
         const totalLeads = leads.filter((l) => l.status === 'leads').length
         const totalFinishClients = leads.filter((l) => l.status === 'finish').length
-
         return { totalClients, totalLeads, totalFinishClients }
     }, [leads])
 }
