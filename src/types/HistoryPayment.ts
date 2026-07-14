@@ -5,8 +5,8 @@ export type PaymentStatus =
 
 export type PricingTier =
     | 'Basic'
-    | 'Growth'
     | 'Enterprise'
+    | 'Coston'
 
 export type InvoiceType =
     | 'monthly'
@@ -34,6 +34,7 @@ export type PaymentMethod =
 
 export type HistoryPayment = {
     id: string
+    lead_id: string
     name: string
     email: string
     company: string
@@ -44,8 +45,8 @@ export type HistoryPayment = {
     pricing_tier: PricingTier
     payment_type: paymentType
     status: PaymentStatus
-    proof_of_payment: string
+    proof_of_payment?: string
     payment_method: PaymentMethod
     created_at: string
-    payment_date: string
+    payment_date: string | null
 }

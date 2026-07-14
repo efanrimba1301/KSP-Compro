@@ -1,7 +1,7 @@
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardAction, CardFooter } from "@/Components/ui/card"
 import { Badge } from "@/Components/ui/badge"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { ArrowMoveUpRightIcon, PlusSignIcon, PencilEdit01Icon, Upload01Icon, LiveStreaming01Icon } from "@hugeicons/core-free-icons"
+import { ArrowMoveUpRightIcon, PlusSignIcon, PencilEdit01Icon, Upload01Icon, LiveStreaming01Icon, ArrowMoveDownRightIcon, Refresh01Icon, Download01Icon } from "@hugeicons/core-free-icons"
 import { Button } from "@/Components/ui/button"
 import { Separator } from "@/Components/ui/separator"
 import {
@@ -14,37 +14,74 @@ import { TooltipProvider, Tooltip, TooltipContent, TooltipTrigger } from "@/Comp
 
 import { createPaymentColumns } from "./payment-columns";
 import type { HistoryPayment, PaymentStatus } from "@/types/HistoryPayment";
-import { HistoryPaymentDummyData } from "@/data/payment-dummy"
 
-import { useState, useMemo, useCallback } from 'react'
+import { useMemo, useCallback, useState } from 'react'
 import { DataTable } from '@/Components/ui/data-table'
+import { useRevenueStats } from "@/hooks/useRevanueStats"
+import { useHistoryPayments } from "@/hooks/useHistoryPayments"
+import { useUpdatePayment } from "@/hooks/useUpdatePayments"
+import { AddPaymentSheet } from "@/Components/AddPaymentSheet"
+import { toast } from "sonner"
+import { PaymentDetailDialog } from "@/Components/PaymentDetailDialog"
+
 
 const formatRupiah = (amount: number) =>
     new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(amount)
 
 const PricingPage = () => {
-    const [payment, setPayment] = useState<HistoryPayment[]>(HistoryPaymentDummyData)
+    const { data: payment, loading, error, refetch } = useHistoryPayments()
+    const { updatePaymentStatus, deletePayment, updatePaymentField } = useUpdatePayment()
+
+    const [selectedPayment, setSelectedPayment] = useState<HistoryPayment | null>(null)
+    const [dialogOpen, setDialogOpen] = useState(false)
+
 
     const handleEdit = useCallback((payment: HistoryPayment) => {
         console.log('Edit payment:', payment)
         alert(`Edit: ${payment.id} — segera diimplementasikan`)
     }, [])
 
-    const handleDelete = useCallback((id: string) => {
+    const handleDelete = useCallback(async (id: string) => {
         const confirmed = window.confirm('Yakin hapus payment ini?')
         if (!confirmed) return
-        setPayment((prev) => prev.filter((item) => item.id !== id))
-    }, [])
+        const { success, error } = await deletePayment(id)
+        if (success) {
+            refetch()
+        } else {
+            console.error(error)
+        }
 
-    const handleStatusChange = useCallback((id: string, status: PaymentStatus) => {
-        setPayment((prev) =>
-            prev.map((item) => (item.id === id ? { ...item, status } : item))
-        )
-    }, [])
+    }, [deletePayment, refetch])
+
+    const handleStatusChange = useCallback(async (id: string, status: PaymentStatus) => {
+        const { success, error } = await updatePaymentStatus(id, status)
+        if (!success) {
+            toast.error('Gagal mengubah status payment', { description: error })
+
+            return
+        }
+        refetch()
+        toast.success(`Status berhasil diubah ke "${status}"`)
+    }, [updatePaymentStatus, refetch])
 
     const handleRowClick = useCallback((payment: HistoryPayment) => {
-        alert(`Detail: ${payment.id} — segera diimplementasikan`)
+        setSelectedPayment(payment)
+        setDialogOpen(true)
     }, [])
+
+    const handleDialogOpenChange = useCallback((open: boolean) => {
+        setDialogOpen(open)
+        if (!open) setTimeout(() => setSelectedPayment(null), 300)
+    }, [])
+
+    const handleDialogUpdateField = useCallback(
+        async (id: string, field: keyof HistoryPayment, value: HistoryPayment[keyof HistoryPayment]) => {
+            const result = await updatePaymentField(id, field, value)
+            if (result.success) refetch()
+            return result
+        },
+        [updatePaymentField, refetch]
+    )
 
     const columns = useMemo(
         () => createPaymentColumns({
@@ -55,9 +92,7 @@ const PricingPage = () => {
         [handleEdit, handleDelete, handleStatusChange]
     )
 
-
-
-
+    const { revenueStats } = useRevenueStats(payment)
 
     return (
         <div className="grid auto-rows-min gap-4 py-4 px-6">
@@ -72,15 +107,31 @@ const PricingPage = () => {
                         <CardHeader>
                             <CardDescription>Total Revanue</CardDescription>
                             <CardAction>
-                                <Badge variant="outline">
-                                    20%
+                                <Badge
+                                    variant="outline"
+                                    className={revenueStats.trend === "up"
+                                        ? "text-green-500 border-green-500/30"
+                                        : revenueStats.trend === "down"
+                                            ? "text-red-500 border-red-500/30"
+                                            : "text-gray-500 border-gray-500/30"
+                                    }>
+                                    {revenueStats.percentageChange > 0 ? "+" : ""}{revenueStats.percentageChange.toFixed(2)}%
                                 </Badge>
                             </CardAction>
                         </CardHeader>
-                        <CardTitle className="px-4 py-2 text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">{formatRupiah(2000000)}</CardTitle>
+                        <CardTitle className="px-4 py-2 text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">{formatRupiah(revenueStats.totalRevenue)}</CardTitle>
                         <CardFooter className="flex-col items-start gap-1.5 text-sm">
-                            <div className="line-clamp-1 flex gap-2 font-medium">
-                                Trending up this month <HugeiconsIcon icon={ArrowMoveUpRightIcon} className="sm:size-4" />
+                            <div className={`line-clamp-1 flex gap-2 font-medium ${revenueStats.trend === "up"
+                                ? 'text-green-500'
+                                : revenueStats.trend === "down"
+                                    ? 'text-red-500'
+                                    : 'text-gray-500'
+                                }`}>
+                                {revenueStats.trend === "up" ? "Trending up" : revenueStats.trend === "down" ? "Trending down" : "Flat"} this month{" "}
+                                <HugeiconsIcon
+                                    icon={revenueStats.trend === "up" ? ArrowMoveUpRightIcon : ArrowMoveDownRightIcon}
+                                    className="sm:size-4"
+                                />
                             </div>
                             <div className="text-muted-foreground">
                                 Revanue for the last 1 months
@@ -119,7 +170,7 @@ const PricingPage = () => {
                     <div className="flex justify-end w-full gap-2 mb-2">
                         <TooltipProvider>
                             <Tooltip>
-                                <TooltipTrigger>
+                                <TooltipTrigger asChild>
                                     <Button variant="outline">
                                         <HugeiconsIcon icon={PencilEdit01Icon} />
                                     </Button>
@@ -129,7 +180,7 @@ const PricingPage = () => {
                                 </TooltipContent>
                             </Tooltip>
                             <Tooltip>
-                                <TooltipTrigger>
+                                <TooltipTrigger asChild>
                                     <Button variant="outline" disabled>
                                         <HugeiconsIcon icon={Upload01Icon} />
                                     </Button>
@@ -139,7 +190,7 @@ const PricingPage = () => {
                                 </TooltipContent>
                             </Tooltip>
                             <Tooltip>
-                                <TooltipTrigger>
+                                <TooltipTrigger asChild>
                                     <Button variant="default" disabled>
                                         <HugeiconsIcon icon={PlusSignIcon} />
                                     </Button>
@@ -290,25 +341,47 @@ const PricingPage = () => {
                 </Tabs>
             </div>
             <Separator />
+
+            {loading && <p className="text-sm text-muted-foreground">Memuat data...</p>}
+            {error && <p className="text-sm text-destructive">Gagal memuat data: {error}</p>}
+
             <div className="flex flex-col gap-2 min-w-0">
                 <div className="flex justify-between items-center">
-                    <p className="text-neutral-400 text-sm">
-                        Histori Pembayaran
-                    </p>
-                    <Button>
-                        <HugeiconsIcon icon={PlusSignIcon} className="size-4" />
-                        Buat Payment
-                    </Button>
-                </div>
+                    <p className="text-neutral-400 text-sm">Histori Pembayaran</p>
+                    <div className="flex gap-2">
+                        <AddPaymentSheet
+                            existingPayments={payment}
+                            onSuccess={refetch}
 
-                <DataTable
-                    columns={columns}
-                    data={payment}
-                    searchKey="name"
-                    searchPlaceholder="Cari Nama atau Company"
-                    onRowClick={handleRowClick}
-                />
+                        />
+                        <Button variant="secondary" >
+                            <HugeiconsIcon icon={Download01Icon} />
+                            Export to CSV
+                        </Button>
+                    </div>
+
+                </div>
+                {!loading && !error && (
+                    <DataTable
+                        columns={columns}
+                        data={payment}
+                        searchKey="name"
+                        searchPlaceholder="Cari Nama atau Company"
+                        onRowClick={handleRowClick}
+                    />
+                )}
             </div>
+
+            <PaymentDetailDialog
+                payment={selectedPayment}
+                allPayments={payment}
+                open={dialogOpen}
+                onOpenChange={handleDialogOpenChange}
+                onStatusChange={handleStatusChange}
+                onUpdateField={handleDialogUpdateField}
+                onDelete={handleDelete}
+                onRefetch={refetch}
+            />
         </div>
     )
 }

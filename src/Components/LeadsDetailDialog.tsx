@@ -24,7 +24,7 @@ import {
     DropdownMenuTrigger,
 } from '@/Components/ui/dropdown-menu'
 import type { Lead, LeadStatus, BudgetRange, ServiceType, CloseReason } from '@/types/leads'
-
+import { AddPaymentSheet } from "@/Components/AddPaymentSheet"
 import { HugeiconsIcon } from '@hugeicons/react'
 import {
     Copy01Icon,
@@ -38,10 +38,12 @@ import {
     Mail01Icon,
     PencilEdit01Icon,
     Delete01Icon,
+    PlusSignIcon
 } from '@hugeicons/core-free-icons'
 
 import type { IconSvgElement } from '@hugeicons/react'
 import { toast } from "sonner"
+import type { HistoryPayment } from "@/types/HistoryPayment"
 
 
 // ─── Props ───────────────────────────────────────────────────────────────
@@ -53,6 +55,8 @@ interface LeadDetailDialogProps {
     onDelete: (id: string) => void
     // ← optional — sambungkan ke useUpdateLead nanti kalau mau persist ke DB
     onUpdateField?: (id: string, field: keyof Lead, value: string) => Promise<void>
+    allpayments: HistoryPayment[]
+    onRefetchPayments: () => void
 }
 
 
@@ -103,6 +107,8 @@ export function LeadDetailDialog({
     onStatusChange,
     onDelete,
     onUpdateField,
+    allpayments,
+    onRefetchPayments
 }: LeadDetailDialogProps) {
     // ── Local state — supaya input benar-benar controlled & re-render ──
     const [form, setForm] = useState({
@@ -138,6 +144,15 @@ export function LeadDetailDialog({
     }, [lead])
 
     if (!lead) return null
+
+    const leadPayments = allpayments.filter((p) => p.lead_id === lead.id)
+
+
+    const paymentStatusConfig: Record<string, string> = {
+        waiting: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/30',
+        success: 'bg-green-500/10 text-green-400 border-green-500/30',
+        failed: 'bg-red-500/10 text-red-400 border-red-500/30',
+    }
 
     // ── Handlers ──────────────────────────────────────────────────────
     const handleFieldChange = (field: EditableField, value: any) => {
@@ -493,6 +508,72 @@ export function LeadDetailDialog({
                             onChange={(e) => handleFieldChange('notes', e.target.value)}
                             onBlur={() => commitFieldIfChanged('notes', form.notes)}
                         />
+                    </div>
+                    {/* ── History Payment client ini ── */}
+                    <div className="flex flex-col gap-2 mt-6">
+                        <div className="flex items-center justify-between">
+                            <p className="text-xs text-neutral-500 uppercase tracking-widest font-medium">
+                                History Payment
+                            </p>
+                            <AddPaymentSheet
+                                existingPayments={allpayments}
+                                presetLead={lead}
+                                onSuccess={() => onRefetchPayments()}
+                                trigger={
+                                    <Button variant="outline" size="sm">
+                                        <HugeiconsIcon icon={PlusSignIcon} className="size-3.5" />
+                                        Buat payment baru
+                                    </Button>
+                                }
+                            />
+                        </div>
+
+                        {leadPayments.length === 0 ? (
+                            <p className="text-sm text-neutral-500 italic py-4 text-center border border-dashed border-neutral-800 rounded-md">
+                                Belum ada payment untuk client ini.
+                            </p>
+                        ) : (
+                            <div className="border border-neutral-800 rounded-md overflow-hidden">
+                                <table className="w-full text-sm">
+                                    <thead className="bg-neutral-900">
+                                        <tr>
+                                            <th className="text-left px-3 py-2 text-neutral-400 font-medium">Payment Type</th>
+                                            <th className="text-left px-3 py-2 text-neutral-400 font-medium">Pricing Tier</th>
+                                            <th className="text-left px-3 py-2 text-neutral-400 font-medium">Amount</th>
+                                            <th className="text-left px-3 py-2 text-neutral-400 font-medium">Payment Date</th>
+                                            <th className="text-left px-3 py-2 text-neutral-400 font-medium">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {leadPayments.map((p) => (
+                                            <tr key={p.id} className="border-t border-neutral-800">
+                                                <td className="px-3 py-2 text-neutral-200 capitalize">
+                                                    <a href={`/admin/pricing`}>
+                                                        {p.payment_type.replace(/_/g, ' ')}
+                                                    </a>
+                                                </td>
+                                                <td className="px-3 py-2 text-neutral-200">
+                                                    {p.pricing_tier}
+                                                </td>
+                                                <td className="px-3 py-2 text-neutral-200">
+                                                    {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(p.amount)}
+                                                </td>
+                                                <td className="px-3 py-2 text-neutral-400">
+                                                    {p.payment_date
+                                                        ? new Date(p.payment_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
+                                                        : <span className="italic">—</span>}
+                                                </td>
+                                                <td className="px-3 py-2">
+                                                    <span className={`text-xs px-2 py-0.5 rounded-full border ${paymentStatusConfig[p.status]}`}>
+                                                        {p.status}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
                     </div>
                 </div>
 

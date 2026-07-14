@@ -81,13 +81,13 @@ const PortfolioPage = () => {
             </div>
 
             {/* ── Table ──────────────────────────────────────────────── */}
-            <DataTable
+            {!loading && !error && <DataTable
                 columns={columns}
                 data={data}
                 searchKey="project_name"
                 searchPlaceholder="Cari nama project atau client..."
                 onRowClick={handleRowClick}
-            />
+            />}
 
             <PortfolioDetailDialog
                 open={dialogOpen}

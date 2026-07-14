@@ -9,6 +9,7 @@ import { ArrowMoveUpRightIcon } from "@hugeicons/core-free-icons";
 import { LeadDetailDialog } from '@/Components/LeadsDetailDialog';
 import { AddLeadSheet } from '@/Components/AddLeadsSheet'
 import { DataTable } from '@/Components/ui/data-table'
+import { useHistoryPayments } from '@/hooks/useHistoryPayments';
 
 
 const formatRupiah = (amount: number) =>
@@ -29,7 +30,10 @@ export default function Leads() {
         handleUpdateField
     } = useLeadsTable()
 
+    const { data: allPayments, refetch: refetchPayments } = useHistoryPayments()   // ← pastikan baris ini ada
+
     const stats = useLeadsStats(data)
+
 
     return (
         <>
@@ -146,6 +150,8 @@ export default function Leads() {
                     onStatusChange={handleStatusChange}
                     onDelete={handleDelete}
                     onUpdateField={handleUpdateField}
+                    allpayments={allPayments}              // ← pastikan prop ini ada
+                    onRefetchPayments={refetchPayments}     // ← pastikan prop ini ada
 
                 />
             </div>
