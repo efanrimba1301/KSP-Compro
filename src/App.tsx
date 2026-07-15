@@ -12,6 +12,7 @@ import Portfolio from './Pages/Admin/Portofolio'
 import TambahProject from './Pages/Admin/TambahProject'
 import Services from './Pages/Admin/Services'
 import Pricing from './Pages/Admin/Pricing'
+import TambahPricing from './Pages/Admin/TambahPricing'
 
 
 function App() {
@@ -38,7 +39,10 @@ function App() {
               <Route path="tambah" element={<TambahProject />} />
             </Route>
             <Route path="services" element={<Services />} />
-            <Route path="pricing" element={<Pricing />} />
+            <Route path="pricing">
+              <Route index element={<Pricing />} />
+              <Route path="tambah" element={<TambahPricing />} />
+            </Route>
           </Route>
         </Routes>
       </AuthProvider>

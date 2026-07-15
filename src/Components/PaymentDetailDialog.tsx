@@ -41,6 +41,7 @@ import {
     TagIcon,
     Calendar01Icon,
     Invoice01Icon,
+    CopyIcon,
 } from "@hugeicons/core-free-icons"
 import { toast } from "sonner"
 
@@ -176,10 +177,9 @@ export function PaymentDetailDialog({
         toast.success(`${label} disalin!`)
     }
 
-    const handleCopyProof = () => {
-        if (!payment.proof_of_payment) return
-        navigator.clipboard.writeText(payment.proof_of_payment)
-        toast.success("Link bukti bayar disalin!")
+    const handleCopyProof = (value: string, label: "Bukti Bayar") => {
+        navigator.clipboard.writeText(value)
+        toast.success(`${label} disalin!`)
     }
 
     const handleDelete = () => {
@@ -310,6 +310,7 @@ export function PaymentDetailDialog({
                                     <TableHead>Payment Type</TableHead>
                                     <TableHead>Payment Method</TableHead>
                                     <TableHead className="text-right">Amount</TableHead>
+                                    <TableHead className="text-center">Salin Bukti Bayar</TableHead>
                                 </TableRow>
                             </TableHeader>
 
@@ -344,6 +345,15 @@ export function PaymentDetailDialog({
                                         </TableCell>
                                         <TableCell>{p.payment_method.replace("_", " ")}</TableCell>
                                         <TableCell className="text-right">{p.amount}</TableCell>
+                                        <TableCell className="text-center">
+                                            {p.proof_of_payment ? (
+                                                <Button variant="outline" size="sm" className="cursor-pointer" onClick={() => handleCopyProof(p.proof_of_payment!, "Bukti Bayar")}>
+                                                    <HugeiconsIcon icon={CopyIcon} className="size-3.5" />
+                                                </Button>
+                                            ) : (
+                                                <span className="text-xs text-neutral-500 italic">Belum ada bukti bayar</span>
+                                            )}
+                                        </TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>

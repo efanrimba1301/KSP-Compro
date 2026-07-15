@@ -1,11 +1,13 @@
 import { useLeadsTable } from '@/hooks/useLeadsTable'
 import { useLeadsStats } from '@/hooks/useLeadsStats'
+import { useRevenueStats } from "@/hooks/useRevanueStats"
+
 
 //ui
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter, CardAction } from "@/Components/ui/card";
 import { Badge } from "@/Components/ui/badge";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowMoveUpRightIcon } from "@hugeicons/core-free-icons";
+import { ArrowMoveDownRightIcon, ArrowMoveUpRightIcon } from "@hugeicons/core-free-icons";
 import { LeadDetailDialog } from '@/Components/LeadsDetailDialog';
 import { AddLeadSheet } from '@/Components/AddLeadsSheet'
 import { DataTable } from '@/Components/ui/data-table'
@@ -34,6 +36,7 @@ export default function Leads() {
 
     const stats = useLeadsStats(data)
 
+    const { revenueStats } = useRevenueStats(allPayments)
 
     return (
         <>
@@ -89,18 +92,34 @@ export default function Leads() {
                         <CardHeader>
                             <CardDescription>Total Revanue</CardDescription>
                             <CardAction>
-                                <Badge variant="outline">
-                                    20%
+                                <Badge
+                                    variant="outline"
+                                    className={revenueStats.trend === "up"
+                                        ? "text-green-500 border-green-500/30"
+                                        : revenueStats.trend === "down"
+                                            ? "text-red-500 border-red-500/30"
+                                            : "text-gray-500 border-gray-500/30"
+                                    }>
+                                    {revenueStats.percentageChange > 0 ? "+" : ""}{revenueStats.percentageChange.toFixed(2)}%
                                 </Badge>
                             </CardAction>
                         </CardHeader>
-                        <CardTitle className="px-4 py-2 text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">{formatRupiah(0)}</CardTitle>
+                        <CardTitle className="px-4 py-2 text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">{formatRupiah(revenueStats.totalRevenue)}</CardTitle>
                         <CardFooter className="flex-col items-start gap-1.5 text-sm">
-                            <div className="line-clamp-1 flex gap-2 font-medium">
-                                Trending up this month <HugeiconsIcon icon={ArrowMoveUpRightIcon} className="sm:size-4" />
+                            <div className={`line-clamp-1 flex gap-2 font-medium ${revenueStats.trend === "up"
+                                ? 'text-green-500'
+                                : revenueStats.trend === "down"
+                                    ? 'text-red-500'
+                                    : 'text-gray-500'
+                                }`}>
+                                {revenueStats.trend === "up" ? "Trending up" : revenueStats.trend === "down" ? "Trending down" : "Flat"} this month{" "}
+                                <HugeiconsIcon
+                                    icon={revenueStats.trend === "up" ? ArrowMoveUpRightIcon : ArrowMoveDownRightIcon}
+                                    className="sm:size-4"
+                                />
                             </div>
                             <div className="text-muted-foreground">
-                                Dari payment berstatus Success
+                                Dari payment berstatus Success 1 bulan terakhir
                             </div>
                         </CardFooter>
                     </CardContent>
@@ -150,8 +169,8 @@ export default function Leads() {
                     onStatusChange={handleStatusChange}
                     onDelete={handleDelete}
                     onUpdateField={handleUpdateField}
-                    allpayments={allPayments}              // ← pastikan prop ini ada
-                    onRefetchPayments={refetchPayments}     // ← pastikan prop ini ada
+                    allpayments={allPayments}
+                    onRefetchPayments={refetchPayments}
 
                 />
             </div>

@@ -1,3 +1,4 @@
+//ui
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardAction, CardFooter } from "@/Components/ui/card"
 import { Badge } from "@/Components/ui/badge"
 import { HugeiconsIcon } from "@hugeicons/react"
@@ -11,24 +12,30 @@ import {
     TabsTrigger,
 } from "@/Components/ui/tabs"
 import { TooltipProvider, Tooltip, TooltipContent, TooltipTrigger } from "@/Components/ui/tooltip"
+import { AddPaymentSheet } from "@/Components/AddPaymentSheet"
+import { toast } from "sonner"
+import { DataTable } from '@/Components/ui/data-table'
 
+//columns
 import { createPaymentColumns } from "./payment-columns";
 import type { HistoryPayment, PaymentStatus } from "@/types/HistoryPayment";
 
+//hooks
 import { useMemo, useCallback, useState } from 'react'
-import { DataTable } from '@/Components/ui/data-table'
 import { useRevenueStats } from "@/hooks/useRevanueStats"
 import { useHistoryPayments } from "@/hooks/useHistoryPayments"
 import { useUpdatePayment } from "@/hooks/useUpdatePayments"
-import { AddPaymentSheet } from "@/Components/AddPaymentSheet"
-import { toast } from "sonner"
 import { PaymentDetailDialog } from "@/Components/PaymentDetailDialog"
+
+//route
+import { useNavigate } from "react-router"
 
 
 const formatRupiah = (amount: number) =>
     new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(amount)
 
 const PricingPage = () => {
+    const navigate = useNavigate()
     const { data: payment, loading, error, refetch } = useHistoryPayments()
     const { updatePaymentStatus, deletePayment, updatePaymentField } = useUpdatePayment()
 
@@ -191,7 +198,9 @@ const PricingPage = () => {
                             </Tooltip>
                             <Tooltip>
                                 <TooltipTrigger asChild>
-                                    <Button variant="default" disabled>
+                                    <Button variant="default"
+                                        onClick={() => navigate('/admin/pricing/tambah')}
+                                    >
                                         <HugeiconsIcon icon={PlusSignIcon} />
                                     </Button>
                                 </TooltipTrigger>
@@ -233,7 +242,7 @@ const PricingPage = () => {
                                 <CardDescription>PT kecil-menengah</CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <CardTitle className="x-4 py-2 text-2xl font-semibold tabular-nums @[250px]/card:text-xl"> Rp 4.500.000 </CardTitle>
+                                <CardTitle className="x-4 py-2 text-2xl font-semibold tabular-nums @[250px]/card:text-xl"> Rp 8.000.000 </CardTitle>
 
                             </CardContent>
                         </Card>

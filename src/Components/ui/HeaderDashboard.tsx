@@ -12,9 +12,17 @@ const SEGMENT_LABELS: Record<string, string> = {
     dashboard: "Dashboard",
     leads: "Leads",
     portfolio: "Portfolio",
-    tambah: "Tambah Project",
     services: "Services",
     pricing: "Pricing",
+
+};
+
+// ─── Override untuk full path yang segmen terakhirnya ambigu ───────────────
+// Tambahkan entri baru di sini setiap kali ada sub-halaman dengan nama segmen
+// yang sudah dipakai di tempat lain (misal "tambah")
+const PATH_OVERRIDES: Record<string, string> = {
+    "/admin/portfolio/tambah": "Tambah Project",
+    "/admin/pricing/tambah": "Tambah Pricing",
 };
 
 const HeaderDashboard = () => {
@@ -30,7 +38,7 @@ const HeaderDashboard = () => {
             const url = "/" + segments.slice(0, index + 1).join("/");
 
             // Gunakan label dari mapping, fallback ke segment mentah jika tidak ada
-            const title = SEGMENT_LABELS[segment] ?? segment;
+            const title = PATH_OVERRIDES[url] ?? SEGMENT_LABELS[segment] ?? segment;
 
             return { title, url };
         });

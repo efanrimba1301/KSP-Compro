@@ -8,11 +8,14 @@ import { ChartAreaInteractive } from "@/Components/chart-area-interactive";
 import { useVisitorStats } from '@/hooks/useVisitorStats'
 import { LeadDetailDialog } from '@/Components/LeadsDetailDialog'
 import { useLeadsTable } from "@/hooks/useLeadsTable";
+import { useHistoryPayments } from "@/hooks/useHistoryPayments";
+import { useRevenueStats } from "@/hooks/useRevanueStats";
 
 
 
 const Dashboard = () => {
     const { stats, isLoading } = useVisitorStats()
+    const { data: allPayments, refetch: refetchPayments } = useHistoryPayments()
 
     const {
         data,
@@ -28,6 +31,11 @@ const Dashboard = () => {
         handleDelete,
         handleUpdateField,
     } = useLeadsTable()
+
+    const formatRupiah = (amount: number) =>
+        new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(amount)
+
+    const { revenueStats } = useRevenueStats(allPayments)
 
     return (
         <>
@@ -58,15 +66,31 @@ const Dashboard = () => {
                         <CardHeader>
                             <CardDescription>Total Revanue</CardDescription>
                             <CardAction>
-                                <Badge variant="outline">
-                                    20%
+                                <Badge
+                                    variant="outline"
+                                    className={revenueStats.trend === "up"
+                                        ? "text-green-500 border-green-500/30"
+                                        : revenueStats.trend === "down"
+                                            ? "text-red-500 border-red-500/30"
+                                            : "text-gray-500 border-gray-500/30"
+                                    }>
+                                    {revenueStats.percentageChange > 0 ? "+" : ""}{revenueStats.percentageChange.toFixed(2)}%
                                 </Badge>
                             </CardAction>
                         </CardHeader>
-                        <CardTitle className="px-4 py-2 text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">RP 1.200.000</CardTitle>
+                        <CardTitle className="px-4 py-2 text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">{formatRupiah(revenueStats.totalRevenue)}</CardTitle>
                         <CardFooter className="flex-col items-start gap-1.5 text-sm">
-                            <div className="line-clamp-1 flex gap-2 font-medium">
-                                Trending up this month <HugeiconsIcon icon={ArrowMoveUpRightIcon} className="sm:size-4" />
+                            <div className={`line-clamp-1 flex gap-2 font-medium ${revenueStats.trend === "up"
+                                ? 'text-green-500'
+                                : revenueStats.trend === "down"
+                                    ? 'text-red-500'
+                                    : 'text-gray-500'
+                                }`}>
+                                {revenueStats.trend === "up" ? "Trending up" : revenueStats.trend === "down" ? "Trending down" : "Flat"} this month{" "}
+                                <HugeiconsIcon
+                                    icon={revenueStats.trend === "up" ? ArrowMoveUpRightIcon : ArrowMoveDownRightIcon}
+                                    className="sm:size-4"
+                                />
                             </div>
                             <div className="text-muted-foreground">
                                 Revanue for the last 1 months
@@ -185,6 +209,8 @@ const Dashboard = () => {
                     onStatusChange={handleStatusChange}
                     onDelete={handleDelete}
                     onUpdateField={handleUpdateField}
+                    allpayments={allPayments}
+                    onRefetchPayments={refetchPayments}
 
                 />
             </div>

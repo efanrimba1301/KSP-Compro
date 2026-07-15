@@ -6,7 +6,7 @@ export type PaymentStatus =
 export type PricingTier =
     | 'Basic'
     | 'Enterprise'
-    | 'Coston'
+    | 'Custom'
 
 export type InvoiceType =
     | 'monthly'
