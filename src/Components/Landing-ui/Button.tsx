@@ -61,7 +61,7 @@ export const ButtonLanding = forwardRef<HTMLButtonElement, ButtonProps>(
         {variant !== "ghostArrow" && children}
 
         {showTrailingIconCircle && (
-          <span className="flex items-center justify-center size-12 rounded-full bg-white">
+          <span className="flex items-center justify-center size-10 rounded-full bg-white">
             <HugeiconsIcon icon={icon ?? ArrowUpRight01Icon} size={24} className="text-black" />
           </span>
         )}

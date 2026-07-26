@@ -39,8 +39,8 @@ export default function AutoSlide() {
             </div>
 
             {/* Gradient fade edges — taruh PALING TERAKHIR (di atas z-index-nya) & pakai token landing */}
-            <div className="absolute inset-y-0 left-0 w-[300px] bg-linear-to-r from-accent to-transparent pointer-events-none" />
-            <div className="absolute inset-y-0 right-0 w-[300px] bg-linear-to-l from-accent to-transparent pointer-events-none" />
+            <div className="absolute inset-y-0 left-0 w-[300px] bg-linear-to-r from-surface-dark to-transparent pointer-events-none" />
+            <div className="absolute inset-y-0 right-0 w-[300px] bg-linear-to-l from-surface-dark to-transparent pointer-events-none" />
 
         </div>
     )

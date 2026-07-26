@@ -15,9 +15,9 @@ import { ButtonLanding } from "@/Components/Landing-ui/Button";
 // kalau linknya sama. `hasDropdownIcon` mengikuti detail Figma: 3 link
 // pertama punya chevron bulat kecil di sebelah kanan text, "Pricing" tidak.
 export const NAV_LINKS = [
-    { name: "Services", href: "#services", hasDropdownIcon: true },
-    { name: "Solution", href: "#solution", hasDropdownIcon: true },
-    { name: "Products", href: "#products", hasDropdownIcon: true },
+    { name: "Services", href: "#services", hasDropdownIcon: false },
+    { name: "Solution", href: "#solution", hasDropdownIcon: false },
+    { name: "Products", href: "#products", hasDropdownIcon: false },
     { name: "Pricing", href: "#pricing", hasDropdownIcon: false },
 ];
 
@@ -31,12 +31,12 @@ function NavLink({
         <a
             href={href}
             onClick={onClick}
-            className="group flex items-center gap-2 py-5 font-landing text-label-1 text-ink/80 hover:text-ink transition-colors"
+            className="group flex items-center gap-2 py-2 px-4 rounded-lg font-landing text-display-4 bg-ink text-white/80 hover:bg-black transition-colors"
         >
             <span>{name}</span>
             {hasDropdownIcon && (
-                <span className="flex items-center justify-center size-[26px] rounded-full bg-white border border-[#f6f6f6] group-hover:border-[#e5e5e5] transition-colors">
-                    <HugeiconsIcon icon={ArrowDownRight01Icon} size={14} className="text-ink" />
+                <span className="flex items-center justify-center rounded-full bg-accent border border-[#515151] group-hover:border-[#515151] transition-colors">
+                    <HugeiconsIcon icon={ArrowDownRight01Icon} size={14} className="text-white" />
                 </span>
             )}
         </a>
@@ -48,15 +48,15 @@ export const Navbar = () => {
     const toggleMenu = () => setIsOpen((prev) => !prev);
 
     return (
-        <header className="sticky top-0 z-50 bg-white">
-            <div className="mx-auto max-w-[1728px] px-3 py-3 border-b border-divider-2">
+        <header className="sticky top-0 z-50 bg-surface-dark/20 backdrop-blur-[10px]">
+            <div className="mx-auto max-w-[1728px] px-3 py-3 border-b border-border-dark">
                 <div className="flex items-center justify-between rounded-full">
                     {/* Logo — Home pakai full wordmark (beda dari inner page yg icon-only) */}
                     <Link to="/" className="flex items-center gap-2 pl-4">
                         <img
-                            src="/Full-Logo_KSP_Small.svg"
+                            src="/Full-Logo_KSP_Small_white.svg"
                             alt="Kebetulan Serius Project"
-                            className="h-full w-auto"
+                            className="h-[32px] w-auto"
                         />
                     </Link>
 
@@ -74,7 +74,7 @@ export const Navbar = () => {
 
                     {/* Mobile Menu Toggle */}
                     <button
-                        className="md:hidden z-50 p-2 text-ink"
+                        className="md:hidden z-50 p-2 text-white"
                         onClick={toggleMenu}
                         aria-label="Toggle menu"
                     >
@@ -91,7 +91,7 @@ export const Navbar = () => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
                         transition={{ duration: 0.2 }}
-                        className="absolute top-full left-0 right-0 bg-white border-b border-divider-2 shadow-lg md:hidden"
+                        className="absolute top-full left-0 right-0 bg-surface-dark border-b border-border-dark shadow-lg md:hidden"
                     >
                         <nav className="flex flex-col p-4 gap-2">
                             {NAV_LINKS.map((link) => (
@@ -101,7 +101,7 @@ export const Navbar = () => {
                                     onClick={() => setIsOpen(false)}
                                 />
                             ))}
-                            <div className="pt-4 border-t border-divider-2">
+                            <div className="pt-4 border-t border-border-dark">
                                 <ButtonLanding icon={Call02Icon} className="w-full justify-center rounded-full">
                                     Contact Us
                                 </ButtonLanding>
