@@ -50,7 +50,7 @@ export function HighlightCard({
                 {badge}
             </Badge>
 
-            <HugeiconsIcon icon={icon} className="size-[48px] text-white" />
+            <HugeiconsIcon icon={icon} className="size-12 text-white" />
 
             <div className="flex flex-col gap-6 w-full">
                 <div className="font-display font-bold text-2xl text-white">

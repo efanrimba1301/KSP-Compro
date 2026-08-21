@@ -5,7 +5,6 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import {
     Menu01Icon,
     Cancel01Icon,
-    ArrowDown01Icon,
     Call02Icon,
     ArrowDownRight01Icon,
 } from "@hugeicons/core-free-icons";
@@ -49,14 +48,14 @@ export const Navbar = () => {
 
     return (
         <header className="sticky top-0 z-50 bg-surface-dark/20 backdrop-blur-[10px]">
-            <div className="mx-auto max-w-[1728px] px-3 py-3 border-b border-border-dark">
+            <div className="mx-auto max-w-432 px-3 py-3 border-b border-border-dark">
                 <div className="flex items-center justify-between rounded-full">
                     {/* Logo — Home pakai full wordmark (beda dari inner page yg icon-only) */}
                     <Link to="/" className="flex items-center gap-2 pl-4">
                         <img
                             src="/Full-Logo_KSP_Small_white.svg"
                             alt="Kebetulan Serius Project"
-                            className="h-[32px] w-auto"
+                            className="h-8 w-auto"
                         />
                     </Link>
 

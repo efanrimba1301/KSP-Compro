@@ -24,7 +24,7 @@ const HomePage = () => {
                 {/* flag icon + text nanti jadi badge component */}
                 <div className="flex flex-row justify-center items-center text-center gap-2 bg-surface-dark-2 rounded-full pl-2 pr-4 py-2 h-auto">
                     <div className="flex flex-col items-center justify-center w-12 h-12 py-4 rounded-full bg-surface-dark-2">
-                        <HugeiconsIcon icon={Flag03Icon} className="w-[24px] h-[24px]" color="white" />
+                        <HugeiconsIcon icon={Flag03Icon} className="w-6 h-6" color="white" />
                     </div>
                     <span className="text-display-2 text-white">Base in Nusantara, IDN</span>
                 </div>
@@ -53,7 +53,7 @@ const HomePage = () => {
                         <div className="flex flex-col items-start">
                             <div className="flex flex-row">
                                 {Array.from({ length: 5 }).map((_, index) => (
-                                    <HugeiconsIcon key={index} icon={Star} color="#FF8833" className="w-[24px] h-[24px]" />
+                                    <HugeiconsIcon key={index} icon={Star} color="#FF8833" className="w-6 h-6" />
                                 ))}
                             </div>
                             <p className="text-lg font-light text-white">10+ Reviews</p>
@@ -115,7 +115,7 @@ const HomePage = () => {
                         </div>
                     </div>
                     <div className="flex w-full max-w flex-col gap-2">
-                        <Item className="border border-y-surface-dark-2 border-t-0 border-x-0 rounded-none hover:!bg-white/5" asChild>
+                        <Item className="border border-y-surface-dark-2 border-t-0 border-x-0 rounded-none hover:bg-white/5!" asChild>
                             <a href="#" className="flex flex-row justify-between items-start gap-4 w-full">
                                 <ItemActions>
                                     <HugeiconsIcon icon={ArrowRight02Icon} color="white" />
@@ -125,7 +125,7 @@ const HomePage = () => {
                                 </ItemContent>
                             </a>
                         </Item>
-                        <Item className="border border-y-surface-dark-2 border-t-0 border-x-0 rounded-none hover:!bg-white/5" asChild>
+                        <Item className="border border-y-surface-dark-2 border-t-0 border-x-0 rounded-none hover:bg-white/5!" asChild>
                             <a href="#" className="flex flex-row justify-between items-start gap-4 w-full">
                                 <ItemActions>
                                     <HugeiconsIcon icon={ArrowRight02Icon} color="white" />
@@ -135,7 +135,7 @@ const HomePage = () => {
                                 </ItemContent>
                             </a>
                         </Item>
-                        <Item className="border border-y-surface-dark-2 border-t-0 border-x-0 rounded-none hover:!bg-white/5" asChild>
+                        <Item className="border border-y-surface-dark-2 border-t-0 border-x-0 rounded-none hover:bg-white/5!" asChild>
                             <a href="#" className="flex flex-row justify-between items-start gap-4 w-full">
                                 <ItemActions>
                                     <HugeiconsIcon icon={ArrowRight02Icon} color="white" />
@@ -145,7 +145,7 @@ const HomePage = () => {
                                 </ItemContent>
                             </a>
                         </Item>
-                        <Item className="border border-y-surface-dark-2 border-t-0 border-x-0 rounded-none hover:!bg-white/5" asChild>
+                        <Item className="border border-y-surface-dark-2 border-t-0 border-x-0 rounded-none hover:bg-white/5!" asChild>
                             <a href="#" className="flex flex-row justify-between items-start gap-4 w-full">
                                 <ItemActions>
                                     <HugeiconsIcon icon={ArrowRight02Icon} color="white" />
@@ -155,7 +155,7 @@ const HomePage = () => {
                                 </ItemContent>
                             </a>
                         </Item>
-                        <Item className="border border-y-surface-dark-2 border-t-0 border-x-0 rounded-none hover:!bg-white/5" asChild>
+                        <Item className="border border-y-surface-dark-2 border-t-0 border-x-0 rounded-none hover:bg-white/5!" asChild>
                             <a href="#" className="flex flex-row justify-between items-start gap-4 w-full">
                                 <ItemActions>
                                     <HugeiconsIcon icon={ArrowRight02Icon} color="white" />
@@ -165,7 +165,7 @@ const HomePage = () => {
                                 </ItemContent>
                             </a>
                         </Item>
-                        <Item className="border border-y-surface-dark-2 border-t-0 border-x-0 rounded-none hover:!bg-white/5" asChild>
+                        <Item className="border border-y-surface-dark-2 border-t-0 border-x-0 rounded-none hover:bg-white/5!" asChild>
                             <a href="#" className="flex flex-row justify-between items-start gap-4 w-full">
                                 <ItemActions>
                                     <HugeiconsIcon icon={ArrowRight02Icon} color="white" />
@@ -175,7 +175,7 @@ const HomePage = () => {
                                 </ItemContent>
                             </a>
                         </Item>
-                        <Item className="border border-y-surface-dark-2 border-t-0 border-x-0 rounded-none hover:!bg-white/5" asChild>
+                        <Item className="border border-y-surface-dark-2 border-t-0 border-x-0 rounded-none hover:bg-white/5!" asChild>
                             <a href="#" className="flex flex-row justify-between items-start gap-4 w-full">
                                 <ItemActions>
                                     <HugeiconsIcon icon={ArrowRight02Icon} color="white" />
@@ -204,7 +204,7 @@ const HomePage = () => {
             <section className="flex flex-col bg-white justify-center items-center mt-12 mb-12">
                 <div className="flex flex-col justify-center items-center m-8 gap-4">
                     <Badge variant="outline"
-                        className="w-[128px] h-[44px] text-base"
+                        className="w-32 h-11 text-base"
                     >
                         Workflow
                     </Badge>
@@ -224,6 +224,8 @@ const HomePage = () => {
                     ))}
                 </div>
             </section>
+
+            {/* Projects Section (bento grid layout) */}
             <section className="flex flex-col justify-between items-center bg-dark px-16">
                 <div className="flex flex-row justify-between items-center gap-12 mx-auto w-full ">
                     <SectionHeading className="text-4xl md:text-title-1 lg:text-display text-start text-white font-display font-semibold leading-[1.1]">
@@ -272,16 +274,43 @@ const HomePage = () => {
                             className="col-span-1"
                         />
                         <ProjectCard
-                            image="/ImagesAsset/projects/Scholify-cover.png"
-                            title="Scholify"
+                            image="/ImagesAsset/projects/CRM-cover.png"
+                            title="CRM"
+                            typeLabel="CRM Dashboard"
+                            description="A mobile CRM solution designed to enhance sales operations through intelligent lead management and automated follow-ups."
+                            className="col-span-2"
+                        />
+                        <ProjectCard
+                            image="/ImagesAsset/projects/sikasep-cover.png"
+                            title="Sikasep"
                             typeLabel="Mobile Apps"
-                            description="Scholify is a mobile apps that helps students to find scholarships and grants"
+                            description="Mobile apps for searching and buying property"
                             className="col-span-1"
                         />
-                        <div className="col-span-1 row-span-1 rounded-lg shadow-sm bg-white"></div>
-                        <div className="col-span-2 row-span-1 rounded-lg shadow-sm bg-white"></div>
-                        <div className="col-span-1 row-span-1 rounded-lg shadow-sm bg-white"></div>
                     </div>
+                </div>
+            </section>
+
+            {/* Trust Section */}
+            <section className="flex flex-col justify-between items-center bg-dark px-16">
+                <div className="flex flex-row justify-between items-center gap-12 mx-auto w-full ">
+                    <SectionHeading className="text-4xl w-full md:text-title-1 lg:text-display text-start text-white font-display font-semibold leading-[1.1]">
+                        Why Teams Choose *Kebetulan Serius Project*
+                    </SectionHeading>
+                    <div className="flex flex-col justify-between items-center gap-8">
+                        <p className="text-white text-lg font-landing">
+                            Choose Kebtulan Serius Project for reliable service, quality results, and a commitment to customer satisfaction. We deliver solutions tailored to your needs with professionalism, efficiency, and care.
+                        </p>
+                    </div>
+                </div>
+
+                <div className="flex flex-col justify-between items-center gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div className="border-y border-accent divide-y divide-dark mt-12 mb-12">
+
+                        </div>
+                    </div>
+
                 </div>
             </section>
         </div>
