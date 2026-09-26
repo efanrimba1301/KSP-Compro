@@ -14,10 +14,10 @@ import { ButtonLanding } from "@/Components/Landing-ui/Button";
 // kalau linknya sama. `hasDropdownIcon` mengikuti detail Figma: 3 link
 // pertama punya chevron bulat kecil di sebelah kanan text, "Pricing" tidak.
 export const NAV_LINKS = [
-    { name: "Services", href: "#services", hasDropdownIcon: false },
-    { name: "Solution", href: "#solution", hasDropdownIcon: false },
-    { name: "Products", href: "#products", hasDropdownIcon: false },
-    { name: "Pricing", href: "#pricing", hasDropdownIcon: false },
+    { name: "Services", href: "/services", hasDropdownIcon: false },
+    { name: "Solution", href: "/solution", hasDropdownIcon: false },
+    { name: "Products", href: "/products", hasDropdownIcon: false },
+    { name: "Pricing", href: "/pricing", hasDropdownIcon: false },
 ];
 
 function NavLink({
@@ -68,7 +68,11 @@ export const Navbar = () => {
 
                     {/* Desktop CTA */}
                     <div className="hidden md:flex items-center">
-                        <ButtonLanding icon={Call02Icon} className="rounded-full">Contact Us</ButtonLanding>
+                        <ButtonLanding icon={Call02Icon} className="rounded-full"
+                            onClick={() => {
+                                window.location.href = "/Contact";
+                            }}
+                        >Contact Us</ButtonLanding>
                     </div>
 
                     {/* Mobile Menu Toggle */}

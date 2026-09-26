@@ -13,6 +13,8 @@ import TambahProject from './Pages/Admin/TambahProject'
 import Services from './Pages/Admin/Services'
 import Pricing from './Pages/Admin/Pricing'
 import TambahPricing from './Pages/Admin/TambahPricing'
+import EmptyState from './Pages/EmptyState'
+import Contact from './Pages/Contact'
 
 
 function App() {
@@ -22,6 +24,8 @@ function App() {
       <AuthProvider>
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/Contact" element={<Contact />} />
+          <Route path="/*" element={<EmptyState />} />
           <Route path="/admin/login" element={<AdminLogin />} />
 
           <Route

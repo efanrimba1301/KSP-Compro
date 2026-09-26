@@ -22,7 +22,7 @@ import { PlusSignIcon } from "@hugeicons/core-free-icons"
 import { toast } from "sonner"
 import type z from "zod"
 
-const pricingTierOptions: PricingTier[] = ['Basic', 'Growth', 'Enterprise']
+const pricingTierOptions: PricingTier[] = ['Basic', 'Enterprise', 'Custom']
 const invoiceTypeOptions: InvoiceType[] = ['monthly', 'quarterly', 'yearly']
 const paymentMethodOptions: PaymentMethod[] = ['bank_transfer', 'credit_card']
 

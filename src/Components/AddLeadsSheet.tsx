@@ -190,7 +190,7 @@ export function AddLeadSheet({ onSuccess }: AddLeadSheetProps) {
                                             <HugeiconsIcon icon={ArrowDown01Icon} className="sm:size-4" />
                                         </Button>
                                     </DropdownMenuTrigger>
-                                    <DropdownMenuContent className="w-full min-w-[200px]">
+                                    <DropdownMenuContent className="w-full min-w-50">
                                         {serviceOptions.map((service) => (
                                             <DropdownMenuItem
                                                 key={service}
@@ -273,13 +273,13 @@ export function AddLeadSheet({ onSuccess }: AddLeadSheetProps) {
                         <Label htmlFor="project_detail">Project Detail</Label>
                         <Textarea
                             {...form.register("project_detail")}
-                            className="border-b-mauve-400 min-h-[80px] resize-y border-2" placeholder="Project Detail Client" />
+                            className="border-b-mauve-400 min-h-20 resize-y border-2" placeholder="Project Detail Client" />
                         <span className="text-red-500">{form.formState.errors.project_detail?.message}</span>
                     </div>
                     <div className="grid gap-2">
                         <Textarea
                             {...form.register("notes")}
-                            className="border-b-mauve-400 min-h-[30px] max-h-[65px] resize-y border-2"
+                            className="border-b-mauve-400 min-h-7.5 max-h-16.25 resize-y border-2"
                             placeholder="Internal Notes" />
                         <span className="text-red-500">{form.formState.errors.notes?.message}</span>
                     </div>

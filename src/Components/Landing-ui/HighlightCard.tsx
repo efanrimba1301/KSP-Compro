@@ -42,7 +42,7 @@ export function HighlightCard({
     subtitle
 }: (typeof highlightStats)[number]) {
     return (
-        <div className="flex flex-col items-center justify-center gap-8 p-10 h-[408.5px]">
+        <div className="flex flex-col items-center justify-center text-center sm:text-left sm:items-start gap-6 sm:gap-8 p-6 sm:p-10 min-h-80 sm:min-h-90 h-full">
             <Badge
                 variant="default"
                 className={cn("text-sm w-fit px-4 py-4 rounded-full border", badgeClass)}

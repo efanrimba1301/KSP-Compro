@@ -161,7 +161,7 @@ export function createLeadsColumns({
             cell: ({ row }) => {
                 const services: string[] = row.getValue('services_required')
                 return (
-                    <div className="flex flex-wrap gap-1 max-w-[180px]">
+                    <div className="flex flex-wrap gap-1 max-w-45">
                         {services.map((s) => (
                             <span
                                 key={s}

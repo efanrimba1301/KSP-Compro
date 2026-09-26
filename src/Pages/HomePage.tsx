@@ -10,190 +10,147 @@ import { HighlightCard, highlightStats } from "@/Components/Landing-ui/Highlight
 import { Badge } from "@/Components/ui/badge";
 import { StepItem, workflowSteps } from "@/Components/Landing-ui/WorkflowTimeline";
 import ProjectCard from "@/Components/Landing-ui/ProjectCard";
+import Footer from "@/Components/Landing-ui/Footer";
 
 
 const HomePage = () => {
     usePageTracking('/')
 
     return (
-        <div className="font-display bg-surface-dark">
+        <div className="font-display bg-surface-dark w-full overflow-x-hidden">
             <Navbar />
-
             {/* Hero Section */}
-            <section className="h-[90svh] flex flex-col justify-center items-center gap-12">
-                {/* flag icon + text nanti jadi badge component */}
-                <div className="flex flex-row justify-center items-center text-center gap-2 bg-surface-dark-2 rounded-full pl-2 pr-4 py-2 h-auto">
-                    <div className="flex flex-col items-center justify-center w-12 h-12 py-4 rounded-full bg-surface-dark-2">
-                        <HugeiconsIcon icon={Flag03Icon} className="w-6 h-6" color="white" />
+            <section className="min-h-[90svh] flex flex-col justify-center items-center gap-8 md:gap-12 py-16 md:py-24 px-4 sm:px-8 max-w-7xl mx-auto text-center">
+                {/* Location Badge */}
+                <div className="inline-flex flex-row items-center gap-3 bg-surface-dark-2 rounded-full pl-3 pr-5 py-2">
+                    <div className="flex items-center justify-center size-8 rounded-full bg-white/10">
+                        <HugeiconsIcon icon={Flag03Icon} className="w-4 h-4 text-white" />
                     </div>
-                    <span className="text-display-2 text-white">Base in Nusantara, IDN</span>
+                    <span className="text-sm md:text-base font-landing text-white font-medium">Based in Nusantara, IDN</span>
                 </div>
-                {/* 1. Large Headline text */}
-                <div className="flex flex-col justify-center items-center gap-6">
-                    <h1 className="text-display-1 font-bold text-7xl text-center text-white">
-                        We Build Digital
-                        <br />
-                        <h1 className="font-accent italic text-7xl text-center text-white">Products That Scale Your Business.</h1>
+
+                {/* Headline Text */}
+                <div className="flex flex-col items-center gap-6 max-w-5xl">
+                    <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1.15]">
+                        We Build Digital{" "}
+                        <span className="block font-accent italic font-normal text-3xl sm:text-5xl md:text-6xl lg:text-7xl text-white mt-1">
+                            Products That Scale Your Business.
+                        </span>
                     </h1>
 
-                    {/* 2. Hero Text below Headline */}
-                    <div className="flex flex-col justify-center items-center gap-10">
-                        <p className="text-center text-xl font-landing w-[72svw] leading-relaxed text-white">
-                            From web & mobile apps to full SaaS platforms - <br />
-                            design, engineering, and launch, all under one roof.
-                        </p>
-                    </div>
+                    <p className="text-base sm:text-lg md:text-xl font-landing leading-relaxed text-white/80 max-w-2xl px-2">
+                        From web & mobile apps to full SaaS platforms — design, engineering, and launch, all under one roof.
+                    </p>
                 </div>
-                {/* Ratiing*/}
-                <div className="flex flex-row justify-center items-center p-4 gap-2">
-                    <div className="flex justify-center items-center gap-2">
-                        <div>
-                            <p className="text-display-1 font-bold text-2xl text-center text-white">5.0</p>
-                        </div>
-                        <div className="flex flex-col items-start">
-                            <div className="flex flex-row">
-                                {Array.from({ length: 5 }).map((_, index) => (
-                                    <HugeiconsIcon key={index} icon={Star} color="#FF8833" className="w-6 h-6" />
-                                ))}
-                            </div>
-                            <p className="text-lg font-light text-white">10+ Reviews</p>
-                        </div>
 
+                {/* Rating */}
+                <div className="flex flex-row items-center justify-center p-2 gap-3">
+                    <span className="font-bold text-2xl text-white font-display">5.0</span>
+                    <div className="flex flex-col items-start gap-0.5">
+                        <div className="flex flex-row gap-0.5">
+                            {Array.from({ length: 5 }).map((_, index) => (
+                                <HugeiconsIcon key={index} icon={Star} color="#FF8833" className="w-5 h-5 fill-[#FF8833]" />
+                            ))}
+                        </div>
+                        <p className="text-xs sm:text-sm font-landing text-white/70">10+ Reviews</p>
                     </div>
                 </div>
 
-                {/* 3. CTA Button */}
-                <div className="flex flex-row justify-center items-center gap-2">
-                    <ButtonLanding icon={Call02Icon} className="rounded-full shadow-btn-soft">Contact Us</ButtonLanding>
-                    <ButtonLanding variant={'outline'} className="rounded-full shadow-btn-soft">
-                        <HugeiconsIcon icon={WhatsappIcon} size={28} color="black" />
+                {/* CTA Buttons */}
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto px-4">
+                    <ButtonLanding icon={Call02Icon} className="rounded-full shadow-btn-soft w-full sm:w-auto">
+                        Contact Us
+                    </ButtonLanding>
+                    <ButtonLanding variant="outline" className="rounded-full shadow-btn-soft w-full sm:w-auto text-white border-white/20 hover:bg-white/10">
+                        <HugeiconsIcon icon={WhatsappIcon} size={24} className="text-white" />
                         Let's Talk
                     </ButtonLanding>
                 </div>
             </section>
 
-            {/* techstack Section */}
-            <section className="h-[40svh] flex flex-col justify-top items-center gap-2">
-                <div className="flex flex-col justify-center items-center text-center gap-2">
-                    <h1 className="font-display text-xl text-center text-white">
+            {/* Techstack Section */}
+            <section className="py-12 md:py-16 px-4 sm:px-8 flex flex-col items-center gap-6 w-full overflow-hidden">
+                <div className="flex flex-col justify-center items-center text-center gap-2 max-w-3xl">
+                    <h2 className="font-display text-lg sm:text-xl md:text-2xl text-white font-medium">
                         Trusted by Innovators, Powered by World-Class Tech.
-                    </h1>
-                    <h3 className="font-display text-base text-center text-white">
-                        From early-stage startups to growing enterprises -
-                        <br />
-                        we build what scales.
-                    </h3>
+                    </h2>
+                    <p className="font-landing text-sm sm:text-base text-white/70">
+                        From early-stage startups to growing enterprises — we build what scales.
+                    </p>
                 </div>
-                {/* Techstack Logo */}
-                <AutoSlide />
+                {/* Techstack Slider */}
+                <div className="w-full">
+                    <AutoSlide />
+                </div>
             </section>
 
             {/* Trusted Section */}
-            <section className="flex flex-col justify-center items-center">
-                <div className="flex flex-col justify-start items-start max-w-[90%]">
-                    <div className="flex justify-center items-center">
-                        <SectionHeading className="text-5xl md:text-title-1 lg:text-display text-start font-display text-white font-semibold leading-[1.1]">
-                            Chosen by *Startups, SMEs & Enterprises* To Build Digital Products That Last.
-                        </SectionHeading>
-                    </div>
+            <section className="py-16 md:py-24 px-4 sm:px-8 md:px-12 lg:px-16 flex flex-col justify-center items-center w-full max-w-7xl mx-auto">
+                <div className="w-full">
+                    <SectionHeading className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-start font-display text-white font-semibold leading-[1.15]">
+                        Chosen by *Startups, SMEs & Enterprises* To Build Digital Products That Last.
+                    </SectionHeading>
                 </div>
-                <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-12 px-20 mt-16">
-                    <div className="flex flex-col justify-start items-start">
-                        <h2 className="font-display text-title-1 font-semibold text-white">We Design, Build & Ship End to End.</h2>
-                        <p className="font-display text-base text-white">
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 w-full mt-12 md:mt-16 items-start">
+                    {/* Left Description & Pricing */}
+                    <div className="flex flex-col justify-start items-start gap-6">
+                        <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-semibold text-white leading-tight">
+                            We Design, Build & Ship End to End.
+                        </h2>
+                        <p className="font-landing text-base sm:text-lg text-white/80 leading-relaxed">
                             From UI/UX design to full-stack development and SaaS delivery, we handle every layer so you can focus on growing your business. Fast timelines. No fluff. Real results.
                         </p>
-                        <div className="flex flex-row gap-12 mt-12 justify-center items-center">
-                            <div className="flex flex-col gap-2">
-                                <p className="font-display text-sm text-white">Starting Price</p>
-                                <h2 className="font-display text-2xl font-bold text-white">$999<span className="font-tittle text-xs text-white">/Project</span></h2>
-                                <span className="font-tittle text-xs text-white">Flexible Price, Cancle anytime</span>
+                        <div className="flex flex-col sm:flex-row gap-6 sm:gap-10 mt-6 sm:mt-8 items-start sm:items-center w-full">
+                            <div className="flex flex-col gap-1">
+                                <p className="font-landing text-xs text-white/60">Starting Price</p>
+                                <h3 className="font-display text-2xl sm:text-3xl font-bold text-white">
+                                    $999<span className="font-landing text-xs font-normal text-white/60 ml-1">/Project</span>
+                                </h3>
+                                <span className="font-landing text-xs text-white/50">Flexible Price, Cancel anytime</span>
                             </div>
-                            <div className="flex flex-col">
-                                <ButtonLanding className="rounded-full shadow-btn-soft"> See pricing & availability </ButtonLanding>
+                            <div className="w-full sm:w-auto">
+                                <ButtonLanding className="rounded-full shadow-btn-soft w-full sm:w-auto">
+                                    See pricing & availability
+                                </ButtonLanding>
                             </div>
                         </div>
                     </div>
-                    <div className="flex w-full max-w flex-col gap-2">
-                        <Item className="border border-y-surface-dark-2 border-t-0 border-x-0 rounded-none hover:bg-white/5!" asChild>
-                            <a href="#" className="flex flex-row justify-between items-start gap-4 w-full">
-                                <ItemActions>
-                                    <HugeiconsIcon icon={ArrowRight02Icon} color="white" />
-                                </ItemActions>
-                                <ItemContent>
-                                    <ItemTitle className="text-lg text-white">UI/UX Design & Prototyping</ItemTitle>
-                                </ItemContent>
-                            </a>
-                        </Item>
-                        <Item className="border border-y-surface-dark-2 border-t-0 border-x-0 rounded-none hover:bg-white/5!" asChild>
-                            <a href="#" className="flex flex-row justify-between items-start gap-4 w-full">
-                                <ItemActions>
-                                    <HugeiconsIcon icon={ArrowRight02Icon} color="white" />
-                                </ItemActions>
-                                <ItemContent>
-                                    <ItemTitle className="text-lg text-white">SaaS Product Engineering</ItemTitle>
-                                </ItemContent>
-                            </a>
-                        </Item>
-                        <Item className="border border-y-surface-dark-2 border-t-0 border-x-0 rounded-none hover:bg-white/5!" asChild>
-                            <a href="#" className="flex flex-row justify-between items-start gap-4 w-full">
-                                <ItemActions>
-                                    <HugeiconsIcon icon={ArrowRight02Icon} color="white" />
-                                </ItemActions>
-                                <ItemContent>
-                                    <ItemTitle className="text-lg text-white">IoT Engineering</ItemTitle>
-                                </ItemContent>
-                            </a>
-                        </Item>
-                        <Item className="border border-y-surface-dark-2 border-t-0 border-x-0 rounded-none hover:bg-white/5!" asChild>
-                            <a href="#" className="flex flex-row justify-between items-start gap-4 w-full">
-                                <ItemActions>
-                                    <HugeiconsIcon icon={ArrowRight02Icon} color="white" />
-                                </ItemActions>
-                                <ItemContent>
-                                    <ItemTitle className="text-lg text-white">IT Consulting & Solutions</ItemTitle>
-                                </ItemContent>
-                            </a>
-                        </Item>
-                        <Item className="border border-y-surface-dark-2 border-t-0 border-x-0 rounded-none hover:bg-white/5!" asChild>
-                            <a href="#" className="flex flex-row justify-between items-start gap-4 w-full">
-                                <ItemActions>
-                                    <HugeiconsIcon icon={ArrowRight02Icon} color="white" />
-                                </ItemActions>
-                                <ItemContent>
-                                    <ItemTitle className="text-lg text-white">AI & Data Engineering</ItemTitle>
-                                </ItemContent>
-                            </a>
-                        </Item>
-                        <Item className="border border-y-surface-dark-2 border-t-0 border-x-0 rounded-none hover:bg-white/5!" asChild>
-                            <a href="#" className="flex flex-row justify-between items-start gap-4 w-full">
-                                <ItemActions>
-                                    <HugeiconsIcon icon={ArrowRight02Icon} color="white" />
-                                </ItemActions>
-                                <ItemContent>
-                                    <ItemTitle className="text-lg text-white">MVP Development</ItemTitle>
-                                </ItemContent>
-                            </a>
-                        </Item>
-                        <Item className="border border-y-surface-dark-2 border-t-0 border-x-0 rounded-none hover:bg-white/5!" asChild>
-                            <a href="#" className="flex flex-row justify-between items-start gap-4 w-full">
-                                <ItemActions>
-                                    <HugeiconsIcon icon={ArrowRight02Icon} color="white" />
-                                </ItemActions>
-                                <ItemContent>
-                                    <ItemTitle className="text-lg text-white">Product Discovery & Strategy</ItemTitle>
-                                </ItemContent>
-                            </a>
-                        </Item>
+
+                    {/* Services Accordion List */}
+                    <div className="flex w-full flex-col gap-2">
+                        {[
+                            "UI/UX Design & Prototyping",
+                            "SaaS Product Engineering",
+                            "IoT Engineering",
+                            "IT Consulting & Solutions",
+                            "AI & Data Engineering",
+                            "MVP Development",
+                            "Product Discovery & Strategy",
+                        ].map((serviceTitle) => (
+                            <Item key={serviceTitle} className="border-b border-surface-dark-2 rounded-none hover:bg-black transition-colors py-4 px-2" asChild>
+                                <a href="#" className="flex flex-row justify-between items-center gap-4 w-full group">
+                                    <ItemContent>
+                                        <ItemTitle className="text-base sm:text-lg text-white group-hover:text-accent-foreground transition-colors">
+                                            {serviceTitle}
+                                        </ItemTitle>
+                                    </ItemContent>
+                                    <ItemActions>
+                                        <HugeiconsIcon icon={ArrowRight02Icon} className="text-white group-hover:translate-x-1 transition-transform" />
+                                    </ItemActions>
+                                </a>
+                            </Item>
+                        ))}
                     </div>
                 </div>
 
-                <div className="border-y border-dark divide-y divide-dark mt-12 mb-12">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-dark">
+                {/* Highlight Stats Grid */}
+                <div className="w-full border-y border-white/10 mt-16 md:mt-24">
+                    <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-white/10">
                         <HighlightCard {...highlightStats[0]} />
                         <HighlightCard {...highlightStats[1]} />
                     </div>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-dark">
+                    <div className="grid grid-cols-1 md:grid-cols-2 border-t border-white/10 divide-y md:divide-y-0 md:divide-x divide-white/10">
                         <HighlightCard {...highlightStats[2]} />
                         <HighlightCard {...highlightStats[3]} />
                     </div>
@@ -201,118 +158,137 @@ const HomePage = () => {
             </section>
 
             {/* Workflow Section */}
-            <section className="flex flex-col bg-white justify-center items-center mt-12 mb-12">
-                <div className="flex flex-col justify-center items-center m-8 gap-4">
-                    <Badge variant="outline"
-                        className="w-32 h-11 text-base"
-                    >
+            <section className="hidden md:flex flex-col bg-white justify-center items-center py-16 md:py-24 w-full">
+                <div className="flex flex-col justify-center items-center px-4 sm:px-8 max-w-4xl text-center gap-6">
+                    <Badge variant="outline" className="w-auto px-4 h-10 text-sm md:text-base rounded-full">
                         Workflow
                     </Badge>
-                    <SectionHeading className="text-4xl md:text-title-1 lg:text-display text-start font-display font-semibold leading-[1.1]">
+                    <SectionHeading className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-center font-display font-semibold leading-[1.15] text-black">
                         No Cap. We Build. *We Ship. You Win.*
                     </SectionHeading>
 
-                    <p className="text-center text-lg font-landing w-[72svw] leading-relaxed">
-                        Most founders burn months chasing freelancers or stuck waiting on slow agencies. We don't do that. One team, full stack, startup speed
-                        <br /> from idea to launch-ready in weeks, not quarters.
+                    <p className="text-base sm:text-lg font-landing leading-relaxed text-black/80 max-w-2xl px-2">
+                        Most founders burn months chasing freelancers or stuck waiting on slow agencies. We don't do that. One team, full stack, startup speed from idea to launch-ready in weeks, not quarters.
                     </p>
                 </div>
+
                 {/* Steps */}
-                <div className="flex flex-col gap-8 mt-8 px-24 mb-12">
+                <div className="flex flex-col gap-8 mt-12 px-4 sm:px-8 md:px-16 lg:px-8 w-full max-w-7xl mx-auto">
                     {workflowSteps.map((step, i) => (
                         <StepItem key={step.stepLabel} {...step} isLast={i === workflowSteps.length - 1} />
                     ))}
                 </div>
             </section>
 
-            {/* Projects Section (bento grid layout) */}
-            <section className="flex flex-col justify-between items-center bg-dark px-16">
-                <div className="flex flex-row justify-between items-center gap-12 mx-auto w-full ">
-                    <SectionHeading className="text-4xl md:text-title-1 lg:text-display text-start text-white font-display font-semibold leading-[1.1]">
-                        Our *project*
-                    </SectionHeading>
-                    <ButtonLanding className="rounded-full shadow-btn-soft bg-white text-surface-dark border-none" variant="outline" size="sm">
-                        All Projects
-                    </ButtonLanding>
-                </div>
-                {/* Project Grid */}
-                <div className="w-full flex justify-center items-center">
-                    <div className="grid h-full w-full grid-cols-3 grid-rows-3 gap-4 p-8 xl:m-8 lg:m-12 md:m-12 sm:m-16">
-                        <ProjectCard
-                            image="/ImagesAsset/projects/zenvy-cover.png"
-                            title="Zenvy City Maps apps"
-                            typeLabel="Mobile Apps"
-                            description="Zenvy is a City maps with digital tour guide apps that simplifies pedestrians"
-                            className="col-span-1"
-                        />
-                        <ProjectCard
-                            image="/ImagesAsset/projects/notarix-cover.png"
-                            title="Notarix"
-                            typeLabel="Saas Development"
-                            description="Notarix is a Smart Document Management for Notary. A SaaS platform designed to streamline notary workflows — from document organization to client file management, all in one intelligent workspace."
-                            className="col-span-2"
-                        />
-                        <ProjectCard
-                            image="/ImagesAsset/projects/GatewaySameElement.png"
-                            title="Gateway SameElement"
-                            typeLabel="IoT"
-                            description="Gateway SameElement is an intelligent building management platform designed to optimize energy consumption and enhance operational efficiency. By integrating seamlessly with existing building systems."
-                            className="col-span-1"
-                        />
-                        <ProjectCard
-                            image="/ImagesAsset/projects/beyond-cover.png"
-                            title="Beyond by BSI"
-                            typeLabel="Web Apps"
-                            description="Fintech apps by Bank Syariah Indonesia"
-                            className="col-span-1"
-                        />
-                        <ProjectCard
-                            image="/ImagesAsset/projects/scholify-cover.png"
-                            title="Scholify"
-                            typeLabel="Saas Development"
-                            description="Scholify is a mobile apps that helps students to find scholarships and grants"
-                            className="col-span-1"
-                        />
-                        <ProjectCard
-                            image="/ImagesAsset/projects/CRM-cover.png"
-                            title="CRM"
-                            typeLabel="CRM Dashboard"
-                            description="A mobile CRM solution designed to enhance sales operations through intelligent lead management and automated follow-ups."
-                            className="col-span-2"
-                        />
-                        <ProjectCard
-                            image="/ImagesAsset/projects/sikasep-cover.png"
-                            title="Sikasep"
-                            typeLabel="Mobile Apps"
-                            description="Mobile apps for searching and buying property"
-                            className="col-span-1"
-                        />
+            {/* Projects Section (Bento Grid) */}
+            <section className="flex flex-col justify-between items-center bg-dark py-16 md:py-24 px-4 sm:px-8 md:px-16 w-full">
+                <div className="max-w-7xl mx-auto w-full flex flex-col gap-12">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 w-full">
+                        <SectionHeading className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-start text-white font-display font-semibold leading-[1.15]">
+                            Our *project*
+                        </SectionHeading>
+                        <ButtonLanding className="rounded-full shadow-btn-soft bg-white text-surface-dark border-none hover:bg-white/90" variant="outline" size="sm">
+                            All Projects
+                        </ButtonLanding>
+                    </div>
+
+                    {/* Project Grid */}
+                    <div className="w-full">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 w-full">
+                            <ProjectCard
+                                image="/ImagesAsset/projects/zenvy-cover.png"
+                                title="Zenvy City Maps apps"
+                                typeLabel="Mobile Apps"
+                                description="Zenvy is a City maps with digital tour guide apps that simplifies pedestrians"
+                                className="col-span-1"
+                            />
+                            <ProjectCard
+                                image="/ImagesAsset/projects/notarix-cover.png"
+                                title="Notarix"
+                                typeLabel="Saas Development"
+                                description="Notarix is a Smart Document Management for Notary. A SaaS platform designed to streamline notary workflows — from document organization to client file management, all in one intelligent workspace."
+                                className="col-span-1 md:col-span-2 lg:col-span-2"
+                            />
+                            <ProjectCard
+                                image="/ImagesAsset/projects/GatewaySameElement.png"
+                                title="Gateway SameElement"
+                                typeLabel="IoT"
+                                description="Gateway SameElement is an intelligent building management platform designed to optimize energy consumption and enhance operational efficiency. By integrating seamlessly with existing building systems."
+                                className="col-span-1"
+                            />
+                            <ProjectCard
+                                image="/ImagesAsset/projects/beyond-cover.png"
+                                title="Beyond by BSI"
+                                typeLabel="Web Apps"
+                                description="Fintech apps by Bank Syariah Indonesia"
+                                className="col-span-1"
+                            />
+                            <ProjectCard
+                                image="/ImagesAsset/projects/scholify-cover.png"
+                                title="Scholify"
+                                typeLabel="Saas Development"
+                                description="Scholify is a mobile apps that helps students to find scholarships and grants"
+                                className="col-span-1"
+                            />
+                            <ProjectCard
+                                image="/ImagesAsset/projects/CRM-cover.png"
+                                title="CRM"
+                                typeLabel="CRM Dashboard"
+                                description="A mobile CRM solution designed to enhance sales operations through intelligent lead management and automated follow-ups."
+                                className="col-span-1 md:col-span-2 lg:col-span-2"
+                            />
+                            <ProjectCard
+                                image="/ImagesAsset/projects/sikasep-cover.png"
+                                title="Sikasep"
+                                typeLabel="Mobile Apps"
+                                description="Mobile apps for searching and buying property"
+                                className="col-span-1"
+                            />
+                        </div>
                     </div>
                 </div>
             </section>
 
             {/* Trust Section */}
-            <section className="flex flex-col justify-between items-center bg-dark px-16">
-                <div className="flex flex-row justify-between items-center gap-12 mx-auto w-full ">
-                    <SectionHeading className="text-4xl w-full md:text-title-1 lg:text-display text-start text-white font-display font-semibold leading-[1.1]">
+            <section className="flex flex-col justify-between items-center bg-dark px-4 sm:px-8 md:px-16 py-16 md:py-24 gap-12 md:gap-16 w-full max-w-7xl mx-auto">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 md:gap-12 w-full">
+                    <SectionHeading className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-start text-white font-display font-semibold leading-[1.15] w-full md:w-1/2">
                         Why Teams Choose *Kebetulan Serius Project*
                     </SectionHeading>
-                    <div className="flex flex-col justify-between items-center gap-8">
-                        <p className="text-white text-lg font-landing">
-                            Choose Kebtulan Serius Project for reliable service, quality results, and a commitment to customer satisfaction. We deliver solutions tailored to your needs with professionalism, efficiency, and care.
+                    <div className="flex flex-col justify-between items-center gap-8 w-full md:w-1/2">
+                        <p className="text-white/80 text-base sm:text-lg font-landing leading-relaxed">
+                            Choose Kebetulan Serius Project for reliable service, quality results, and a commitment to customer satisfaction. We deliver solutions tailored to your needs with professionalism, efficiency, and care.
                         </p>
                     </div>
                 </div>
 
-                <div className="flex flex-col justify-between items-center gap-8">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <div className="border-y border-accent divide-y divide-dark mt-12 mb-12">
+                <div className="w-full">
+                    <div className="grid grid-cols-1 md:grid-cols-2 w-full border-t border-white/10">
+                        <div className="flex flex-row justify-between items-center py-6 md:py-8 pr-0 md:pr-10 lg:pr-14 border-b border-white/10 md:border-r md:border-white/10">
+                            <p className="font-landing text-base sm:text-lg lg:text-[20px] text-white">Project Completed</p>
+                            <SectionHeading className="text-3xl sm:text-4xl lg:text-[56px] leading-none text-white">*30+*</SectionHeading>
+                        </div>
 
+                        <div className="flex flex-row justify-between items-center py-6 md:py-8 pl-0 md:pl-10 lg:pl-14 border-b border-white/10">
+                            <p className="font-landing text-base sm:text-lg lg:text-[20px] text-white">Product teams supported</p>
+                            <SectionHeading className="text-3xl sm:text-4xl lg:text-[56px] leading-none text-white">*30+*</SectionHeading>
+                        </div>
+
+                        <div className="flex flex-row justify-between items-center py-6 md:py-8 pr-0 md:pr-10 lg:pr-14 border-b md:border-b-0 border-white/10 md:border-r md:border-white/10">
+                            <p className="font-landing text-base sm:text-lg lg:text-[20px] text-white">Years in product design</p>
+                            <SectionHeading className="text-3xl sm:text-4xl lg:text-[56px] leading-none text-white">*4+ Years*</SectionHeading>
+                        </div>
+
+                        <div className="flex flex-row justify-between items-center py-6 md:py-8 pl-0 md:pl-10 lg:pl-14">
+                            <p className="font-landing text-base sm:text-lg lg:text-[20px] text-white">Average client rating</p>
+                            <SectionHeading className="text-3xl sm:text-4xl lg:text-[56px] leading-none text-white">*4.9/5*</SectionHeading>
                         </div>
                     </div>
-
                 </div>
             </section>
+
+            <Footer />
+
         </div>
     )
 }

@@ -48,30 +48,30 @@ export function StepItem({ stepLabel, stepTitle, heading, description, image, ti
                 <span className="bg-[#e2e2e2] rounded-full px-4 py-1.5 text-base font-landing whitespace-nowrap">
                     {stepLabel}
                 </span>
-                <p className="font-accent italic font-bold text-[32px] text-center min-w-[224px]">
+                <p className="font-accent italic font-bold text-[32px] text-center min-w-56">
                     {stepTitle}
                 </p>
             </div>
 
             {/* Tengah: Timeline — INI bagian yang di-hover */}
-            <div className="flex flex-col items-center w-[46px] shrink-0 self-stretch">
+            <div className="flex flex-col items-center w-11.5 shrink-0 self-stretch">
                 <div className="w-fit flex items-center justify-center rounded-full">
                     <img src="src/assets/StepArrow.svg" alt="Arrow Down" className="size-12" />
                 </div>
 
                 {!isLast && (
-                    <div className="flex-1 w-[6px] bg-gradient-to-b from-[#292d32] to-white" />
+                    <div className="flex-1 w-1.5 bg-linear-to-b from-[#292d32] to-white" />
                 )}
             </div>
 
             {/* Kanan: Judul & Deskripsi */}
-            <div className="flex-1 flex flex-col gap-6 pt-1">
-                <p className="font-landing font-medium text-[32px] leading-[38px]">{heading}</p>
-                <p className="font-landing text-[20px] leading-[30px] text-ink">{description}</p>
+            <div className="flex-1 flex flex-col gap-6 align-self-stretch pt-1">
+                <p className="font-landing font-medium text-[32px] leading-9.5">{heading}</p>
+                <p className="font-landing text-[20px] leading-7.5 text-ink">{description}</p>
             </div>
 
             {/* Paling kanan: Image Card */}
-            <div className="bg-[#9ca3af] p-3.5 rounded-2xl w-[345px] h-[260px] shrink-0 overflow-hidden flex items-center justify-center">
+            <div className="bg-[#9ca3af] p-3.5 rounded-2xl w-86.25 h-65 shrink-0 overflow-hidden flex items-center justify-center">
                 <img
                     src={image}
                     alt={stepTitle}

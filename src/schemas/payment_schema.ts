@@ -1,5 +1,5 @@
 import { z } from "zod";
-export const pricingTierEnum = z.enum(['Basic', 'Growth', 'Enterprise'])
+export const pricingTierEnum = z.enum(['Basic', 'Enterprise', 'Custom'])
 export const invoiceTypeEnum = z.enum(['monthly', 'quarterly', 'yearly'])
 export const paymentMethodEnum = z.enum(['bank_transfer', 'credit_card'])
 export const paymentTypeEnum = z.enum([
