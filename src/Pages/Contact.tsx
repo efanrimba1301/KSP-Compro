@@ -77,7 +77,7 @@ const Contact = () => {
         }
 
         localStorage.setItem("ks_last_lead_submit", String(Date.now()));
-        toast.success("Terima kasih! Tim kami akan menghubungi kamu dalam 1×24 jam.");
+        toast.success("Terima kasih! Tim kami akan menghubungi kamu dalam 1x24 jam.");
         form.reset();
     };
 

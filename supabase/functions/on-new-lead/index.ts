@@ -93,7 +93,7 @@ Deno.serve(async (req: any) => {
 /*
 import { Resend } from 'resend';
 
-const resend = new Resend('re_aRYV2o8R_B7p47vS9ALFmftZ58CbWVaUv');
+const resend = new Resend('');
 
 resend.emails.send({
   from: 'onboarding@resend.dev',
