@@ -143,13 +143,16 @@ const Contact = () => {
                                 {form.formState.errors.name &&
                                     <span className="text-red-500 text-sm">{form.formState.errors.name.message}</span>
                                 }
-                                <input
-                                    type="number"
-                                    placeholder="+62 0000 0000"
-                                    id="whatsapp"
-                                    className="w-full p-4 rounded-lg border border-border-black/80"
-                                    {...form.register("whatsapp")}
-                                />
+
+                                <div className="flex flex-row w-full">
+                                    <input
+                                        type="text"
+                                        id="whatsapp"
+                                        className="w-full p-4 rounded-lg border border-border-black/80"
+                                        placeholder="Whatsapp Number"
+                                        {...form.register("whatsapp")}
+                                    />
+                                </div>
                                 {form.formState.errors.whatsapp &&
                                     <span className="text-red-500 text-sm">{form.formState.errors.whatsapp.message}</span>
                                 }
