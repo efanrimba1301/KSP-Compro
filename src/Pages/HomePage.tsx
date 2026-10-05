@@ -11,6 +11,7 @@ import { Badge } from "@/Components/ui/badge";
 import { StepItem, workflowSteps } from "@/Components/Landing-ui/WorkflowTimeline";
 import ProjectCard from "@/Components/Landing-ui/ProjectCard";
 import Footer from "@/Components/Landing-ui/Footer";
+import { Seo } from "@/Components/Seo";
 
 
 const HomePage = () => {
@@ -19,6 +20,11 @@ const HomePage = () => {
     return (
         <div className="font-display bg-surface-dark w-full overflow-x-hidden">
             <Navbar />
+            <Seo
+                title="Kebetulan Serius - Web, App & SaaS Development Studio"
+                description="We build digital products with intention. Web, mobile, SaaS and IoT."
+                path="/"
+            />
             {/* Hero Section */}
             <section className="min-h-[90svh] flex flex-col justify-center items-center gap-8 md:gap-12 py-16 md:py-24 px-4 sm:px-8 max-w-7xl mx-auto text-center">
                 {/* Location Badge */}
@@ -105,7 +111,7 @@ const HomePage = () => {
                             <div className="flex flex-col gap-1">
                                 <p className="font-landing text-xs text-white/60">Starting Price</p>
                                 <h3 className="font-display text-2xl sm:text-3xl font-bold text-white">
-                                    $999<span className="font-landing text-xs font-normal text-white/60 ml-1">/Project</span>
+                                    IDR 3.999.000,- <span className="font-landing text-xs font-normal text-white/60 ml-1">/Project</span>
                                 </h3>
                                 <span className="font-landing text-xs text-white/50">Flexible Price, Cancel anytime</span>
                             </div>

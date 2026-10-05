@@ -29,6 +29,7 @@ import { PaymentDetailDialog } from "@/Components/PaymentDetailDialog"
 
 //route
 import { useNavigate } from "react-router"
+import { Seo } from "@/Components/Seo"
 
 
 const formatRupiah = (amount: number) =>
@@ -103,6 +104,7 @@ const PricingPage = () => {
 
     return (
         <div className="grid auto-rows-min gap-4 py-4 px-6">
+            <Seo title="Admin - Kebetulan Serius" description="" noindex />
             <div className="flex items-start justify-between">
                 <div className="flex flex-col gap-1">
                     <h1>Pricing</h1>

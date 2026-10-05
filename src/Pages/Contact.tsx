@@ -38,6 +38,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { MessageSquare, Star } from "@hugeicons/core-free-icons";
 import { toast, Toaster } from "sonner";
 import { Navbar } from "@/Components/Landing-ui/Navbar";
+import { Seo } from "@/Components/Seo";
 
 const Contact = () => {
     usePageTracking('/contact');
@@ -84,9 +85,16 @@ const Contact = () => {
     return (
         <>
             <Navbar />
+            <Seo
+                title="Contact - Kebetulan Serius"
+                description="Have a project idea? Let's get started. We build web, mobile, SaaS, and IoT products with intention."
+                path="/contact"
+            />
+            {/* // layout admin dan EmptyState */}
+            <Seo title="Contact - Kebetulan Serius" description="" noindex />
             <div className="min-h-svh flex flex-col items-center bg-accent w-full overflow-x-hidden">
-                <div className="flex flex-row w-full max-w-7xl mx-auto pt-32 pb-16 gap-8">
-                    <div className="flex flex-col w-full">
+                <div className="flex flex-col lg:flex-row w-full max-w-7xl mx-auto pt-24 sm:pt-32 pb-12 sm:pb-16 px-4 sm:px-6 lg:px-8 gap-8 lg:gap-12">
+                    <div className="flex flex-col w-full lg:w-1/2">
                         <img
                             src="/KSP-Icon-Black.svg"
                             alt="KSP"
@@ -105,14 +113,14 @@ const Contact = () => {
                         <p className="text-base sm:text-lg md:text-xl font-landing leading-relaxed text-ink max-w-xl mt-8 mb-8">
                             We'll schedule a call to discuss your idea. After discovery sessions, we'll send a proposal, and upon approval, we'll get started.
                         </p>
-                        <div className="flex flex-row items-between justify-between p-2 gap-3 mt-16">
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-2 gap-6 sm:gap-3 mt-8 lg:mt-16">
                             <div className="flex flex-col items-start justify-center">
                                 <img
                                     src="/IMG_0971.JPEG.jpg"
                                     alt="founder"
-                                    className="w-32 rounded-xl object-cover aspect-square shadow-btn-soft"
+                                    className="w-28 sm:w-32 rounded-xl object-cover aspect-square shadow-btn-soft"
                                 />
-                                <span className="font-display font-semibold text-lg text-ink">Syariefan Muhammad</span>
+                                <span className="font-display font-semibold text-base sm:text-lg text-ink mt-2">Syariefan Muhammad</span>
                                 <span className="font-display font-medium text-sm text-ink">CEO & Founder</span>
                             </div>
                             <div className="flex flex-row items-start gap-2">
@@ -129,22 +137,25 @@ const Contact = () => {
                         </div>
 
                     </div>
-                    <div className="flex flex-col w-full">
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="border-none p-8 md:p-12 gap-4 flex flex-col bg-white rounded-2xl shadow-lg">
+                    <div className="flex flex-col w-full lg:w-1/2">
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="border-none p-6 sm:p-8 md:p-12 gap-4 flex flex-col bg-white rounded-2xl shadow-lg">
                             <FormSeparator number={1} title="YOU" />
                             {/*Form*/}
-                            <div className="flex flex-row gap-4">
-                                <input
-                                    type="text"
-                                    placeholder="Maspek"
-                                    id="name"
-                                    className="w-full p-4 rounded-lg border border-border-black/80"
-                                    {...form.register("name")} />
-                                {form.formState.errors.name &&
-                                    <span className="text-red-500 text-sm">{form.formState.errors.name.message}</span>
-                                }
+                            <div className="flex flex-col sm:flex-row gap-4">
+                                <div className="flex flex-col w-full gap-1">
+                                    <input
+                                        type="text"
+                                        placeholder="Maspek"
+                                        id="name"
+                                        className="w-full p-4 rounded-lg border border-border-black/80"
+                                        {...form.register("name")}
+                                    />
+                                    {form.formState.errors.name && (
+                                        <span className="text-red-500 text-sm">{form.formState.errors.name.message}</span>
+                                    )}
+                                </div>
 
-                                <div className="flex flex-row w-full">
+                                <div className="flex flex-col w-full gap-1">
                                     <input
                                         type="text"
                                         id="whatsapp"
@@ -152,48 +163,52 @@ const Contact = () => {
                                         placeholder="Whatsapp Number"
                                         {...form.register("whatsapp")}
                                     />
+                                    {form.formState.errors.whatsapp && (
+                                        <span className="text-red-500 text-sm">{form.formState.errors.whatsapp.message}</span>
+                                    )}
                                 </div>
-                                {form.formState.errors.whatsapp &&
-                                    <span className="text-red-500 text-sm">{form.formState.errors.whatsapp.message}</span>
-                                }
                             </div>
                             <div className="flex flex-col w-full gap-2">
                                 <FormSeparator number={2} title="YOUR COMPANY" />
-                                <div className="flex flex-row gap-4">
-                                    <input
-                                        type="text"
-                                        placeholder="You@company.com"
-                                        id="email"
-                                        className="w-full p-4 rounded-lg border border-border-black/80"
-                                        {...form.register("email")}
-                                    />
-                                    {form.formState.errors.email &&
-                                        <span className="text-red-500 text-sm">{form.formState.errors.email.message}</span>
-                                    }
-                                    <input
-                                        type="text"
-                                        placeholder="Your Company"
-                                        id="company"
-                                        className="w-full p-4 rounded-lg border border-border-black/80"
-                                        {...form.register("company")}
-                                    />
-                                    {form.formState.errors.company &&
-                                        <span className="text-red-500 text-sm">{form.formState.errors.company.message}</span>
-                                    }
+                                <div className="flex flex-col sm:flex-row gap-4">
+                                    <div className="flex flex-col w-full gap-1">
+                                        <input
+                                            type="text"
+                                            placeholder="You@company.com"
+                                            id="email"
+                                            className="w-full p-4 rounded-lg border border-border-black/80"
+                                            {...form.register("email")}
+                                        />
+                                        {form.formState.errors.email && (
+                                            <span className="text-red-500 text-sm">{form.formState.errors.email.message}</span>
+                                        )}
+                                    </div>
+                                    <div className="flex flex-col w-full gap-1">
+                                        <input
+                                            type="text"
+                                            placeholder="Your Company"
+                                            id="company"
+                                            className="w-full p-4 rounded-lg border border-border-black/80"
+                                            {...form.register("company")}
+                                        />
+                                        {form.formState.errors.company && (
+                                            <span className="text-red-500 text-sm">{form.formState.errors.company.message}</span>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                             <div className="flex flex-col w-full gap-2">
                                 <FormSeparator number={3} title="PROJECT CREATIVITY" />
-                                <div className="flex flex-row gap-4">
+                                <div className="flex flex-col sm:flex-row gap-4">
                                     <Controller
                                         name="budget_range"
                                         control={form.control}
                                         render={({ field }) => (
                                             <Select value={field.value} onValueChange={field.onChange}>
-                                                <SelectTrigger className="w-full max-w-auto p-6 rounded-lg border border-border-black/80">
+                                                <SelectTrigger className="w-full p-6 rounded-lg border border-border-black/80">
                                                     <SelectValue placeholder="Budget Range" className="text-ink" />
                                                 </SelectTrigger>
-                                                <SelectContent className="w-full max-w-auto p-4 rounded-lg border border-border-black/80">
+                                                <SelectContent className="w-full p-4 rounded-lg border border-border-black/80">
                                                     {budgetRangeOptions.map((range) => (
                                                         <SelectItem key={range} value={range}>{range}</SelectItem>
                                                     ))}
@@ -206,10 +221,10 @@ const Contact = () => {
                                         name="service"
                                         render={({ field }) => (
                                             <Select value={field.value} onValueChange={field.onChange}>
-                                                <SelectTrigger className="w-full max-w-auto p-6 rounded-lg border border-border-black/80">
+                                                <SelectTrigger className="w-full p-6 rounded-lg border border-border-black/80">
                                                     <SelectValue placeholder="Select Service" className="text-ink" />
                                                 </SelectTrigger>
-                                                <SelectContent className="w-full max-w-auto p-4 rounded-lg border border-border-black/80">
+                                                <SelectContent className="w-full p-4 rounded-lg border border-border-black/80">
                                                     {serviceOptions.map((service) => (
                                                         <SelectItem key={service} value={service}>{service}</SelectItem>
                                                     ))}
@@ -230,7 +245,7 @@ const Contact = () => {
                                     control={form.control}
                                     name="heard_from"
                                     render={({ field }) => (
-                                        <div className="flex gap-4 justify-start items-start pt-4 flex-wrap">
+                                        <div className="flex gap-2 sm:gap-4 justify-start items-start pt-4 flex-wrap">
                                             {heardFromOptions.map((option) => (
                                                 <Toggle
                                                     key={option}
@@ -274,7 +289,7 @@ const Contact = () => {
                                     </FieldContent>
                                 </Field>
                             </div>
-                            <div className="flex flex-row justify-between items-center pt-4 gap-4">
+                            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center pt-4 gap-4">
                                 <ButtonLanding
                                     type="submit"
                                     disabled={loading}
@@ -289,11 +304,11 @@ const Contact = () => {
                             </div>
                         </form>
                     </div>
-                </div >
+                </div>
                 {/* FAQ */}
-                < section className="px-4 gap-4 sm:px-8 md:px-12 lg:px-16 w-full" >
-                    <div className="flex flex-row w-full px-4 sm:px-8 md:px-12 lg:px-16 py-12 md:py-24">
-                        <div className="flex flex-col gap-4 w-1/2">
+                <section className="w-full px-4 sm:px-6 lg:px-8">
+                    <div className="flex flex-col lg:flex-row w-full max-w-7xl mx-auto py-12 md:py-24 gap-12 lg:gap-16">
+                        <div className="flex flex-col gap-4 w-full lg:w-1/2">
                             <SectionHeading className="text-3xl sm:text-5xl md:text-2xl lg:text-5xl font-display font-semibold tracking-tight text-ink leading-[1.15]">
                                 Got Questions?
                             </SectionHeading>
@@ -306,14 +321,13 @@ const Contact = () => {
                             </p>
 
                             <div
-                                className=" flex flex-col gap-4 w-full lg:w-1/2 border border-black/10 p-8 rounded-lg shadow-btn-soft"
+                                className="flex flex-col gap-4 w-full lg:w-1/2 border border-black/10 p-6 sm:p-8 rounded-lg shadow-btn-soft"
                                 style={{
                                     imageRendering: "pixelated",
                                     backgroundImage: "url(/CardBG.png)",
                                     backgroundSize: "cover",
                                     backgroundPosition: "center",
                                     backgroundRepeat: "no-repeat",
-
                                 }}
                             >
                                 <p className="text-base sm:text-lg md:text-xl lg:text-3xl font-display font-semibold tracking-tight text-ink leading-[1.15]">Ready to Start Building Your Product?</p>
@@ -322,7 +336,7 @@ const Contact = () => {
                                 <ButtonLanding className="rounded-full w-fit shadow-btn-soft text-white border-white/20">
                                     Contact us
                                 </ButtonLanding>
-                                <div className=" flex flex-row gap-4 items-center">
+                                <div className="flex flex-row gap-4 items-center">
                                     <HugeiconsIcon icon={MessageSquare} color="#0D1D26" size={36} className="bg-white p-2 rounded-full" />
                                     <div className="flex flex-col">
                                         <Link to="mailto:kebetulanserius.com" className="font-landing text-sm text-foreground hover:text-foreground transition-colors">
@@ -333,7 +347,7 @@ const Contact = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex flex-col w-1/2">
+                        <div className="flex flex-col w-full lg:w-1/2">
                             <Accordion type="single" collapsible className="w-full">
                                 <AccordionItem value="item-1">
                                     <AccordionTrigger className="text-lg font-landing">
@@ -378,7 +392,7 @@ const Contact = () => {
                             </Accordion>
                         </div>
                     </div>
-                </section >
+                </section>
                 <Toaster position="top-center" />
                 <Footer />
             </div >

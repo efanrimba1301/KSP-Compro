@@ -12,6 +12,7 @@ import { LeadDetailDialog } from '@/Components/LeadsDetailDialog';
 import { AddLeadSheet } from '@/Components/AddLeadsSheet'
 import { DataTable } from '@/Components/ui/data-table'
 import { useHistoryPayments } from '@/hooks/useHistoryPayments';
+import { Seo } from '@/Components/Seo';
 
 
 const formatRupiah = (amount: number) =>
@@ -40,6 +41,7 @@ export default function Leads() {
 
     return (
         <>
+            <Seo title="Admin - Kebetulan Serius" description="" noindex />
             <div className="grid auto-rows-min gap-4 py-4 px-6">
                 <h1>Leads</h1>
             </div>

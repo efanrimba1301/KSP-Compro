@@ -7,6 +7,7 @@ import { HugeiconsIcon } from '@hugeicons/react'
 import { PlusSignIcon } from '@hugeicons/core-free-icons'
 import { PortfolioDetailDialog } from '@/Components/PortfolioDetailDialog'
 import { usePortfolioTable } from "@/hooks/usePortfolioTable";
+import { Seo } from "@/Components/Seo";
 
 const PortfolioPage = () => {
     const navigate = useNavigate()
@@ -26,7 +27,7 @@ const PortfolioPage = () => {
 
     return (
         <div className="flex flex-col gap-6 py-6 px-6">
-
+            <Seo title="Admin - Kebetulan Serius" description="" noindex />
             {/* ── Header ─────────────────────────────────────────────── */}
             <div className="flex items-start justify-between">
                 <div className="flex flex-col gap-1">

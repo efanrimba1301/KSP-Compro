@@ -10,6 +10,7 @@ import { LeadDetailDialog } from '@/Components/LeadsDetailDialog'
 import { useLeadsTable } from "@/hooks/useLeadsTable";
 import { useHistoryPayments } from "@/hooks/useHistoryPayments";
 import { useRevenueStats } from "@/hooks/useRevanueStats";
+import { Seo } from "@/Components/Seo";
 
 
 
@@ -39,6 +40,7 @@ const Dashboard = () => {
 
     return (
         <>
+            <Seo title="Admin - Kebetulan Serius" description="" noindex />
             {loading && (
                 <div className="flex items-center gap-3 text-neutral-400">
                     <div className="w-4 h-4 border-2 border-[#E8FF5A] border-t-transparent 
