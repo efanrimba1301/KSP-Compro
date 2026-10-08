@@ -55,7 +55,7 @@ interface FooterProps {
 export function Footer({
     className = "",
     brandDescription = "We design and build scalable digital products that support complex workflows and business-critical systems.",
-    deckHref = "/KSP Company Deck.pdf",
+    deckHref = "/documents/KSP-Company-Deck.pdf",
 }: FooterProps) {
     return (
         <footer className={`w-full bg-paper text-black py-16 lg:py-24 px-6 md:px-16 border-t border-black/10 ${className}`}>

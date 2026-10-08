@@ -31,7 +31,7 @@ export const NAV_LINKS: NavLinkItem[] = [
     { name: "Services", href: "/services", hasDropdownIcon: true, menu: "services" },
     { name: "Solution", href: "/solution", hasDropdownIcon: false },
     { name: "Products", href: "/products", hasDropdownIcon: false },
-    { name: "Pricing", href: "/pricing", hasDropdownIcon: false },
+    { name: "Pricing", href: "/LandingPricing", hasDropdownIcon: false },
 ];
 
 type NavLinkProps = NavLinkItem & {

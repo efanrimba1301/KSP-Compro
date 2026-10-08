@@ -15,16 +15,20 @@ import Pricing from './Pages/Admin/Pricing'
 import TambahPricing from './Pages/Admin/TambahPricing'
 import EmptyState from './Pages/EmptyState'
 import Contact from './Pages/Contact'
+import LandingPricing from './Pages/LandingPricing'
 
+import { ScrollToTop } from './Components/ScrollToTop'
 
 function App() {
 
   return (
     <>
       <AuthProvider>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/Contact" element={<Contact />} />
+          <Route path="/LandingPricing" element={<LandingPricing />} />
           <Route path="/*" element={<EmptyState />} />
           <Route path="/admin/login" element={<AdminLogin />} />
 
